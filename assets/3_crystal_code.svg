@@ -92,7 +92,7 @@
     <line x1="0" y1="38" x2="520" y2="38" stroke="#1e293b" stroke-width="1"/>
 
     <!-- Syntax Highlighted Crystal Code -->
-    <g transform="translate(24, 62)" font-family="'JetBrains Mono', 'Fira Code', Menlo, monospace" font-size="11" line-height="1.5">
+    <g transform="translate(24, 62)" font-family="'JetBrains Mono', 'Fira Code', Menlo, monospace" font-size="11" line-height="1.5" fill="#e2e8f0">
       <text y="0"><tspan fill="#f43f5e">module</tspan> <tspan fill="#38bdf8">GoogleApis::Storage::V1</tspan></text>
       
       <text y="20">  <tspan fill="#f43f5e">class</tspan> <tspan fill="#fbbf24">BucketsService</tspan> &lt; <tspan fill="#e2e8f0">GoogleApis::Service</tspan></text>
@@ -111,7 +111,7 @@
       <!-- Live Execution Output Demo -->
       <text y="180" fill="#64748b"># Executing with Application Default Credentials:</text>
       <text y="200"><tspan fill="#e2e8f0">storage</tspan> = <tspan fill="#38bdf8">GoogleApis::Storage::V1::Client</tspan>.<tspan fill="#60a5fa">new</tspan>(<tspan fill="#e2e8f0">credentials</tspan>)</text>
-      <text y="220"><tspan fill="#e2e8f0">buckets</tspan> = <tspan fill="#e2e8f0">storage</tspan>.<tspan fill="#e2e8f0">buckets</tspan>.<tspan fill="#60a5fa">list</tspan>(<tspan fill="#a7f3d0">"testing-355714"</tspan>)</text>
+      <text y="220"><tspan fill="#e2e8f0">buckets</tspan> = <tspan fill="#e2e8f0">storage</tspan>.<tspan fill="#60a5fa">buckets</tspan>.<tspan fill="#60a5fa">list</tspan>(<tspan fill="#a7f3d0">"testing-355714"</tspan>)</text>
 
       <!-- Verified Success Callouts -->
       <g transform="translate(0, 235)">

@@ -1,5 +1,7 @@
 # google_apis_cr
 
+![Google APIs Crystal Architecture Pipeline](assets/pipeline_architecture.png)
+
 A Crystal client library for Google APIs, featuring Application Default Credentials (ADC) authentication, Google Discovery Service typed code generation with Embedded Crystal (ECR) templates, and a typed Google Cloud Storage client.
 
 ## Features
