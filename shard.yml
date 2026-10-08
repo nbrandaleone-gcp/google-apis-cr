@@ -1,0 +1,15 @@
+name: google_apis_cr
+version: 0.1.0
+
+authors:
+  - Nick Brandaleone <nbrand@mac.com>
+
+crystal: '>= 1.21.1'
+
+license: MIT
+
+targets:
+  list_storage:
+    main: src/bin/list_storage.cr
+  generate_api:
+    main: src/bin/generate_api.cr
