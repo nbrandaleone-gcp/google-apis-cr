@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="bgGlow1" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#0b0f19" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#05070c" stop-opacity="1"/>
+    </radialGradient>
+    
+    <linearGradient id="docBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.6"/>
+    </linearGradient>
+
+    <linearGradient id="docBgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111827" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.98"/>
+    </linearGradient>
+
+    <linearGradient id="foldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#3b82f6" flood-opacity="0.15"/>
+    </filter>
+
+    <!-- Pattern -->
+    <pattern id="gridPattern" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e293b" stroke-width="0.75" stroke-opacity="0.4"/>
+      <circle cx="0" cy="0" r="1" fill="#3b82f6" fill-opacity="0.25"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="520" fill="url(#bgGlow1)"/>
+  <rect width="800" height="520" fill="url(#gridPattern)"/>
+
+  <!-- Ambient background glow behind document -->
+  <ellipse cx="400" cy="270" rx="220" ry="160" fill="#2563eb" fill-opacity="0.15" filter="url(#softGlow)"/>
+  
+  <!-- Flow lines emerging from doc -->
+  <path d="M 640 220 C 710 220, 720 260, 780 260" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4 4" stroke-opacity="0.4" fill="none"/>
+  <path d="M 640 280 C 700 280, 710 320, 780 320" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="6 6" stroke-opacity="0.3" fill="none"/>
+
+  <!-- Top Title & Badge -->
+  <g transform="translate(400, 48)" text-anchor="middle">
+    <rect x="-110" y="-14" width="220" height="26" rx="13" fill="#1e293b" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.5"/>
+    <circle cx="-88" cy="-1" r="4" fill="#3b82f6"/>
+    <text x="5" y="4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#93c5fd" letter-spacing="1.5">STAGE 1 : DISCOVERY</text>
+    
+    <text x="0" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Google API Discovery Document</text>
+    <text x="0" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">Raw JSON schema contract describing endpoints, types, and resource methods</text>
+  </g>
+
+  <!-- Main Floating Document Card -->
+  <g transform="translate(160, 135)" filter="url(#cardShadow)">
+    <!-- Document Backdrop Card -->
+    <path d="M 0 16 C 0 7.16 7.16 0 16 0 L 410 0 L 480 70 L 480 304 C 480 312.84 472.84 320 464 320 L 16 320 C 7.16 320 0 312.84 0 304 Z" fill="url(#docBgGrad)" stroke="url(#docBorderGrad)" stroke-width="1.5"/>
+    
+    <!-- Folded Corner Effect -->
+    <path d="M 410 0 L 410 54 C 410 62.84 417.16 70 426 70 L 480 70 Z" fill="url(#foldGrad)" stroke="#60a5fa" stroke-width="1"/>
+    
+    <!-- Window Bar Header inside document -->
+    <g transform="translate(20, 24)">
+      <!-- Google 4-color dots -->
+      <circle cx="8" cy="8" r="4.5" fill="#4285F4"/>
+      <circle cx="24" cy="8" r="4.5" fill="#EA4335"/>
+      <circle cx="40" cy="8" r="4.5" fill="#FBBC05"/>
+      <circle cx="56" cy="8" r="4.5" fill="#34A853"/>
+      
+      <!-- Doc title chip -->
+      <rect x="80" y="-1" width="160" height="18" rx="4" fill="#1e293b" fill-opacity="0.8"/>
+      <text x="90" y="12" font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="10" fill="#94a3b8">storage.v1.rest.json</text>
+      
+      <!-- Version pill -->
+      <rect x="340" y="-1" width="46" height="18" rx="9" fill="#2563eb" fill-opacity="0.2" stroke="#3b82f6" stroke-width="0.8"/>
+      <text x="350" y="12" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#60a5fa">REST</text>
+    </g>
+
+    <!-- Divider -->
+    <line x1="20" y1="52" x2="400" y2="52" stroke="#334155" stroke-width="1" stroke-opacity="0.6"/>
+
+    <!-- Document Content: JSON Schema Syntax Highlighted -->
+    <g transform="translate(26, 76)" font-family="'JetBrains Mono', 'Fira Code', Menlo, monospace" font-size="11.5" line-height="1.5">
+      <text y="0" fill="#94a3b8">{</text>
+      <text y="20" fill="#94a3b8">  <tspan fill="#60a5fa">"name"</tspan>: <tspan fill="#a7f3d0">"storage"</tspan>,</text>
+      <text y="40" fill="#94a3b8">  <tspan fill="#60a5fa">"version"</tspan>: <tspan fill="#a7f3d0">"v1"</tspan>,</text>
+      <text y="60" fill="#94a3b8">  <tspan fill="#60a5fa">"rootUrl"</tspan>: <tspan fill="#a7f3d0">"https://storage.googleapis.com/"</tspan>,</text>
+      
+      <text y="88" fill="#94a3b8">  <tspan fill="#60a5fa">"schemas"</tspan>: {</text>
+      <text y="108" fill="#94a3b8">    <tspan fill="#fbbf24">"Bucket"</tspan>: { <tspan fill="#94a3b8">"type"</tspan>: <tspan fill="#a7f3d0">"object"</tspan>, <tspan fill="#64748b">/* 37 props */</tspan> },</text>
+      <text y="128" fill="#94a3b8">    <tspan fill="#fbbf24">"Buckets"</tspan>: { <tspan fill="#94a3b8">"properties"</tspan>: { <tspan fill="#60a5fa">"items"</tspan>: [...] } },</text>
+      <text y="148" fill="#94a3b8">    <tspan fill="#fbbf24">"Objects"</tspan>: { <tspan fill="#94a3b8">"properties"</tspan>: { <tspan fill="#60a5fa">"items"</tspan>: [...] } }</text>
+      <text y="168" fill="#94a3b8">  },</text>
+
+      <text y="194" fill="#94a3b8">  <tspan fill="#60a5fa">"resources"</tspan>: {</text>
+      <text y="214" fill="#94a3b8">    <tspan fill="#c084fc">"buckets"</tspan>: { <tspan fill="#94a3b8">"methods"</tspan>: { <tspan fill="#34d399">"list"</tspan>, <tspan fill="#34d399">"get"</tspan>, <tspan fill="#34d399">"insert"</tspan> } },</text>
+      <text y="234" fill="#94a3b8">    <tspan fill="#c084fc">"objects"</tspan>: { <tspan fill="#94a3b8">"methods"</tspan>: { <tspan fill="#34d399">"list"</tspan>, <tspan fill="#34d399">"get"</tspan>, <tspan fill="#34d399">"delete"</tspan> } }</text>
+      <text y="254" fill="#94a3b8">  }</text>
+      <text y="274" fill="#94a3b8">}</text>
+    </g>
+
+    <!-- Decorative Corner Tag -->
+    <g transform="translate(320, 276)">
+      <rect width="140" height="26" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="0.8"/>
+      <circle cx="14" cy="13" r="3" fill="#22c55e"/>
+      <text x="26" y="17" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="600" fill="#e2e8f0">39 Schemas • 14 APIs</text>
+    </g>
+  </g>
+
+  <!-- Left Sidebar Node Graph Decoration -->
+  <g transform="translate(60, 220)">
+    <circle cx="20" cy="20" r="14" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="20" y="24" text-anchor="middle" font-family="monospace" font-size="11" fill="#60a5fa">{ }</text>
+    
+    <path d="M 20 34 L 20 80" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+    
+    <circle cx="20" cy="80" r="10" fill="#1e293b" stroke="#60a5fa" stroke-width="1.2"/>
+    <text x="20" y="83" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#93c5fd">API</text>
+
+    <path d="M 20 90 L 20 130" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+    
+    <circle cx="20" cy="130" r="8" fill="#1e293b" stroke="#93c5fd" stroke-width="1"/>
+  </g>
+</svg>

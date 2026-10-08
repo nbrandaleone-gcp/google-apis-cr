@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="bgGlow2" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#111c30" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#070c18" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#020409" stop-opacity="1"/>
+    </radialGradient>
+
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.45"/>
+      <stop offset="40%" stop-color="#8b5cf6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="streamGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.1"/>
+      <stop offset="30%" stop-color="#06b6d4" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#a855f7" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.3"/>
+    </linearGradient>
+
+    <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur1"/>
+      <feGaussianBlur stdDeviation="16" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="boxGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#06b6d4" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="#000000" flood-opacity="0.7"/>
+    </filter>
+
+    <!-- Binary matrix grid pattern -->
+    <pattern id="binaryGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.6" stroke-opacity="0.25"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="520" fill="url(#bgGlow2)"/>
+  <rect width="800" height="520" fill="url(#binaryGrid)"/>
+
+  <!-- Energy core vortex -->
+  <circle cx="400" cy="275" r="230" fill="url(#coreGlow)"/>
+
+  <!-- Header & Stage Badge -->
+  <g transform="translate(400, 48)" text-anchor="middle">
+    <rect x="-135" y="-14" width="270" height="26" rx="13" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="-112" cy="-1" r="4" fill="#a855f7" filter="url(#neonGlow)"/>
+    <text x="7" y="4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#c084fc" letter-spacing="1.5">STAGE 2 : TRANSFORMATION</text>
+    
+    <text x="0" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Binary Streams &amp; ECR Synthesis</text>
+    <text x="0" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#94a3b8">The API schema deconstructs into binary tokens and compiles through Embedded Crystal</text>
+  </g>
+
+  <!-- Left: Dissolving Schema Artifact -->
+  <g transform="translate(70, 160)" opacity="0.65">
+    <rect width="130" height="190" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill-opacity="0.4"/>
+    <text x="14" y="28" font-family="monospace" font-size="10" fill="#38bdf8">{ "Bucket" }</text>
+    <line x1="14" y1="44" x2="110" y2="44" stroke="#334155" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <line x1="14" y1="60" x2="90" y2="60" stroke="#334155" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <line x1="14" y1="76" x2="100" y2="76" stroke="#334155" stroke-width="1.5" stroke-dasharray="2 4"/>
+    <text x="14" y="105" font-family="monospace" font-size="9" fill="#64748b">"methods":</text>
+    <text x="24" y="122" font-family="monospace" font-size="9" fill="#06b6d4">[list, get]</text>
+    <text x="14" y="150" font-family="monospace" font-size="9" fill="#a855f7">"schemas": 39</text>
+
+    <!-- Dissolve particles blowing to the right -->
+    <circle cx="135" cy="50" r="2.5" fill="#38bdf8"/>
+    <circle cx="150" cy="40" r="1.5" fill="#06b6d4"/>
+    <circle cx="140" cy="80" r="2" fill="#a855f7"/>
+    <circle cx="160" cy="110" r="2.5" fill="#38bdf8"/>
+    <circle cx="145" cy="140" r="1.5" fill="#c084fc"/>
+  </g>
+
+  <!-- Connecting Flow Stream Rays -->
+  <path d="M 200 240 Q 290 220, 330 250" stroke="url(#streamGrad1)" stroke-width="3" fill="none" opacity="0.8"/>
+  <path d="M 195 280 Q 280 300, 330 280" stroke="url(#streamGrad1)" stroke-width="3" fill="none" opacity="0.8"/>
+
+  <!-- Matrix Binary Rain Background Columns -->
+  <g font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="11" font-weight="500" letter-spacing="2">
+    <!-- Stream 1 -->
+    <g transform="translate(230, 130)" fill="#06b6d4" opacity="0.4">
+      <text y="0">01000111</text>
+      <text y="18" fill="#38bdf8" opacity="0.7">01101111</text>
+      <text y="36" fill="#a5f3fc" opacity="0.9" font-weight="700">01101111</text>
+      <text y="54" opacity="0.6">01100111</text>
+      <text y="72" opacity="0.3">01101100</text>
+      <text y="90" opacity="0.2">01100101</text>
+      <text y="108" opacity="0.1">00100000</text>
+    </g>
+
+    <!-- Stream 2 -->
+    <g transform="translate(275, 190)" fill="#10b981" opacity="0.5">
+      <text y="0">1101001</text>
+      <text y="18" opacity="0.7">1110011</text>
+      <text y="36" fill="#6ee7b7" opacity="1" font-weight="700">1110100</text>
+      <text y="54" opacity="0.6">1101111</text>
+      <text y="72" opacity="0.4">1110010</text>
+      <text y="90" opacity="0.2">1100001</text>
+    </g>
+
+    <!-- Stream 3 (Right side) -->
+    <g transform="translate(490, 130)" fill="#c084fc" opacity="0.5">
+      <text y="0">01100011</text>
+      <text y="18" fill="#e879f9" opacity="0.8">01110010</text>
+      <text y="36" fill="#f0abfc" opacity="1" font-weight="700">01111001</text>
+      <text y="54" opacity="0.7">01110011</text>
+      <text y="72" opacity="0.5">01110100</text>
+      <text y="90" opacity="0.3">01100001</text>
+      <text y="108" opacity="0.15">01101100</text>
+    </g>
+
+    <!-- Stream 4 (Right side) -->
+    <g transform="translate(545, 180)" fill="#06b6d4" opacity="0.45">
+      <text y="0">1010101</text>
+      <text y="18" opacity="0.7">0101010</text>
+      <text y="36" fill="#67e8f9" opacity="1">1111000</text>
+      <text y="54" opacity="0.6">0001111</text>
+      <text y="72" opacity="0.3">1100110</text>
+    </g>
+  </g>
+
+  <!-- Central Reactor Core: ECR Template Compiler Engine -->
+  <g transform="translate(325, 175)" filter="url(#boxGlow)">
+    <!-- Main Processor Node Box -->
+    <rect width="150" height="180" rx="16" fill="url(#chipGrad)" stroke="#8b5cf6" stroke-width="2"/>
+    
+    <!-- Neon Corner Accents -->
+    <path d="M 12 4 L 4 4 L 4 12" stroke="#06b6d4" stroke-width="2.5" fill="none"/>
+    <path d="M 138 4 L 146 4 L 146 12" stroke="#06b6d4" stroke-width="2.5" fill="none"/>
+    <path d="M 12 176 L 4 176 L 4 168" stroke="#06b6d4" stroke-width="2.5" fill="none"/>
+    <path d="M 138 176 L 146 176 L 146 168" stroke="#06b6d4" stroke-width="2.5" fill="none"/>
+
+    <!-- Central Microchip Icon -->
+    <circle cx="75" cy="58" r="26" fill="#1e1b4b" stroke="#06b6d4" stroke-width="1.8" filter="url(#neonGlow)"/>
+    <path d="M 64 58 L 86 58 M 75 47 L 75 69" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="68" y="51" width="14" height="14" rx="2" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+
+    <!-- Labels -->
+    <text x="75" y="104" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9" letter-spacing="0.5">ECR ENGINE</text>
+    <text x="75" y="119" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#94a3b8">AST SYNTHESIZER</text>
+
+    <!-- Embedded ECR Template Tags Glowing -->
+    <rect x="18" y="132" width="114" height="20" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="0.8"/>
+    <text x="75" y="146" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#f43f5e">&lt;%= @service %&gt;</text>
+
+    <rect x="18" y="156" width="114" height="14" rx="3" fill="#020617"/>
+    <text x="75" y="166" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#38bdf8">&lt;% schemas.each %&gt;</text>
+  </g>
+
+  <!-- Emerging Crystal Facet Beams on Right -->
+  <g transform="translate(620, 190)">
+    <!-- Crystalline geometric preview forming -->
+    <polygon points="60,20 100,50 80,100 20,80 10,40" fill="#a855f7" fill-opacity="0.15" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <polygon points="70,60 110,85 95,130 45,115 35,75" fill="#06b6d4" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1.5"/>
+    
+    <text x="65" y="160" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#e2e8f0">Solidifying...</text>
+    <text x="65" y="176" text-anchor="middle" font-family="sans-serif" font-size="8.5" fill="#94a3b8">Types &amp; Methods</text>
+  </g>
+
+  <!-- Flow Arrows -->
+  <path d="M 490 260 L 590 260" stroke="url(#streamGrad1)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <polygon points="596,260 588,255 588,265" fill="#ec4899"/>
+
+  <!-- Bottom Terminal Status Bar -->
+  <g transform="translate(180, 430)">
+    <rect width="440" height="42" rx="10" fill="#0b1120" stroke="#334155" stroke-width="1"/>
+    <circle cx="20" cy="21" r="5" fill="#10b981" filter="url(#neonGlow)"/>
+    <text x="36" y="25" font-family="'JetBrains Mono', monospace" font-size="11" fill="#cbd5e1">
+      <tspan fill="#64748b">$</tspan> crystal run generate_api <tspan fill="#10b981">✔ 39 Types 14 Services</tspan>
+    </text>
+  </g>
+</svg>

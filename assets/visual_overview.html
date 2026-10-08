@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--foreground, #f8fafc);
+    background: transparent;
+  }
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .header h2 {
+    margin: 0 0 6px 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted-foreground, #94a3b8);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: var(--card, #0f172a);
+    border: 1px solid var(--border, #1e293b);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent, #3b82f6);
+  }
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    width: fit-content;
+    margin-bottom: 12px;
+  }
+  .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+  .badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+  .badge-pink { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+
+  .card h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .card .desc {
+    font-size: 12px;
+    color: var(--muted-foreground, #94a3b8);
+    margin: 0 0 14px 0;
+  }
+  .preview-box {
+    background: #030712;
+    border: 1px solid #1f2937;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    flex: 1;
+    overflow-x: auto;
+  }
+  .blue { color: #60a5fa; }
+  .green { color: #34d399; }
+  .yellow { color: #fbbf24; }
+  .purple { color: #c084fc; }
+  .pink { color: #f43f5e; }
+  .cyan { color: #06b6d4; }
+  .gray { color: #6b7280; }
+  
+  .img-link {
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--accent, #3b82f6);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .img-link:hover { text-decoration: underline; }
+  
+  .footer-banner {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid var(--border, #1e293b);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+  .pill-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h2>Google APIs Crystal Pipeline</h2>
+    <p>How the library transforms raw Google Discovery REST schemas into typed, compiled Crystal clients</p>
+  </div>
+
+  <div class="grid">
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-badge badge-blue">STAGE 1 : CONTRACT</div>
+      <h3>1. Discovery Document</h3>
+      <p class="desc">Raw Google REST API JSON metadata</p>
+      <div class="preview-box">
+        <span class="gray">{</span><br>
+        &nbsp;&nbsp;<span class="blue">"name"</span>: <span class="green">"storage"</span>,<br>
+        &nbsp;&nbsp;<span class="blue">"version"</span>: <span class="green">"v1"</span>,<br>
+        &nbsp;&nbsp;<span class="blue">"schemas"</span>: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="yellow">"Bucket"</span>: { ... },<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="yellow">"Objects"</span>: { ... }<br>
+        &nbsp;&nbsp;},<br>
+        &nbsp;&nbsp;<span class="blue">"resources"</span>: {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="purple">"buckets"</span>: { <span class="cyan">"list"</span> },<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="purple">"objects"</span>: { <span class="cyan">"list"</span> }<br>
+        &nbsp;&nbsp;}<br>
+        <span class="gray">}</span>
+      </div>
+      <div style="margin-top:10px; font-size:11px; color:#94a3b8;">
+        📁 <code>discovery/storage_v1.json</code><br>
+        ✓ 39 Schemas, 14 Services
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-badge badge-purple">STAGE 2 : SYNTHESIS</div>
+      <h3>2. Binary &amp; ECR Engine</h3>
+      <p class="desc">0101 streams compiled via Embedded Crystal</p>
+      <div class="preview-box">
+        <span class="cyan">01000011 01110010 01111001</span><br>
+        <span class="green">01110011 01110100 01100001</span><br>
+        <span class="gray">────── ECR TEMPLATE ──────</span><br>
+        <span class="pink">&lt;%=</span> @service.schemas.each <span class="pink">%&gt;</span><br>
+        &nbsp;&nbsp;<span class="yellow">class</span> <span class="blue">&lt;%= schema.name %&gt;</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="cyan">@[JSON::Field]</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;property ...<br>
+        <span class="pink">&lt;% end %&gt;</span><br>
+        <span class="purple">1101001 0110111 1101100</span>
+      </div>
+      <div style="margin-top:10px; font-size:11px; color:#94a3b8;">
+        ⚙️ <code>bin/generate_api</code><br>
+        ✓ Compile-time code generation
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-badge badge-pink">STAGE 3 : COMPILED</div>
+      <h3>3. Crystal Client Library</h3>
+      <p class="desc">Strongly-typed, high-performance shard</p>
+      <div class="preview-box">
+        <span class="pink">module</span> <span class="blue">GoogleApis::Storage::V1</span><br>
+        &nbsp;&nbsp;<span class="pink">class</span> <span class="yellow">BucketsService</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pink">def</span> <span class="cyan">list</span>(project) : <span class="yellow">Buckets</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@client.execute(...)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pink">end</span><br>
+        &nbsp;&nbsp;<span class="pink">end</span><br>
+        <span class="pink">end</span><br>
+        <span class="gray"># Live output:</span><br>
+        <span class="green">✔ nbrandaleone-bucket</span><br>
+        <span class="green">✔ nbrandaleone-testing</span>
+      </div>
+      <div style="margin-top:10px; font-size:11px; color:#94a3b8;">
+        💎 <code>bin/list_storage</code><br>
+        ✓ Fast as C, Ruby-like syntax
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-banner">
+    <div><strong>Definition of Done Verified:</strong> Application Default Credentials &amp; Storage buckets listed</div>
+    <div class="pill-success">24 Specs Passing • Ameba Clean</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="100%" height="100%">
+  <defs>
+    <radialGradient id="panGlow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#141b2d" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#0a0e17" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#04060a" stop-opacity="1"/>
+    </radialGradient>
+
+    <linearGradient id="panCard1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <linearGradient id="connGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+
+    <filter id="cardShadowPan" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+
+    <pattern id="dotGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.4"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="480" fill="url(#panGlow)"/>
+  <rect width="1200" height="480" fill="url(#dotGrid)"/>
+
+  <!-- Title Header -->
+  <g transform="translate(600, 42)" text-anchor="middle">
+    <text font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="800" fill="#f8fafc" letter-spacing="0.5">Google APIs Crystal Architecture Pipeline</text>
+    <text y="24" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" fill="#94a3b8">From Google Cloud Discovery Document through ECR Synthesis to Compiled Typed Crystal Code</text>
+  </g>
+
+  <!-- Connector Path 1 -> 2 -->
+  <path d="M 370 260 L 440 260" stroke="url(#connGrad)" stroke-width="3" stroke-dasharray="6 4" fill="none"/>
+  <polygon points="445,260 435,254 435,266" fill="#a855f7"/>
+
+  <!-- Connector Path 2 -> 3 -->
+  <path d="M 760 260 L 830 260" stroke="url(#connGrad)" stroke-width="3" stroke-dasharray="6 4" fill="none"/>
+  <polygon points="835,260 825,254 825,266" fill="#ec4899"/>
+
+  <!-- ================= PANEL 1: DISCOVERY DOCUMENT ================= -->
+  <g transform="translate(60, 100)" filter="url(#cardShadowPan)">
+    <rect width="310" height="320" rx="14" fill="url(#panCard1)" stroke="#3b82f6" stroke-width="1.5"/>
+    
+    <!-- Top Badge -->
+    <rect x="18" y="16" width="130" height="22" rx="11" fill="#1e3a8a" stroke="#60a5fa" stroke-width="0.8"/>
+    <text x="83" y="31" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#bfdbfe">1. DISCOVERY DOC</text>
+    <circle cx="280" cy="27" r="4" fill="#3b82f6"/>
+
+    <text x="18" y="66" font-family="sans-serif" font-size="16" font-weight="700" fill="#f1f5f9">Google API Contract</text>
+    <text x="18" y="84" font-family="sans-serif" font-size="11" fill="#64748b">storage.v1.rest.json</text>
+
+    <!-- Schema Snippet -->
+    <g transform="translate(18, 105)" font-family="'JetBrains Mono', monospace" font-size="10">
+      <rect width="274" height="150" rx="6" fill="#090d16" stroke="#1e293b" stroke-width="1"/>
+      <text x="12" y="24" fill="#60a5fa">"name": <tspan fill="#a7f3d0">"storage"</tspan>,</text>
+      <text x="12" y="44" fill="#60a5fa">"schemas": {</text>
+      <text x="24" y="64" fill="#fbbf24">"Bucket": { ... },</text>
+      <text x="24" y="84" fill="#fbbf24">"Buckets": { ... },</text>
+      <text x="24" y="104" fill="#fbbf24">"Objects": { ... }</text>
+      <text x="12" y="124" fill="#60a5fa">},</text>
+      <text x="12" y="142" fill="#c084fc">"resources": { "buckets", ... }</text>
+    </g>
+
+    <text x="18" y="290" font-family="sans-serif" font-size="11" font-weight="600" fill="#93c5fd">● 39 Schemas • 14 Resource APIs</text>
+  </g>
+
+  <!-- ================= PANEL 2: 0s & 1s + ECR SYNTHESIS ================= -->
+  <g transform="translate(450, 100)" filter="url(#cardShadowPan)">
+    <rect width="310" height="320" rx="14" fill="url(#panCard1)" stroke="#8b5cf6" stroke-width="1.5"/>
+    
+    <!-- Top Badge -->
+    <rect x="18" y="16" width="130" height="22" rx="11" fill="#3b0764" stroke="#a855f7" stroke-width="0.8"/>
+    <text x="83" y="31" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#e9d5ff">2. CODE SYNTHESIS</text>
+    <circle cx="280" cy="27" r="4" fill="#a855f7"/>
+
+    <text x="18" y="66" font-family="sans-serif" font-size="16" font-weight="700" fill="#f1f5f9">ECR Template Engine</text>
+    <text x="18" y="84" font-family="sans-serif" font-size="11" fill="#64748b">Binary bits &amp; template parsing</text>
+
+    <!-- Matrix Stream Area -->
+    <g transform="translate(18, 105)" font-family="'JetBrains Mono', monospace" font-size="10">
+      <rect width="274" height="150" rx="6" fill="#090d16" stroke="#1e293b" stroke-width="1"/>
+      <text x="12" y="24" fill="#06b6d4" opacity="0.8">01000011 01110010 01111001</text>
+      <text x="12" y="44" fill="#10b981" opacity="0.8">01110011 01110100 01100001</text>
+      
+      <rect x="12" y="58" width="250" height="28" rx="4" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="0.8"/>
+      <text x="20" y="76" fill="#f43f5e" font-weight="700">&lt;%= @service.schemas %&gt;</text>
+
+      <rect x="12" y="94" width="250" height="28" rx="4" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="0.8"/>
+      <text x="20" y="112" fill="#38bdf8" font-weight="700">&lt;% method.parameters.each %&gt;</text>
+      
+      <text x="12" y="140" fill="#a855f7" opacity="0.8">1101001 0110111 1101100 1100101</text>
+    </g>
+
+    <text x="18" y="290" font-family="sans-serif" font-size="11" font-weight="600" fill="#d8b4fe">● AST Mapping • Zero Runtime Lag</text>
+  </g>
+
+  <!-- ================= PANEL 3: CRYSTAL CODE ================= -->
+  <g transform="translate(840, 100)" filter="url(#cardShadowPan)">
+    <rect width="310" height="320" rx="14" fill="url(#panCard1)" stroke="#ec4899" stroke-width="1.5"/>
+    
+    <!-- Top Badge -->
+    <rect x="18" y="16" width="130" height="22" rx="11" fill="#500724" stroke="#f43f5e" stroke-width="0.8"/>
+    <text x="83" y="31" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#fbcfe8">3. CRYSTAL SHARD</text>
+    <circle cx="280" cy="27" r="4" fill="#ec4899"/>
+
+    <text x="18" y="66" font-family="sans-serif" font-size="16" font-weight="700" fill="#f1f5f9">Typed &amp; Compiled Client</text>
+    <text x="18" y="84" font-family="sans-serif" font-size="11" fill="#64748b">GoogleApis::Storage::V1</text>
+
+    <!-- Code Snippet -->
+    <g transform="translate(18, 105)" font-family="'JetBrains Mono', monospace" font-size="9.5">
+      <rect width="274" height="150" rx="6" fill="#090d16" stroke="#1e293b" stroke-width="1"/>
+      <text x="10" y="22"><tspan fill="#f43f5e">class</tspan> <tspan fill="#fbbf24">BucketsService</tspan></text>
+      <text x="10" y="38">  <tspan fill="#f43f5e">def</tspan> <tspan fill="#60a5fa">list</tspan>(<tspan fill="#e2e8f0">project</tspan>) : <tspan fill="#fbbf24">Buckets</tspan></text>
+      <text x="10" y="54">    <tspan fill="#e2e8f0">@client</tspan>.<tspan fill="#60a5fa">execute</tspan>(<tspan fill="#fbbf24">Buckets</tspan>, ...)</text>
+      <text x="10" y="70">  <tspan fill="#f43f5e">end</tspan></text>
+      <text x="10" y="86"><tspan fill="#f43f5e">end</tspan></text>
+      
+      <line x1="10" y1="96" x2="264" y2="96" stroke="#1e293b"/>
+      
+      <text x="10" y="114" fill="#34d399">✔ nbrandaleone-bucket</text>
+      <text x="10" y="132" fill="#34d399">✔ nbrandaleone-testing</text>
+    </g>
+
+    <text x="18" y="290" font-family="sans-serif" font-size="11" font-weight="600" fill="#f472b6">● Type-Safe • Fast as C • Shard lib</text>
+  </g>
+</svg>
