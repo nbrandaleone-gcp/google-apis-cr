@@ -13,9 +13,11 @@ to be correct, it is clearly not idiomatic crystal that humans would write.
 
 - **Application Default Credentials (ADC)**: Automatic loading via `$GOOGLE_APPLICATION_CREDENTIALS` or well-known gcloud CLI path (`~/.config/gcloud/application_default_credentials.json`). Supports automatic token refresh and caching.
 - **Google Cloud Storage (v1)**: Strongly-typed client for buckets, objects, ACLs, and other storage resources.
+- **Cloud Run Admin API (v2)**: Strongly-typed client for Cloud Run services, revisions, instances, and jobs.
 - **Discovery Service Code Generator**: Built-in generator using ECR templates to parse any Google Discovery document and produce typed Crystal clients and schemas.
 - **CLI Utilities**:
   - `bin/list_storage`: Command-line tool to list GCS buckets and objects.
+  - `bin/list_cloud_run`: Command-line tool to list Cloud Run services and instances.
   - `bin/generate_api`: Code generation tool for Google Discovery documents.
 
 ## Installation
@@ -63,6 +65,7 @@ end)
 
 ```bash
 crystal build src/bin/list_storage.cr -o bin/list_storage
+crystal build src/bin/list_cloud_run.cr -o bin/list_cloud_run
 crystal build src/bin/generate_api.cr -o bin/generate_api
 ```
 
@@ -77,6 +80,19 @@ crystal build src/bin/generate_api.cr -o bin/generate_api
 
 # List all buckets and preview objects in each
 ./bin/list_storage --all-objects
+```
+
+### List Cloud Run Services and Instances
+
+```bash
+# List all Cloud Run services across all regions
+./bin/list_cloud_run
+
+# List services with active revisions and container images
+./bin/list_cloud_run -r
+
+# Inspect a specific service
+./bin/list_cloud_run -s mandelbrot -l us-east5
 ```
 
 ### Generate Clients from Discovery Documents

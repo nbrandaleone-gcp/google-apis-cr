@@ -50,7 +50,7 @@ module GoogleApis
 
     # Sanitizes parameter or property names to avoid Crystal keyword collisions.
     def self.sanitize_identifier(name : String) : String
-      s = name.underscore
+      s = name.gsub(".", "_").underscore
       CRYSTAL_KEYWORDS.includes?(s) ? "#{s}_param" : s
     end
 
