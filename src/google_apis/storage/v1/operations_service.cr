@@ -14,9 +14,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}/operations/{operationId}/cancel"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{operationId}", URI.encode_path_segment(operation_id.to_s))
-      req_path = req_path.gsub("{+operationId}", URI.encode_path_segment(operation_id.to_s))
+      req_path = req_path.gsub("{+operationId}", operation_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -36,9 +36,9 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/operations/{operationId}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{operationId}", URI.encode_path_segment(operation_id.to_s))
-      req_path = req_path.gsub("{+operationId}", URI.encode_path_segment(operation_id.to_s))
+      req_path = req_path.gsub("{+operationId}", operation_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -59,9 +59,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}/operations/{operationId}/advanceRelocateBucket"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{operationId}", URI.encode_path_segment(operation_id.to_s))
-      req_path = req_path.gsub("{+operationId}", URI.encode_path_segment(operation_id.to_s))
+      req_path = req_path.gsub("{+operationId}", operation_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -83,7 +83,7 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningListOperationsResponse
       req_path = "b/{bucket}/operations"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["filter"] = filter unless filter.nil?

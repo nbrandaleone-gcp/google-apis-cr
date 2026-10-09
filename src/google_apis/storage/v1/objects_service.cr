@@ -21,9 +21,9 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{destinationBucket}/o/{destinationObject}/compose"
       req_path = req_path.gsub("{destinationBucket}", URI.encode_path_segment(destination_bucket.to_s))
-      req_path = req_path.gsub("{+destinationBucket}", URI.encode_path_segment(destination_bucket.to_s))
+      req_path = req_path.gsub("{+destinationBucket}", destination_bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationObject}", URI.encode_path_segment(destination_object.to_s))
-      req_path = req_path.gsub("{+destinationObject}", URI.encode_path_segment(destination_object.to_s))
+      req_path = req_path.gsub("{+destinationObject}", destination_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["destinationPredefinedAcl"] = destination_predefined_acl unless destination_predefined_acl.nil?
@@ -65,13 +65,13 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{sourceBucket}/o/{sourceObject}/copyTo/b/{destinationBucket}/o/{destinationObject}"
       req_path = req_path.gsub("{sourceBucket}", URI.encode_path_segment(source_bucket.to_s))
-      req_path = req_path.gsub("{+sourceBucket}", URI.encode_path_segment(source_bucket.to_s))
+      req_path = req_path.gsub("{+sourceBucket}", source_bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{sourceObject}", URI.encode_path_segment(source_object.to_s))
-      req_path = req_path.gsub("{+sourceObject}", URI.encode_path_segment(source_object.to_s))
+      req_path = req_path.gsub("{+sourceObject}", source_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationBucket}", URI.encode_path_segment(destination_bucket.to_s))
-      req_path = req_path.gsub("{+destinationBucket}", URI.encode_path_segment(destination_bucket.to_s))
+      req_path = req_path.gsub("{+destinationBucket}", destination_bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationObject}", URI.encode_path_segment(destination_object.to_s))
-      req_path = req_path.gsub("{+destinationObject}", URI.encode_path_segment(destination_object.to_s))
+      req_path = req_path.gsub("{+destinationObject}", destination_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["destinationKmsKeyName"] = destination_kms_key_name unless destination_kms_key_name.nil?
@@ -110,9 +110,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}/o/{object}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -147,9 +147,9 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{bucket}/o/{object}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -180,9 +180,9 @@ module GoogleApis::Storage::V1
     ) : Policy
       req_path = "b/{bucket}/o/{object}/iam"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -214,7 +214,7 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{bucket}/o"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["contentEncoding"] = content_encoding unless content_encoding.nil?
@@ -257,7 +257,7 @@ module GoogleApis::Storage::V1
     ) : Objects
       req_path = "b/{bucket}/o"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["delimiter"] = delimiter unless delimiter.nil?
@@ -301,9 +301,9 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{bucket}/o/{object}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -351,13 +351,13 @@ module GoogleApis::Storage::V1
     ) : RewriteResponse
       req_path = "b/{sourceBucket}/o/{sourceObject}/rewriteTo/b/{destinationBucket}/o/{destinationObject}"
       req_path = req_path.gsub("{sourceBucket}", URI.encode_path_segment(source_bucket.to_s))
-      req_path = req_path.gsub("{+sourceBucket}", URI.encode_path_segment(source_bucket.to_s))
+      req_path = req_path.gsub("{+sourceBucket}", source_bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{sourceObject}", URI.encode_path_segment(source_object.to_s))
-      req_path = req_path.gsub("{+sourceObject}", URI.encode_path_segment(source_object.to_s))
+      req_path = req_path.gsub("{+sourceObject}", source_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationBucket}", URI.encode_path_segment(destination_bucket.to_s))
-      req_path = req_path.gsub("{+destinationBucket}", URI.encode_path_segment(destination_bucket.to_s))
+      req_path = req_path.gsub("{+destinationBucket}", destination_bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationObject}", URI.encode_path_segment(destination_object.to_s))
-      req_path = req_path.gsub("{+destinationObject}", URI.encode_path_segment(destination_object.to_s))
+      req_path = req_path.gsub("{+destinationObject}", destination_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["destinationKmsKeyName"] = destination_kms_key_name unless destination_kms_key_name.nil?
@@ -404,11 +404,11 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{bucket}/o/{sourceObject}/moveTo/o/{destinationObject}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{sourceObject}", URI.encode_path_segment(source_object.to_s))
-      req_path = req_path.gsub("{+sourceObject}", URI.encode_path_segment(source_object.to_s))
+      req_path = req_path.gsub("{+sourceObject}", source_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationObject}", URI.encode_path_segment(destination_object.to_s))
-      req_path = req_path.gsub("{+destinationObject}", URI.encode_path_segment(destination_object.to_s))
+      req_path = req_path.gsub("{+destinationObject}", destination_object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifGenerationMatch"] = if_generation_match unless if_generation_match.nil?
@@ -441,9 +441,9 @@ module GoogleApis::Storage::V1
     ) : Policy
       req_path = "b/{bucket}/o/{object}/iam"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -468,9 +468,9 @@ module GoogleApis::Storage::V1
     ) : TestIamPermissionsResponse
       req_path = "b/{bucket}/o/{object}/iam/testPermissions"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["permissions"] = permissions
@@ -503,9 +503,9 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{bucket}/o/{object}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -543,9 +543,9 @@ module GoogleApis::Storage::V1
     ) : Object
       req_path = "b/{bucket}/o/{object}/restore"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation
@@ -574,7 +574,7 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/o/bulkRestore"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -597,9 +597,9 @@ module GoogleApis::Storage::V1
     ) : ObjectFullContext
       req_path = "b/{bucket}/o/{object}/viewFullContext"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{object}", URI.encode_path_segment(object.to_s))
-      req_path = req_path.gsub("{+object}", URI.encode_path_segment(object.to_s))
+      req_path = req_path.gsub("{+object}", object.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["contextKey"] = context_key

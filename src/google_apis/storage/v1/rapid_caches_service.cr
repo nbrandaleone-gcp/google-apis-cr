@@ -14,7 +14,7 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/rapidCaches"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -35,9 +35,9 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/rapidCaches/{rapidCacheId}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{rapidCacheId}", URI.encode_path_segment(rapid_cache_id.to_s))
-      req_path = req_path.gsub("{+rapidCacheId}", URI.encode_path_segment(rapid_cache_id.to_s))
+      req_path = req_path.gsub("{+rapidCacheId}", rapid_cache_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -57,9 +57,9 @@ module GoogleApis::Storage::V1
     ) : RapidCache
       req_path = "b/{bucket}/rapidCaches/{rapidCacheId}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{rapidCacheId}", URI.encode_path_segment(rapid_cache_id.to_s))
-      req_path = req_path.gsub("{+rapidCacheId}", URI.encode_path_segment(rapid_cache_id.to_s))
+      req_path = req_path.gsub("{+rapidCacheId}", rapid_cache_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -80,7 +80,7 @@ module GoogleApis::Storage::V1
     ) : RapidCaches
       req_path = "b/{bucket}/rapidCaches"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["pageSize"] = page_size unless page_size.nil?
@@ -102,9 +102,9 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/rapidCaches/{rapidCacheId}/disable"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{rapidCacheId}", URI.encode_path_segment(rapid_cache_id.to_s))
-      req_path = req_path.gsub("{+rapidCacheId}", URI.encode_path_segment(rapid_cache_id.to_s))
+      req_path = req_path.gsub("{+rapidCacheId}", rapid_cache_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 

@@ -1,0 +1,1581 @@
+---
+last_updated: 2026-10-09 15:34:36 UTC
+apis:
+  abusiveexperiencereport:
+    title: Abusive Experience Report API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://abusiveexperiencereport.googleapis.com/$discovery/rest?version=v1
+  acceleratedmobilepageurl:
+    title: Accelerated Mobile Pages (AMP) URL API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://acceleratedmobilepageurl.googleapis.com/$discovery/rest?version=v1
+  accessapproval:
+    title: Access Approval API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://accessapproval.googleapis.com/$discovery/rest?version=v1
+  accesscontextmanager:
+    title: Access Context Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://accesscontextmanager.googleapis.com/$discovery/rest?version=v1
+  addressvalidation:
+    title: Address Validation API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://addressvalidation.googleapis.com/$discovery/rest?version=v1
+  adexchangebuyer2:
+    title: Ad Exchange Buyer API II
+    latest_version: v2beta1
+    status: not_generated
+    discovery_url: https://adexchangebuyer.googleapis.com/$discovery/rest?version=v2beta1
+  adexperiencereport:
+    title: Ad Experience Report API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://adexperiencereport.googleapis.com/$discovery/rest?version=v1
+  admin:
+    title: Admin SDK API
+    latest_version: reports_v1
+    status: not_generated
+    discovery_url: https://admin.googleapis.com/$discovery/rest?version=reports_v1
+  admob:
+    title: AdMob API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://admob.googleapis.com/$discovery/rest?version=v1
+  adsense:
+    title: AdSense Management API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://adsense.googleapis.com/$discovery/rest?version=v2
+  adsenseplatform:
+    title: AdSense Platform API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://adsenseplatform.googleapis.com/$discovery/rest?version=v1
+  advisorynotifications:
+    title: Advisory Notifications API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://advisorynotifications.googleapis.com/$discovery/rest?version=v1
+  agenciesandbrands:
+    title: Agencies and Brands API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://agenciesandbrands.googleapis.com/$discovery/rest?version=v1
+  agentidentity:
+    title: Agent Identity API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://agentidentity.googleapis.com/$discovery/rest?version=v1
+  agentidentitycredentials:
+    title: Agent Identity Credentials API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://agentidentitycredentials.googleapis.com/$discovery/rest?version=v1
+  agentregistry:
+    title: Agent Registry API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://agentregistry.googleapis.com/$discovery/rest?version=v1
+  aiplatform:
+    title: Agent Platform API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://aiplatform.googleapis.com/$discovery/rest?version=v1
+  airquality:
+    title: Air Quality API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://airquality.googleapis.com/$discovery/rest?version=v1
+  alertcenter:
+    title: Google Workspace Alert Center API
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://alertcenter.googleapis.com/$discovery/rest?version=v1beta1
+  alloydb:
+    title: AlloyDB API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://alloydb.googleapis.com/$discovery/rest?version=v1
+  analyticsadmin:
+    title: Google Analytics Admin API
+    latest_version: v1beta
+    status: not_generated
+    discovery_url: https://analyticsadmin.googleapis.com/$discovery/rest?version=v1beta
+  analyticsdata:
+    title: Google Analytics Data API
+    latest_version: v1beta
+    status: not_generated
+    discovery_url: https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta
+  analyticshub:
+    title: Analytics Hub API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://analyticshub.googleapis.com/$discovery/rest?version=v1
+  androiddeveloperidstatus:
+    title: Android Developer ID Status API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://androiddeveloperidstatus.googleapis.com/$discovery/rest?version=v1
+  androiddeviceprovisioning:
+    title: Android Device Provisioning Partner API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://androiddeviceprovisioning.googleapis.com/$discovery/rest?version=v1
+  androidenterprise:
+    title: Google Play EMM API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://androidenterprise.googleapis.com/$discovery/rest?version=v1
+  androidmanagement:
+    title: Android Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://androidmanagement.googleapis.com/$discovery/rest?version=v1
+  androidpublisher:
+    title: Google Play Android Developer API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://androidpublisher.googleapis.com/$discovery/rest?version=v3
+  apigateway:
+    title: API Gateway API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://apigateway.googleapis.com/$discovery/rest?version=v1
+  apigee:
+    title: Apigee API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://apigee.googleapis.com/$discovery/rest?version=v1
+  apihub:
+    title: API hub API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://apihub.googleapis.com/$discovery/rest?version=v1
+  apikeys:
+    title: API Keys API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://apikeys.googleapis.com/$discovery/rest?version=v2
+  apim:
+    title: API Management API
+    latest_version: v1alpha
+    status: not_generated
+    discovery_url: https://apim.googleapis.com/$discovery/rest?version=v1alpha
+  appengine:
+    title: App Engine Admin API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://appengine.googleapis.com/$discovery/rest?version=v1
+  apphub:
+    title: App Hub API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://apphub.googleapis.com/$discovery/rest?version=v1
+  appsmarket:
+    title: Google Workspace Marketplace API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://appsmarket.googleapis.com/$discovery/rest?version=v2
+  area120tables:
+    title: Area120 Tables API
+    latest_version: v1alpha1
+    status: not_generated
+    discovery_url: https://area120tables.googleapis.com/$discovery/rest?version=v1alpha1
+  areainsights:
+    title: Places Aggregate API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://areainsights.googleapis.com/$discovery/rest?version=v1
+  artifactregistry:
+    title: Artifact Registry API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://artifactregistry.googleapis.com/$discovery/rest?version=v1
+  assuredworkloads:
+    title: Assured Workloads API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://assuredworkloads.googleapis.com/$discovery/rest?version=v1
+  auditmanager:
+    title: Audit Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://auditmanager.googleapis.com/$discovery/rest?version=v1
+  authorizedbuyersmarketplace:
+    title: Authorized Buyers Marketplace API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://authorizedbuyersmarketplace.googleapis.com/$discovery/rest?version=v1
+  backupdr:
+    title: Backup and DR Service API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://backupdr.googleapis.com/$discovery/rest?version=v1
+  baremetalsolution:
+    title: Bare Metal Solution API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://baremetalsolution.googleapis.com/$discovery/rest?version=v2
+  batch:
+    title: Batch API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://batch.googleapis.com/$discovery/rest?version=v1
+  beyondcorp:
+    title: BeyondCorp API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://beyondcorp.googleapis.com/$discovery/rest?version=v1
+  biglake:
+    title: Lakehouse API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://biglake.googleapis.com/$discovery/rest?version=v1
+  bigquery:
+    title: BigQuery API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://bigquery.googleapis.com/$discovery/rest?version=v2
+  bigqueryconnection:
+    title: BigQuery Connection API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://bigqueryconnection.googleapis.com/$discovery/rest?version=v1
+  bigquerydatapolicy:
+    title: BigQuery Data Policy API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://bigquerydatapolicy.googleapis.com/$discovery/rest?version=v2
+  bigquerydatatransfer:
+    title: BigQuery Data Transfer API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://bigquerydatatransfer.googleapis.com/$discovery/rest?version=v1
+  bigqueryreservation:
+    title: BigQuery Reservation API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://bigqueryreservation.googleapis.com/$discovery/rest?version=v1
+  bigtableadmin:
+    title: Cloud Bigtable Admin API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://bigtableadmin.googleapis.com/$discovery/rest?version=v2
+  billingbudgets:
+    title: Cloud Billing Budget API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://billingbudgets.googleapis.com/$discovery/rest?version=v1
+  binaryauthorization:
+    title: Binary Authorization API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://binaryauthorization.googleapis.com/$discovery/rest?version=v1
+  blockchainnodeengine:
+    title: Blockchain Node Engine API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://blockchainnodeengine.googleapis.com/$discovery/rest?version=v1
+  blogger:
+    title: Blogger API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://blogger.googleapis.com/$discovery/rest?version=v3
+  books:
+    title: Books API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://books.googleapis.com/$discovery/rest?version=v1
+  businessprofileperformance:
+    title: Business Profile Performance API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://businessprofileperformance.googleapis.com/$discovery/rest?version=v1
+  calendar:
+    title: Google Calendar API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://calendar-json.googleapis.com/$discovery/rest?version=v3
+  certificatemanager:
+    title: Certificate Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://certificatemanager.googleapis.com/$discovery/rest?version=v1
+  ces:
+    title: Gemini Enterprise for Customer Experience API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://ces.googleapis.com/$discovery/rest?version=v1
+  chat:
+    title: Google Chat API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://chat.googleapis.com/$discovery/rest?version=v1
+  checks:
+    title: Checks API
+    latest_version: v1alpha
+    status: not_generated
+    discovery_url: https://checks.googleapis.com/$discovery/rest?version=v1alpha
+  chromemanagement:
+    title: Chrome Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://chromemanagement.googleapis.com/$discovery/rest?version=v1
+  chromepolicy:
+    title: Chrome Policy API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://chromepolicy.googleapis.com/$discovery/rest?version=v1
+  chromeuxreport:
+    title: Chrome UX Report API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://chromeuxreport.googleapis.com/$discovery/rest?version=v1
+  chromewebstore:
+    title: Chrome Web Store API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://chromewebstore.googleapis.com/$discovery/rest?version=v2
+  civicinfo:
+    title: Google Civic Information API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://civicinfo.googleapis.com/$discovery/rest?version=v2
+  classroom:
+    title: Google Classroom API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://classroom.googleapis.com/$discovery/rest?version=v1
+  cloudasset:
+    title: Cloud Asset API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudasset.googleapis.com/$discovery/rest?version=v1
+  cloudbilling:
+    title: Cloud Billing API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudbilling.googleapis.com/$discovery/rest?version=v1
+  cloudbuild:
+    title: Cloud Build API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://cloudbuild.googleapis.com/$discovery/rest?version=v2
+  cloudchannel:
+    title: Cloud Channel API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudchannel.googleapis.com/$discovery/rest?version=v1
+  cloudcommerceprocurement:
+    title: Cloud Commerce Partner Procurement API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudcommerceprocurement.googleapis.com/$discovery/rest?version=v1
+  cloudcontrolspartner:
+    title: Cloud Controls Partner API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudcontrolspartner.googleapis.com/$discovery/rest?version=v1
+  clouddeploy:
+    title: Cloud Deploy API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://clouddeploy.googleapis.com/$discovery/rest?version=v1
+  clouderrorreporting:
+    title: Error Reporting API
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://clouderrorreporting.googleapis.com/$discovery/rest?version=v1beta1
+  cloudfunctions:
+    title: Cloud Functions API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://cloudfunctions.googleapis.com/$discovery/rest?version=v2
+  cloudidentity:
+    title: Cloud Identity API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudidentity.googleapis.com/$discovery/rest?version=v1
+  cloudkms:
+    title: Cloud Key Management Service (KMS) API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudkms.googleapis.com/$discovery/rest?version=v1
+  cloudlocationfinder:
+    title: Cloud Location Finder API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudlocationfinder.googleapis.com/$discovery/rest?version=v1
+  cloudnumberregistry:
+    title: Cloud Number Registry API
+    latest_version: v1alpha
+    status: not_generated
+    discovery_url: https://cloudnumberregistry.googleapis.com/$discovery/rest?version=v1alpha
+  cloudproductregistry:
+    title: Cloud Product Registry API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudproductregistry.googleapis.com/$discovery/rest?version=v1
+  cloudprofiler:
+    title: Cloud Profiler API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://cloudprofiler.googleapis.com/$discovery/rest?version=v2
+  cloudresourcemanager:
+    title: Cloud Resource Manager API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://cloudresourcemanager.googleapis.com/$discovery/rest?version=v3
+  cloudscheduler:
+    title: Cloud Scheduler API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudscheduler.googleapis.com/$discovery/rest?version=v1
+  cloudsearch:
+    title: Cloud Search API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudsearch.googleapis.com/$discovery/rest?version=v1
+  cloudshell:
+    title: Cloud Shell API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://cloudshell.googleapis.com/$discovery/rest?version=v1
+  cloudsupport:
+    title: Google Cloud Support API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://cloudsupport.googleapis.com/$discovery/rest?version=v2
+  cloudtasks:
+    title: Cloud Tasks API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://cloudtasks.googleapis.com/$discovery/rest?version=v2
+  cloudtrace:
+    title: Cloud Trace API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://cloudtrace.googleapis.com/$discovery/rest?version=v2
+  composer:
+    title: Cloud Composer API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://composer.googleapis.com/$discovery/rest?version=v1
+  compute:
+    title: Compute Engine API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://www.googleapis.com/discovery/v1/apis/compute/v1/rest
+  config:
+    title: Infrastructure Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://config.googleapis.com/$discovery/rest?version=v1
+  connectors:
+    title: Connectors API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://connectors.googleapis.com/$discovery/rest?version=v2
+  contactcenteraiplatform:
+    title: Contact Center AI Platform API
+    latest_version: v1alpha1
+    status: not_generated
+    discovery_url: https://contactcenteraiplatform.googleapis.com/$discovery/rest?version=v1alpha1
+  contactcenterinsights:
+    title: Contact Center AI Insights API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://contactcenterinsights.googleapis.com/$discovery/rest?version=v1
+  container:
+    title: Kubernetes Engine API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://container.googleapis.com/$discovery/rest?version=v1
+  containeranalysis:
+    title: Container Analysis API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://containeranalysis.googleapis.com/$discovery/rest?version=v1
+  contentwarehouse:
+    title: Document AI Warehouse API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://contentwarehouse.googleapis.com/$discovery/rest?version=v1
+  css:
+    title: CSS API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://css.googleapis.com/$discovery/rest?version=v1
+  curationpartners:
+    title: Curation Partners API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://curationpartners.googleapis.com/$discovery/rest?version=v1
+  customsearch:
+    title: Custom Search API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://customsearch.googleapis.com/$discovery/rest?version=v1
+  databasecenter:
+    title: Database Center API
+    latest_version: v1beta
+    status: not_generated
+    discovery_url: https://databasecenter.googleapis.com/$discovery/rest?version=v1beta
+  datacatalog:
+    title: Google Cloud Data Catalog API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datacatalog.googleapis.com/$discovery/rest?version=v1
+  dataflow:
+    title: Dataflow API
+    latest_version: v1b3
+    status: not_generated
+    discovery_url: https://dataflow.googleapis.com/$discovery/rest?version=v1b3
+  dataform:
+    title: Dataform API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://dataform.googleapis.com/$discovery/rest?version=v1
+  datafusion:
+    title: Cloud Data Fusion API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datafusion.googleapis.com/$discovery/rest?version=v1
+  datalabeling:
+    title: Data Labeling API
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://datalabeling.googleapis.com/$discovery/rest?version=v1beta1
+  datalineage:
+    title: Data Lineage API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datalineage.googleapis.com/$discovery/rest?version=v1
+  datamanager:
+    title: Data Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datamanager.googleapis.com/$discovery/rest?version=v1
+  datamigration:
+    title: Database Migration API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datamigration.googleapis.com/$discovery/rest?version=v1
+  datapipelines:
+    title: Data pipelines API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datapipelines.googleapis.com/$discovery/rest?version=v1
+  dataplex:
+    title: Cloud Dataplex API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://dataplex.googleapis.com/$discovery/rest?version=v1
+  dataportability:
+    title: Data Portability API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://dataportability.googleapis.com/$discovery/rest?version=v1
+  dataproc:
+    title: Cloud Dataproc API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://dataproc.googleapis.com/$discovery/rest?version=v1
+  datastore:
+    title: Cloud Datastore API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datastore.googleapis.com/$discovery/rest?version=v1
+  datastream:
+    title: Datastream API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://datastream.googleapis.com/$discovery/rest?version=v1
+  deploymentmanager:
+    title: Cloud Deployment Manager V2 API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://deploymentmanager.googleapis.com/$discovery/rest?version=v2
+  developerconnect:
+    title: Developer Connect API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://developerconnect.googleapis.com/$discovery/rest?version=v1
+  developerknowledge:
+    title: Developer Knowledge API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://developerknowledge.googleapis.com/$discovery/rest?version=v1
+  devicerun:
+    title: Device Run API
+    latest_version: v1alpha
+    status: not_generated
+    discovery_url: https://devicerun.googleapis.com/$discovery/rest?version=v1alpha
+  dfareporting:
+    title: Campaign Manager 360 API
+    latest_version: v5
+    status: not_generated
+    discovery_url: https://dfareporting.googleapis.com/$discovery/rest?version=v5
+  dialogflow:
+    title: Dialogflow API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://dialogflow.googleapis.com/$discovery/rest?version=v3
+  digitalassetlinks:
+    title: Digital Asset Links API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://digitalassetlinks.googleapis.com/$discovery/rest?version=v1
+  discovery:
+    title: API Discovery Service
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://discovery.googleapis.com/$discovery/rest?version=v1
+  discoveryengine:
+    title: Discovery Engine API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://discoveryengine.googleapis.com/$discovery/rest?version=v1
+  displayvideo:
+    title: Display & Video 360 API
+    latest_version: v4
+    status: not_generated
+    discovery_url: https://displayvideo.googleapis.com/$discovery/rest?version=v4
+  dlp:
+    title: Sensitive Data Protection (DLP)
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://dlp.googleapis.com/$discovery/rest?version=v2
+  dns:
+    title: Cloud DNS API
+    latest_version: v1
+    generated_version: v1
+    status: up_to_date
+    discovery_url: https://dns.googleapis.com/
+  docs:
+    title: Google Docs API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://docs.googleapis.com/$discovery/rest?version=v1
+  documentai:
+    title: Cloud Document AI API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://documentai.googleapis.com/$discovery/rest?version=v1
+  domains:
+    title: Cloud Domains API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://domains.googleapis.com/$discovery/rest?version=v1
+  doubleclickbidmanager:
+    title: DoubleClick Bid Manager API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://doubleclickbidmanager.googleapis.com/$discovery/rest?version=v2
+  doubleclicksearch:
+    title: Search Ads 360 API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://doubleclicksearch.googleapis.com/$discovery/rest?version=v2
+  drive:
+    title: Drive API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://www.googleapis.com/discovery/v1/apis/drive/v3/rest
+  driveactivity:
+    title: Drive Activity API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://driveactivity.googleapis.com/$discovery/rest?version=v2
+  drivelabels:
+    title: Drive Labels API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://drivelabels.googleapis.com/$discovery/rest?version=v2
+  essentialcontacts:
+    title: Essential Contacts API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://essentialcontacts.googleapis.com/$discovery/rest?version=v1
+  eventarc:
+    title: Eventarc API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://eventarc.googleapis.com/$discovery/rest?version=v1
+  factchecktools:
+    title: Fact Check Tools API
+    latest_version: v1alpha1
+    status: not_generated
+    discovery_url: https://factchecktools.googleapis.com/$discovery/rest?version=v1alpha1
+  fcm:
+    title: Firebase Cloud Messaging API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://fcm.googleapis.com/$discovery/rest?version=v1
+  fcmdata:
+    title: Firebase Cloud Messaging Data API
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://fcmdata.googleapis.com/$discovery/rest?version=v1beta1
+  file:
+    title: Cloud Filestore API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://file.googleapis.com/$discovery/rest?version=v1
+  firebase:
+    title: Firebase Management API
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://firebase.googleapis.com/$discovery/rest?version=v1beta1
+  firebaseappcheck:
+    title: Firebase App Check API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebaseappcheck.googleapis.com/$discovery/rest?version=v1
+  firebaseappdistribution:
+    title: Firebase App Distribution API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebaseappdistribution.googleapis.com/$discovery/rest?version=v1
+  firebaseapphosting:
+    title: Firebase App Hosting API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebaseapphosting.googleapis.com/$discovery/rest?version=v1
+  firebasecrashlytics:
+    title: Firebase Crashlytics API
+    latest_version: v1alpha
+    status: not_generated
+    discovery_url: https://firebasecrashlytics.googleapis.com/$discovery/rest?version=v1alpha
+  firebasedatabase:
+    title: Firebase Realtime Database Management API
+    latest_version: v1beta
+    status: not_generated
+    discovery_url: https://firebasedatabase.googleapis.com/$discovery/rest?version=v1beta
+  firebasedataconnect:
+    title: Firebase SQL Connect API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebasedataconnect.googleapis.com/$discovery/rest?version=v1
+  firebasedynamiclinks:
+    title: Firebase Dynamic Links API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebasedynamiclinks.googleapis.com/$discovery/rest?version=v1
+  firebasehosting:
+    title: Firebase Hosting API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebasehosting.googleapis.com/$discovery/rest?version=v1
+  firebaseml:
+    title: Firebase ML API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebaseml.googleapis.com/$discovery/rest?version=v1
+  firebaserules:
+    title: Firebase Rules API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firebaserules.googleapis.com/$discovery/rest?version=v1
+  firebasestorage:
+    title: Cloud Storage for Firebase API
+    latest_version: v1beta
+    status: not_generated
+    discovery_url: https://firebasestorage.googleapis.com/$discovery/rest?version=v1beta
+  firestore:
+    title: Cloud Firestore API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://firestore.googleapis.com/$discovery/rest?version=v1
+  fitness:
+    title: Fitness API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://fitness.googleapis.com/$discovery/rest?version=v1
+  forms:
+    title: Google Forms API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://forms.googleapis.com/$discovery/rest?version=v1
+  ftp:
+    title: Cloud FTP API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://ftp.googleapis.com/$discovery/rest?version=v1
+  games:
+    title: Google Play Games Services API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://games.googleapis.com/$discovery/rest?version=v1
+  gamesConfiguration:
+    title: Google Play Games Services Publishing API
+    latest_version: v1configuration
+    status: not_generated
+    discovery_url: https://gamesconfiguration.googleapis.com/$discovery/rest?version=v1configuration
+  gamesManagement:
+    title: Google Play Games Services Management API
+    latest_version: v1management
+    status: not_generated
+    discovery_url: https://gamesmanagement.googleapis.com/$discovery/rest?version=v1management
+  gkebackup:
+    title: Backup for GKE API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://gkebackup.googleapis.com/$discovery/rest?version=v1
+  gkehub:
+    title: GKE Hub API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://gkehub.googleapis.com/$discovery/rest?version=v2
+  gkeonprem:
+    title: GKE On-Prem API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://gkeonprem.googleapis.com/$discovery/rest?version=v1
+  gmail:
+    title: Gmail API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://gmail.googleapis.com/$discovery/rest?version=v1
+  gmailpostmastertools:
+    title: Gmail Postmaster Tools API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://gmailpostmastertools.googleapis.com/$discovery/rest?version=v2
+  groupsmigration:
+    title: Groups Migration API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://groupsmigration.googleapis.com/$discovery/rest?version=v1
+  groupssettings:
+    title: Groups Settings API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://groupssettings.googleapis.com/$discovery/rest?version=v1
+  health:
+    title: Google Health API
+    latest_version: v4
+    status: not_generated
+    discovery_url: https://health.googleapis.com/$discovery/rest?version=v4
+  healthcare:
+    title: Cloud Healthcare API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://healthcare.googleapis.com/$discovery/rest?version=v1
+  homegraph:
+    title: HomeGraph API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://homegraph.googleapis.com/$discovery/rest?version=v1
+  hypercomputecluster:
+    title: Cluster Director API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://hypercomputecluster.googleapis.com/$discovery/rest?version=v1
+  iam:
+    title: Identity and Access Management (IAM) API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://iam.googleapis.com/$discovery/rest?version=v2
+  iamcredentials:
+    title: IAM Service Account Credentials API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://iamcredentials.googleapis.com/$discovery/rest?version=v1
+  iap:
+    title: Cloud Identity-Aware Proxy API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://iap.googleapis.com/$discovery/rest?version=v1
+  identitytoolkit:
+    title: Identity Toolkit API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://identitytoolkit.googleapis.com/$discovery/rest?version=v3
+  ids:
+    title: Cloud IDS API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://ids.googleapis.com/$discovery/rest?version=v1
+  indexing:
+    title: Web Search Indexing API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://indexing.googleapis.com/$discovery/rest?version=v3
+  integrations:
+    title: Application Integration API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://integrations.googleapis.com/$discovery/rest?version=v2
+  jobs:
+    title: Cloud Talent Solution API
+    latest_version: v4
+    status: not_generated
+    discovery_url: https://jobs.googleapis.com/$discovery/rest?version=v4
+  keep:
+    title: Google Keep API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://keep.googleapis.com/$discovery/rest?version=v1
+  kgsearch:
+    title: Knowledge Graph Search API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://kgsearch.googleapis.com/$discovery/rest?version=v1
+  kmsinventory:
+    title: KMS Inventory API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://kmsinventory.googleapis.com/$discovery/rest?version=v1
+  language:
+    title: Cloud Natural Language API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://language.googleapis.com/$discovery/rest?version=v2
+  libraryagent:
+    title: Library Agent API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://libraryagent.googleapis.com/$discovery/rest?version=v1
+  licensing:
+    title: Enterprise License Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://licensing.googleapis.com/$discovery/rest?version=v1
+  localservices:
+    title: Local Services API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://localservices.googleapis.com/$discovery/rest?version=v1
+  logging:
+    title: Cloud Logging API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://logging.googleapis.com/$discovery/rest?version=v2
+  looker:
+    title: Looker (Google Cloud core) API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://looker.googleapis.com/$discovery/rest?version=v1
+  managedidentities:
+    title: Managed Service for Microsoft Active Directory API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://managedidentities.googleapis.com/$discovery/rest?version=v1
+  managedkafka:
+    title: Managed Service for Apache Kafka API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://managedkafka.googleapis.com/$discovery/rest?version=v1
+  manufacturers:
+    title: Manufacturer Center API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://manufacturers.googleapis.com/$discovery/rest?version=v1
+  marketingplatformadmin:
+    title: Google Marketing Platform Admin API
+    latest_version: v1alpha
+    status: not_generated
+    discovery_url: https://marketingplatformadmin.googleapis.com/$discovery/rest?version=v1alpha
+  meet:
+    title: Google Meet API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://meet.googleapis.com/$discovery/rest?version=v2
+  memcache:
+    title: Cloud Memorystore for Memcached API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://memcache.googleapis.com/$discovery/rest?version=v1
+  merchantapi:
+    title: Merchant API
+    latest_version: reviews_v1beta
+    status: not_generated
+    discovery_url: https://merchantapi.googleapis.com/$discovery/rest?version=reviews_v1beta
+  metastore:
+    title: Dataproc Metastore API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://metastore.googleapis.com/$discovery/rest?version=v1
+  migrationcenter:
+    title: Migration Center API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://migrationcenter.googleapis.com/$discovery/rest?version=v1
+  ml:
+    title: AI Platform Training & Prediction API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://ml.googleapis.com/$discovery/rest?version=v1
+  monitoring:
+    title: Cloud Monitoring API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://monitoring.googleapis.com/$discovery/rest?version=v3
+  mybusinessaccountmanagement:
+    title: My Business Account Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinessaccountmanagement.googleapis.com/$discovery/rest?version=v1
+  mybusinessbusinessinformation:
+    title: My Business Business Information API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinessbusinessinformation.googleapis.com/$discovery/rest?version=v1
+  mybusinesslodging:
+    title: My Business Lodging API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinesslodging.googleapis.com/$discovery/rest?version=v1
+  mybusinessnotifications:
+    title: My Business Notifications API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinessnotifications.googleapis.com/$discovery/rest?version=v1
+  mybusinessplaceactions:
+    title: My Business Place Actions API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinessplaceactions.googleapis.com/$discovery/rest?version=v1
+  mybusinessqanda:
+    title: My Business Q&A API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinessqanda.googleapis.com/$discovery/rest?version=v1
+  mybusinessverifications:
+    title: My Business Verifications API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://mybusinessverifications.googleapis.com/$discovery/rest?version=v1
+  netapp:
+    title: NetApp API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://netapp.googleapis.com/$discovery/rest?version=v1
+  networkconnectivity:
+    title: Network Connectivity API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://networkconnectivity.googleapis.com/$discovery/rest?version=v1
+  networkmanagement:
+    title: Network Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://networkmanagement.googleapis.com/$discovery/rest?version=v1
+  networksecurity:
+    title: Network Security API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://networksecurity.googleapis.com/$discovery/rest?version=v1
+  networkservices:
+    title: Network Services API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://networkservices.googleapis.com/$discovery/rest?version=v1
+  notebooks:
+    title: Notebooks API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://notebooks.googleapis.com/$discovery/rest?version=v2
+  oauth2:
+    title: Google OAuth2 API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://www.googleapis.com/discovery/v1/apis/oauth2/v2/rest
+  observability:
+    title: Observability API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://observability.googleapis.com/$discovery/rest?version=v1
+  ondemandscanning:
+    title: On-Demand Scanning API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://ondemandscanning.googleapis.com/$discovery/rest?version=v1
+  oracledatabase:
+    title: Oracle Database@Google Cloud API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://oracledatabase.googleapis.com/$discovery/rest?version=v1
+  orgpolicy:
+    title: Organization Policy API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://orgpolicy.googleapis.com/$discovery/rest?version=v2
+  osconfig:
+    title: OS Config API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://osconfig.googleapis.com/$discovery/rest?version=v2
+  oslogin:
+    title: Cloud OS Login API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://oslogin.googleapis.com/$discovery/rest?version=v1
+  pagespeedonline:
+    title: PageSpeed Insights API
+    latest_version: v5
+    status: not_generated
+    discovery_url: https://pagespeedonline.googleapis.com/$discovery/rest?version=v5
+  parallelstore:
+    title: Parallelstore API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://parallelstore.googleapis.com/$discovery/rest?version=v1
+  parametermanager:
+    title: Parameter Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://parametermanager.googleapis.com/$discovery/rest?version=v1
+  paymentsresellersubscription:
+    title: Payments Reseller Subscription API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://paymentsresellersubscription.googleapis.com/$discovery/rest?version=v1
+  people:
+    title: People API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://people.googleapis.com/$discovery/rest?version=v1
+  places:
+    title: Places API (New)
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://places.googleapis.com/$discovery/rest?version=v1
+  playcustomapp:
+    title: Google Play Custom App Publishing API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://playcustomapp.googleapis.com/$discovery/rest?version=v1
+  playdeveloperreporting:
+    title: Google Play Developer Reporting API
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://playdeveloperreporting.googleapis.com/$discovery/rest?version=v1beta1
+  playgrouping:
+    title: Google Play Grouping API
+    latest_version: v1alpha1
+    status: not_generated
+    discovery_url: https://playgrouping.googleapis.com/$discovery/rest?version=v1alpha1
+  playintegrity:
+    title: Google Play Integrity API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://playintegrity.googleapis.com/$discovery/rest?version=v1
+  policyanalyzer:
+    title: Policy Analyzer API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://policyanalyzer.googleapis.com/$discovery/rest?version=v1
+  policysimulator:
+    title: Policy Simulator API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://policysimulator.googleapis.com/$discovery/rest?version=v1
+  policytroubleshooter:
+    title: Policy Troubleshooter API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://policytroubleshooter.googleapis.com/$discovery/rest?version=v3
+  pollen:
+    title: Pollen API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://pollen.googleapis.com/$discovery/rest?version=v1
+  poly:
+    title: Poly API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://poly.googleapis.com/$discovery/rest?version=v1
+  privateca:
+    title: Certificate Authority API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://privateca.googleapis.com/$discovery/rest?version=v1
+  prod_tt_sasportal:
+    title: SAS Portal API (Testing)
+    latest_version: v1alpha1
+    status: not_generated
+    discovery_url: https://prod-tt-sasportal.googleapis.com/$discovery/rest?version=v1alpha1
+  publicca:
+    title: Public Certificate Authority API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://publicca.googleapis.com/$discovery/rest?version=v1
+  pubsub:
+    title: Cloud Pub/Sub API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://pubsub.googleapis.com/$discovery/rest?version=v1
+  pubsublite:
+    title: Pub/Sub Lite API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://pubsublite.googleapis.com/$discovery/rest?version=v1
+  rapidmigrationassessment:
+    title: Rapid Migration Assessment API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://rapidmigrationassessment.googleapis.com/$discovery/rest?version=v1
+  readerrevenuesubscriptionlinking:
+    title: Reader Revenue Subscription Linking API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://readerrevenuesubscriptionlinking.googleapis.com/$discovery/rest?version=v1
+  realtimebidding:
+    title: Real-time Bidding API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://realtimebidding.googleapis.com/$discovery/rest?version=v1
+  recaptchaenterprise:
+    title: reCAPTCHA Enterprise API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://recaptchaenterprise.googleapis.com/$discovery/rest?version=v1
+  recommendationengine:
+    title: Recommendations AI (Beta)
+    latest_version: v1beta1
+    status: not_generated
+    discovery_url: https://recommendationengine.googleapis.com/$discovery/rest?version=v1beta1
+  recommender:
+    title: Recommender API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://recommender.googleapis.com/$discovery/rest?version=v1
+  redis:
+    title: Google Cloud Memorystore for Redis API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://redis.googleapis.com/$discovery/rest?version=v1
+  reseller:
+    title: Google Workspace Reseller API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://reseller.googleapis.com/$discovery/rest?version=v1
+  retail:
+    title: AI Commerce Search API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://retail.googleapis.com/$discovery/rest?version=v2
+  run:
+    title: Cloud Run Admin API
+    latest_version: v2
+    generated_version: v2
+    status: up_to_date
+    discovery_url: https://run.googleapis.com/
+  runtimeconfig:
+    title: Cloud Runtime Configuration API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://runtimeconfig.googleapis.com/$discovery/rest?version=v1
+  saasservicemgmt:
+    title: App Lifecycle Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://saasservicemgmt.googleapis.com/$discovery/rest?version=v1
+  safebrowsing:
+    title: Safe Browsing API
+    latest_version: v5
+    status: not_generated
+    discovery_url: https://safebrowsing.googleapis.com/$discovery/rest?version=v5
+  sasportal:
+    title: SAS Portal API
+    latest_version: v1alpha1
+    status: not_generated
+    discovery_url: https://sasportal.googleapis.com/$discovery/rest?version=v1alpha1
+  script:
+    title: Apps Script API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://script.googleapis.com/$discovery/rest?version=v1
+  searchads360:
+    title: Search Ads 360 Reporting API
+    latest_version: v23
+    status: not_generated
+    discovery_url: https://searchads360.googleapis.com/$discovery/rest?version=v23
+  searchconsole:
+    title: Google Search Console API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://searchconsole.googleapis.com/$discovery/rest?version=v1
+  secretmanager:
+    title: Secret Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://secretmanager.googleapis.com/$discovery/rest?version=v1
+  securesourcemanager:
+    title: Secure Source Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://securesourcemanager.googleapis.com/$discovery/rest?version=v1
+  securitycenter:
+    title: Security Command Center API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://securitycenter.googleapis.com/$discovery/rest?version=v1
+  securityposture:
+    title: Security Posture API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://securityposture.googleapis.com/$discovery/rest?version=v1
+  serviceconsumermanagement:
+    title: Service Consumer Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://serviceconsumermanagement.googleapis.com/$discovery/rest?version=v1
+  servicecontrol:
+    title: Service Control API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://servicecontrol.googleapis.com/$discovery/rest?version=v2
+  servicedirectory:
+    title: Service Directory API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://servicedirectory.googleapis.com/$discovery/rest?version=v1
+  servicemanagement:
+    title: Service Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://servicemanagement.googleapis.com/$discovery/rest?version=v1
+  servicenetworking:
+    title: Service Networking API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://servicenetworking.googleapis.com/$discovery/rest?version=v1
+  serviceusage:
+    title: Service Usage API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://serviceusage.googleapis.com/$discovery/rest?version=v1
+  sheets:
+    title: Google Sheets API
+    latest_version: v4
+    status: not_generated
+    discovery_url: https://sheets.googleapis.com/$discovery/rest?version=v4
+  siteVerification:
+    title: Site Verification API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://siteverification.googleapis.com/$discovery/rest?version=v1
+  slides:
+    title: Google Slides API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://slides.googleapis.com/$discovery/rest?version=v1
+  smartdevicemanagement:
+    title: Smart Device Management API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://smartdevicemanagement.googleapis.com/$discovery/rest?version=v1
+  solar:
+    title: Solar API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://solar.googleapis.com/$discovery/rest?version=v1
+  spanner:
+    title: Cloud Spanner API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://spanner.googleapis.com/$discovery/rest?version=v1
+  speech:
+    title: Cloud Speech-to-Text API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://speech.googleapis.com/$discovery/rest?version=v1
+  sqladmin:
+    title: Cloud SQL Admin API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://sqladmin.googleapis.com/$discovery/rest?version=v1
+  storage:
+    title: Cloud Storage JSON API
+    latest_version: v1
+    generated_version: v1
+    status: up_to_date
+    discovery_url: https://storage.googleapis.com/storage/v1/
+  storagebatchoperations:
+    title: Storage Batch Operations API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://storagebatchoperations.googleapis.com/$discovery/rest?version=v1
+  storagetransfer:
+    title: Storage Transfer API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://storagetransfer.googleapis.com/$discovery/rest?version=v1
+  streetviewpublish:
+    title: Street View Publish API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://streetviewpublish.googleapis.com/$discovery/rest?version=v1
+  sts:
+    title: Security Token Service API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://sts.googleapis.com/$discovery/rest?version=v1
+  tagmanager:
+    title: Tag Manager API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://tagmanager.googleapis.com/$discovery/rest?version=v2
+  tasks:
+    title: Google Tasks API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://tasks.googleapis.com/$discovery/rest?version=v1
+  testing:
+    title: Cloud Testing API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://testing.googleapis.com/$discovery/rest?version=v1
+  texttospeech:
+    title: Cloud Text-to-Speech API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://texttospeech.googleapis.com/$discovery/rest?version=v1
+  threatintelligence:
+    title: Threat Intelligence API
+    latest_version: v1beta
+    status: not_generated
+    discovery_url: https://threatintelligence.googleapis.com/$discovery/rest?version=v1beta
+  toolresults:
+    title: Cloud Tool Results API
+    latest_version: v1beta3
+    status: not_generated
+    discovery_url: https://toolresults.googleapis.com/$discovery/rest?version=v1beta3
+  tpu:
+    title: Cloud TPU API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://tpu.googleapis.com/$discovery/rest?version=v2
+  trafficdirector:
+    title: Traffic Director API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://trafficdirector.googleapis.com/$discovery/rest?version=v3
+  transcoder:
+    title: Transcoder API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://transcoder.googleapis.com/$discovery/rest?version=v1
+  translate:
+    title: Cloud Translation API
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://translation.googleapis.com/$discovery/rest?version=v3
+  travelimpactmodel:
+    title: Travel Impact Model API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://travelimpactmodel.googleapis.com/$discovery/rest?version=v1
+  vault:
+    title: Google Vault API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://vault.googleapis.com/$discovery/rest?version=v1
+  verifiedaccess:
+    title: Chrome Verified Access API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://verifiedaccess.googleapis.com/$discovery/rest?version=v2
+  versionhistory:
+    title: versionhistory.googleapis.com API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://versionhistory.googleapis.com/$discovery/rest?version=v1
+  videointelligence:
+    title: Cloud Video Intelligence API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://videointelligence.googleapis.com/$discovery/rest?version=v1
+  vision:
+    title: Cloud Vision API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://vision.googleapis.com/$discovery/rest?version=v1
+  vmmigration:
+    title: VM Migration API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://vmmigration.googleapis.com/$discovery/rest?version=v1
+  vmwareengine:
+    title: VMware Engine API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://vmwareengine.googleapis.com/$discovery/rest?version=v1
+  vpcaccess:
+    title: Serverless VPC Access API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://vpcaccess.googleapis.com/$discovery/rest?version=v1
+  walletobjects:
+    title: Google Wallet API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://walletobjects.googleapis.com/$discovery/rest?version=v1
+  webcontentpublisher:
+    title: Web Content Publisher API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://webcontentpublisher.googleapis.com/$discovery/rest?version=v1
+  webfonts:
+    title: Web Fonts Developer API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://webfonts.googleapis.com/$discovery/rest?version=v1
+  webrisk:
+    title: Web Risk API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://webrisk.googleapis.com/$discovery/rest?version=v1
+  websecurityscanner:
+    title: Web Security Scanner API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://websecurityscanner.googleapis.com/$discovery/rest?version=v1
+  workflowexecutions:
+    title: Workflow Executions API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://workflowexecutions.googleapis.com/$discovery/rest?version=v1
+  workflows:
+    title: Workflows API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://workflows.googleapis.com/$discovery/rest?version=v1
+  workloadmanager:
+    title: Workload Manager API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://workloadmanager.googleapis.com/$discovery/rest?version=v1
+  workspaceevents:
+    title: Google Workspace Events API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://workspaceevents.googleapis.com/$discovery/rest?version=v1
+  workstations:
+    title: Cloud Workstations API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://workstations.googleapis.com/$discovery/rest?version=v1
+  youtube:
+    title: YouTube Data API v3
+    latest_version: v3
+    status: not_generated
+    discovery_url: https://youtube.googleapis.com/$discovery/rest?version=v3
+  youtubeAnalytics:
+    title: YouTube Analytics API
+    latest_version: v2
+    status: not_generated
+    discovery_url: https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2
+  youtubereporting:
+    title: YouTube Reporting API
+    latest_version: v1
+    status: not_generated
+    discovery_url: https://youtubereporting.googleapis.com/$discovery/rest?version=v1

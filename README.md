@@ -15,10 +15,12 @@ to be correct, it is clearly not idiomatic crystal that humans would write.
 - **Google Cloud Storage (v1)**: Strongly-typed client for buckets, objects, ACLs, and other storage resources.
 - **Cloud Run Admin API (v2)**: Strongly-typed client for Cloud Run services, revisions, instances, and jobs.
 - **Discovery Service Code Generator**: Built-in generator using ECR templates to parse any Google Discovery document and produce typed Crystal clients and schemas.
-- **CLI Utilities**:
+- **CLI & TUI Utilities**:
+  - `bin/tui`: Interactive Terminal User Interface (TUI) powered by [Crysterm](https://github.com/crystallabs/crysterm) to browse Discovery targets, generate APIs, run tests, build/clean documentation, and track versions via `api-list.yaml`.
   - `bin/list_storage`: Command-line tool to list GCS buckets and objects.
   - `bin/list_cloud_run`: Command-line tool to list Cloud Run services and instances.
   - `bin/generate_api`: Code generation tool for Google Discovery documents.
+  - `api-list.yaml`: Catalog tracking available Google APIs and latest version numbers from Google Discovery Service to detect outdated clients.
 
 ## Installation
 
@@ -67,6 +69,40 @@ end)
 crystal build src/bin/list_storage.cr -o bin/list_storage
 crystal build src/bin/list_cloud_run.cr -o bin/list_cloud_run
 crystal build src/bin/generate_api.cr -o bin/generate_api
+crystal build src/bin/tui.cr -o bin/tui
+```
+
+### Crysterm Terminal User Interface (TUI)
+
+Launch the interactive TUI application:
+
+```bash
+./bin/tui
+```
+
+Or run directly via command-line flags:
+
+```bash
+# Show all Discovery targets and sync api-list.yaml
+./bin/tui --list
+
+# Generate client for an API
+./bin/tui --generate storage
+
+# Run unit tests for a specific API
+./bin/tui --test storage
+
+# Run all unit tests
+./bin/tui --test-all
+
+# Generate Crystal documentation HTML
+./bin/tui --docs
+
+# Clean up generated documentation
+./bin/tui --remove-docs
+
+# Clear existing generated APIs and regenerate
+./bin/tui --clear-and-regenerate
 ```
 
 ### List Buckets and Objects

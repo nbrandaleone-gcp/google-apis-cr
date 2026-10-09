@@ -15,9 +15,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}/notificationConfigs/{notification}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{notification}", URI.encode_path_segment(notification.to_s))
-      req_path = req_path.gsub("{+notification}", URI.encode_path_segment(notification.to_s))
+      req_path = req_path.gsub("{+notification}", notification.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -39,9 +39,9 @@ module GoogleApis::Storage::V1
     ) : Notification
       req_path = "b/{bucket}/notificationConfigs/{notification}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{notification}", URI.encode_path_segment(notification.to_s))
-      req_path = req_path.gsub("{+notification}", URI.encode_path_segment(notification.to_s))
+      req_path = req_path.gsub("{+notification}", notification.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -63,7 +63,7 @@ module GoogleApis::Storage::V1
     ) : Notification
       req_path = "b/{bucket}/notificationConfigs"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -84,7 +84,7 @@ module GoogleApis::Storage::V1
     ) : Notifications
       req_path = "b/{bucket}/notificationConfigs"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?

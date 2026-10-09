@@ -15,9 +15,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}/defaultObjectAcl/{entity}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{entity}", URI.encode_path_segment(entity.to_s))
-      req_path = req_path.gsub("{+entity}", URI.encode_path_segment(entity.to_s))
+      req_path = req_path.gsub("{+entity}", entity.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -39,9 +39,9 @@ module GoogleApis::Storage::V1
     ) : ObjectAccessControl
       req_path = "b/{bucket}/defaultObjectAcl/{entity}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{entity}", URI.encode_path_segment(entity.to_s))
-      req_path = req_path.gsub("{+entity}", URI.encode_path_segment(entity.to_s))
+      req_path = req_path.gsub("{+entity}", entity.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -63,7 +63,7 @@ module GoogleApis::Storage::V1
     ) : ObjectAccessControl
       req_path = "b/{bucket}/defaultObjectAcl"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -86,7 +86,7 @@ module GoogleApis::Storage::V1
     ) : ObjectAccessControls
       req_path = "b/{bucket}/defaultObjectAcl"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?
@@ -111,9 +111,9 @@ module GoogleApis::Storage::V1
     ) : ObjectAccessControl
       req_path = "b/{bucket}/defaultObjectAcl/{entity}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{entity}", URI.encode_path_segment(entity.to_s))
-      req_path = req_path.gsub("{+entity}", URI.encode_path_segment(entity.to_s))
+      req_path = req_path.gsub("{+entity}", entity.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -136,9 +136,9 @@ module GoogleApis::Storage::V1
     ) : ObjectAccessControl
       req_path = "b/{bucket}/defaultObjectAcl/{entity}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{entity}", URI.encode_path_segment(entity.to_s))
-      req_path = req_path.gsub("{+entity}", URI.encode_path_segment(entity.to_s))
+      req_path = req_path.gsub("{+entity}", entity.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?

@@ -8,6 +8,10 @@ crystal: '>= 1.21.1'
 
 license: MIT
 
+dependencies:
+  crysterm:
+    github: crystallabs/crysterm
+
 targets:
   list_storage:
     main: src/bin/list_storage.cr
@@ -15,3 +19,5 @@ targets:
     main: src/bin/list_cloud_run.cr
   generate_api:
     main: src/bin/generate_api.cr
+  tui:
+    main: src/bin/tui.cr

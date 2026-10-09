@@ -16,7 +16,7 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?
@@ -41,7 +41,7 @@ module GoogleApis::Storage::V1
     ) : Bucket
       req_path = "b/{bucket}/restore"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation
@@ -64,7 +64,7 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/relocate"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
@@ -89,7 +89,7 @@ module GoogleApis::Storage::V1
     ) : Bucket
       req_path = "b/{bucket}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["generation"] = generation unless generation.nil?
@@ -116,7 +116,7 @@ module GoogleApis::Storage::V1
     ) : Policy
       req_path = "b/{bucket}/iam"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["optionsRequestedPolicyVersion"] = options_requested_policy_version unless options_requested_policy_version.nil?
@@ -138,7 +138,7 @@ module GoogleApis::Storage::V1
     ) : BucketStorageLayout
       req_path = "b/{bucket}/storageLayout"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["prefix"] = prefix unless prefix.nil?
@@ -221,7 +221,7 @@ module GoogleApis::Storage::V1
     ) : Bucket
       req_path = "b/{bucket}/lockRetentionPolicy"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match
@@ -249,7 +249,7 @@ module GoogleApis::Storage::V1
     ) : Bucket
       req_path = "b/{bucket}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?
@@ -276,7 +276,7 @@ module GoogleApis::Storage::V1
     ) : Policy
       req_path = "b/{bucket}/iam"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -298,7 +298,7 @@ module GoogleApis::Storage::V1
     ) : TestIamPermissionsResponse
       req_path = "b/{bucket}/iam/testPermissions"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["permissions"] = permissions
@@ -326,7 +326,7 @@ module GoogleApis::Storage::V1
     ) : Bucket
       req_path = "b/{bucket}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?

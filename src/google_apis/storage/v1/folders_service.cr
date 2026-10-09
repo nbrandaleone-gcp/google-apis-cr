@@ -16,9 +16,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "b/{bucket}/folders/{folder}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{folder}", URI.encode_path_segment(folder.to_s))
-      req_path = req_path.gsub("{+folder}", URI.encode_path_segment(folder.to_s))
+      req_path = req_path.gsub("{+folder}", folder.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?
@@ -42,9 +42,9 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/folders/{folder}/deleteRecursive"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{folder}", URI.encode_path_segment(folder.to_s))
-      req_path = req_path.gsub("{+folder}", URI.encode_path_segment(folder.to_s))
+      req_path = req_path.gsub("{+folder}", folder.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?
@@ -68,9 +68,9 @@ module GoogleApis::Storage::V1
     ) : Folder
       req_path = "b/{bucket}/folders/{folder}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{folder}", URI.encode_path_segment(folder.to_s))
-      req_path = req_path.gsub("{+folder}", URI.encode_path_segment(folder.to_s))
+      req_path = req_path.gsub("{+folder}", folder.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifMetagenerationMatch"] = if_metageneration_match unless if_metageneration_match.nil?
@@ -93,7 +93,7 @@ module GoogleApis::Storage::V1
     ) : Folder
       req_path = "b/{bucket}/folders"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["recursive"] = recursive unless recursive.nil?
@@ -119,7 +119,7 @@ module GoogleApis::Storage::V1
     ) : Folders
       req_path = "b/{bucket}/folders"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["delimiter"] = delimiter unless delimiter.nil?
@@ -148,11 +148,11 @@ module GoogleApis::Storage::V1
     ) : GoogleLongrunningOperation
       req_path = "b/{bucket}/folders/{sourceFolder}/renameTo/folders/{destinationFolder}"
       req_path = req_path.gsub("{bucket}", URI.encode_path_segment(bucket.to_s))
-      req_path = req_path.gsub("{+bucket}", URI.encode_path_segment(bucket.to_s))
+      req_path = req_path.gsub("{+bucket}", bucket.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{sourceFolder}", URI.encode_path_segment(source_folder.to_s))
-      req_path = req_path.gsub("{+sourceFolder}", URI.encode_path_segment(source_folder.to_s))
+      req_path = req_path.gsub("{+sourceFolder}", source_folder.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{destinationFolder}", URI.encode_path_segment(destination_folder.to_s))
-      req_path = req_path.gsub("{+destinationFolder}", URI.encode_path_segment(destination_folder.to_s))
+      req_path = req_path.gsub("{+destinationFolder}", destination_folder.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["ifSourceMetagenerationMatch"] = if_source_metageneration_match unless if_source_metageneration_match.nil?

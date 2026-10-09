@@ -230,6 +230,87 @@ module GoogleApis
       # 4. Service module (v1.cr)
       service_module_content = ServiceModuleView.new(service).to_s
       File.write(File.join(target_dir, "#{service.version.downcase}.cr"), service_module_content)
+
+      # 5. README.md with usage example
+      readme_content = generate_readme(service)
+      File.write(File.join(target_dir, "README.md"), readme_content)
+
+      # 6. Auto-format generated Crystal files
+      Process.run("crystal", ["tool", "format", target_dir])
+    end
+
+    # Generates a README.md documenting usage of the generated client.
+    def self.generate_readme(service : ServiceModel) : String
+      String.build do |builder|
+        title = service.title || "#{service.name.capitalize} API"
+        builder << "# #{title} (#{service.version.upcase})\n\n"
+        if desc = service.description
+          builder << desc << "\n\n"
+        end
+        builder << "This client was generated from the Google Discovery document for `#{service.name}` (#{service.version}).\n\n"
+        builder << "## Usage Example\n\n"
+        builder << "```crystal\n"
+        builder << "require \"google_apis_cr\"\n\n"
+        builder << "# Load Application Default Credentials (ADC)\n"
+        builder << "credentials = GoogleApis::Auth.default_credentials\n\n"
+        builder << "# Initialize #{title} Client\n"
+        builder << "client = #{service.module_name}::Client.new(credentials)\n"
+
+        if first_res = service.resources.first?
+          builder << "\n# Access #{first_res.getter_name} methods:\n"
+          if first_method = first_res.methods.first?
+            builder << "# response = client.#{first_res.getter_name}.#{first_method.crystal_name}("
+            req_params = first_method.required_parameters
+            if req_params.empty?
+              builder << ")\n"
+            else
+              builder << req_params.map { |param| "#{param.crystal_name}: \"value\"" }.join(", ")
+              builder << ")\n"
+            end
+          else
+            builder << "# client.#{first_res.getter_name}\n"
+          end
+        end
+
+        builder << "```\n\n"
+        builder << "## Available Resources\n\n"
+        builder << "| Resource | Service Class | Methods |\n"
+        builder << "|---|---|---|\n"
+        service.resources.each do |resource|
+          methods_summary = resource.methods.map(&.crystal_name).join(", ")
+          builder << "| `#{resource.getter_name}` | `#{resource.class_name}` | `#{methods_summary}` |\n"
+        end
+        builder << "\n"
+      end
+    end
+
+    # Generates a spec file for the given ServiceModel if not already present.
+    def self.generate_spec(service : ServiceModel, spec_dir : String = "spec/google_apis") : String
+      FileUtils.mkdir_p(spec_dir)
+      spec_file = File.join(spec_dir, "#{service.name.underscore}_#{service.version.downcase}_spec.cr")
+      return spec_file if File.exists?(spec_file)
+
+      content = String.build do |builder|
+        builder << "require \"../spec_helper\"\n"
+        builder << "require \"../../src/google_apis/#{service.name}/#{service.version.downcase}/#{service.version.downcase}\"\n\n"
+        builder << "describe #{service.module_name} do\n"
+        builder << "  it \"initializes #{service.name} client with credentials\" do\n"
+        builder << "    creds = MockCredentials.new\n"
+        builder << "    client = #{service.module_name}::Client.new(creds)\n"
+        builder << "    client.client.base_url.should eq(\"#{service.base_url}\")\n"
+        builder << "  end\n"
+        if first_res = service.resources.first?
+          builder << "\n  it \"exposes #{first_res.getter_name} service\" do\n"
+          builder << "    creds = MockCredentials.new\n"
+          builder << "    client = #{service.module_name}::Client.new(creds)\n"
+          builder << "    client.#{first_res.getter_name}.should_not be_nil\n"
+          builder << "  end\n"
+        end
+        builder << "end\n"
+      end
+
+      File.write(spec_file, content)
+      spec_file
     end
   end
 end

@@ -14,7 +14,7 @@ module GoogleApis::Storage::V1
     ) : ServiceAccount
       req_path = "projects/{projectId}/serviceAccount"
       req_path = req_path.gsub("{projectId}", URI.encode_path_segment(project_id.to_s))
-      req_path = req_path.gsub("{+projectId}", URI.encode_path_segment(project_id.to_s))
+      req_path = req_path.gsub("{+projectId}", project_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?

@@ -15,7 +15,7 @@ module GoogleApis::Storage::V1
     ) : HmacKey
       req_path = "projects/{projectId}/hmacKeys"
       req_path = req_path.gsub("{projectId}", URI.encode_path_segment(project_id.to_s))
-      req_path = req_path.gsub("{+projectId}", URI.encode_path_segment(project_id.to_s))
+      req_path = req_path.gsub("{+projectId}", project_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["serviceAccountEmail"] = service_account_email
@@ -38,9 +38,9 @@ module GoogleApis::Storage::V1
     ) : Nil
       req_path = "projects/{projectId}/hmacKeys/{accessId}"
       req_path = req_path.gsub("{projectId}", URI.encode_path_segment(project_id.to_s))
-      req_path = req_path.gsub("{+projectId}", URI.encode_path_segment(project_id.to_s))
+      req_path = req_path.gsub("{+projectId}", project_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{accessId}", URI.encode_path_segment(access_id.to_s))
-      req_path = req_path.gsub("{+accessId}", URI.encode_path_segment(access_id.to_s))
+      req_path = req_path.gsub("{+accessId}", access_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -62,9 +62,9 @@ module GoogleApis::Storage::V1
     ) : HmacKeyMetadata
       req_path = "projects/{projectId}/hmacKeys/{accessId}"
       req_path = req_path.gsub("{projectId}", URI.encode_path_segment(project_id.to_s))
-      req_path = req_path.gsub("{+projectId}", URI.encode_path_segment(project_id.to_s))
+      req_path = req_path.gsub("{+projectId}", project_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{accessId}", URI.encode_path_segment(access_id.to_s))
-      req_path = req_path.gsub("{+accessId}", URI.encode_path_segment(access_id.to_s))
+      req_path = req_path.gsub("{+accessId}", access_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
@@ -89,7 +89,7 @@ module GoogleApis::Storage::V1
     ) : HmacKeysMetadata
       req_path = "projects/{projectId}/hmacKeys"
       req_path = req_path.gsub("{projectId}", URI.encode_path_segment(project_id.to_s))
-      req_path = req_path.gsub("{+projectId}", URI.encode_path_segment(project_id.to_s))
+      req_path = req_path.gsub("{+projectId}", project_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["maxResults"] = max_results unless max_results.nil?
@@ -116,9 +116,9 @@ module GoogleApis::Storage::V1
     ) : HmacKeyMetadata
       req_path = "projects/{projectId}/hmacKeys/{accessId}"
       req_path = req_path.gsub("{projectId}", URI.encode_path_segment(project_id.to_s))
-      req_path = req_path.gsub("{+projectId}", URI.encode_path_segment(project_id.to_s))
+      req_path = req_path.gsub("{+projectId}", project_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
       req_path = req_path.gsub("{accessId}", URI.encode_path_segment(access_id.to_s))
-      req_path = req_path.gsub("{+accessId}", URI.encode_path_segment(access_id.to_s))
+      req_path = req_path.gsub("{+accessId}", access_id.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
       params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["userProject"] = user_project unless user_project.nil?
