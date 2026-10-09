@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-09 20:29:54 UTC
+last_updated: 2026-10-09 22:16:45 UTC
 apis:
   abusiveexperiencereport:
     title: Abusive Experience Report API
@@ -1453,8 +1453,7 @@ apis:
   tpu:
     title: Cloud TPU API
     latest_version: v2
-    generated_version: v2alpha1
-    status: out_of_date
+    status: not_generated
     discovery_url: https://tpu.googleapis.com/$discovery/rest?version=v2
   trafficdirector:
     title: Traffic Director API

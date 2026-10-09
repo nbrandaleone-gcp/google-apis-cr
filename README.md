@@ -2,7 +2,13 @@
 
 ![Google APIs Crystal Architecture Pipeline](assets/pipeline_architecture.png)
 
-A Crystal program that generates client libraries for Google APIs, featuring Application Default Credentials (ADC) authentication, Google Discovery Service typed code generation with Embedded Crystal (ECR) templates. 
+A Crystal program that generates client libraries for Google Cloud APIs, featuring Application Default Credentials (ADC) authentication, Google Discovery Service typed code generation with Embedded Crystal (ECR) templates. 
+
+Crystal is **NOT** an officially supported SDK for Google Cloud APIs. Therefore,
+I created my own SDK following guidance from Google. Almost all official language SDKs
+are generated programmatically, following a Discovery document. There is guide to assist in building your own client libraries. Please see: https://developers.google.com/discovery/v1/building-a-client-library.
+
+The Google APIs can be explored using [*Google APIs Explorer*](https://developers.google.com/apis-explorer/).
 
 All code is agent generated (Gemini 3.8 Flash). While unit tested
 to be correct, it is clearly not idiomatic crystal that humans would write.

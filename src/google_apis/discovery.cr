@@ -200,6 +200,9 @@ module GoogleApis
 
     # Inspects src_dir to detect generated versions.
     def detect_generated_apis(src_dir : String = "src/google_apis")
+      @targets.each do |target|
+        target.generated_version = nil
+      end
       return unless Dir.exists?(src_dir)
 
       @targets.each do |target|

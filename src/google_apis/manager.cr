@@ -18,8 +18,12 @@ module GoogleApis
     end
 
     # Lists available targets, optionally filtered by search substring.
-    def self.list_targets(search : String? = nil, allow_network : Bool = true) : Array(DiscoveryTarget)
-      cat = catalog(allow_network: allow_network)
+    def self.list_targets(search : String? = nil, allow_network : Bool = true, project_root : String = ".") : Array(DiscoveryTarget)
+      cat = catalog(
+        discovery_dir: File.join(project_root, "discovery"),
+        src_dir: File.join(project_root, "src/google_apis"),
+        allow_network: allow_network
+      )
       targets = cat.targets
       if query = search.try(&.strip.downcase)
         targets = targets.select do |target|
@@ -126,10 +130,17 @@ module GoogleApis
       query = api_query.strip.downcase
       return {false, "API name cannot be empty."} if query.empty?
       return remove_docs(project_root) if query == "docs"
-      return remove_all_apis(project_root) if query == "all"
+      return remove_all_apis(project_root) if query == "all" || query == "clear"
 
       generated = find_generated_api_names(project_root)
-      target_api = generated.find { |name| name.downcase == query || name.downcase.includes?(query) }
+      prefix_query = query.split(':').first
+      target_api = generated.find do |name|
+        n = name.downcase
+        n == query || n == prefix_query || n.includes?(query) || query.includes?(n)
+      end
+      unless target_api
+        target_api = find_discovery_target_api(prefix_query, project_root)
+      end
       unless target_api
         return {false, "No generated API found matching '#{api_query}'. Generated APIs: #{generated.join(", ")}"}
       end
@@ -150,23 +161,48 @@ module GoogleApis
       {true, msg.strip}
     end
 
+    private def self.find_discovery_target_api(prefix_query : String, project_root : String) : String?
+      discovery_dir = File.join(project_root, "discovery")
+      return nil unless Dir.exists?(discovery_dir)
+
+      Dir.glob(File.join(discovery_dir, "*.json")).each do |file|
+        base = File.basename(file)
+        next if base == "directory.json"
+        if base == "#{prefix_query}.json" || base.starts_with?("#{prefix_query}_")
+          return prefix_query
+        end
+      end
+      nil
+    end
+
     private def self.remove_all_apis(project_root : String) : Tuple(Bool, String)
       generated = find_generated_api_names(project_root)
-      if generated.empty?
-        remove_docs(project_root)
-        return {true, "No generated APIs to remove. Cleaned documentation."}
-      end
-
       all_removed = [] of String
       generated.each do |api_name|
         all_removed.concat(remove_single_api(api_name, project_root))
       end
       remove_docs(project_root)
+
+      # Clean any remaining discovery documents except directory.json
+      discovery_dir = File.join(project_root, "discovery")
+      if Dir.exists?(discovery_dir)
+        Dir.glob(File.join(discovery_dir, "*.json")).each do |disc_file|
+          fname = File.basename(disc_file)
+          next if fname == "directory.json"
+          FileUtils.rm(disc_file)
+          all_removed << "discovery/#{fname}"
+        end
+      end
+
       sync_api_list_yaml(project_root)
 
-      msg = "Successfully removed all generated APIs (#{generated.join(", ")}):\n" +
-            all_removed.map { |item| "  - #{item}" }.join("\n")
-      {true, msg}
+      if all_removed.empty?
+        {true, "No generated APIs to remove. Cleaned documentation."}
+      else
+        msg = "Successfully removed all generated APIs (#{generated.join(", ")}):\n" +
+              all_removed.map { |item| "  - #{item}" }.join("\n")
+        {true, msg}
+      end
     end
 
     private def self.remove_single_api(target_api : String, project_root : String) : Array(String)
@@ -226,7 +262,28 @@ module GoogleApis
         removed_items << "docs/GoogleApis/#{target_api.camelcase}/"
       end
 
+      # 8. discovery files in discovery/
+      removed_items.concat(remove_discovery_files(target_api, project_root))
+
       removed_items
+    end
+
+    private def self.remove_discovery_files(target_api : String, project_root : String) : Array(String)
+      removed = [] of String
+      discovery_dir = File.join(project_root, "discovery")
+      return removed unless Dir.exists?(discovery_dir)
+
+      base_api = target_api.split(':').first.strip.downcase
+      Dir.glob(File.join(discovery_dir, "*.json")).each do |disc_file|
+        fname = File.basename(disc_file)
+        next if fname == "directory.json"
+
+        if fname == "#{base_api}.json" || fname.starts_with?("#{base_api}_")
+          FileUtils.rm(disc_file)
+          removed << "discovery/#{fname}"
+        end
+      end
+      removed
     end
 
     private def self.collect_api_target_names(api_name : String) : Array(String)
@@ -429,7 +486,10 @@ module GoogleApis
       -----------------------
       1. [G] Generate API:
          Choose a Google API target from Google Discovery Docs (or enter name/id like
-         'storage', 'run', 'youtube:v3'). Generates strongly-typed Crystal clients in
+         'storage', 'run', 'youtube:v3'). In the API chooser, you can search and filter
+         using [F], skip a screenful of choices at a time using [PageUp]/[PageDown]
+         or [Ctrl+D]/[Ctrl+U], switch active widgets with [Tab], or jump to the top/bottom
+         with [Home]/[End]. Generates strongly-typed Crystal clients in
          'src/google_apis/<name>/<version>/', creates a usage README.md in that directory,
          and generates a unit test spec in 'spec/google_apis/'.
 

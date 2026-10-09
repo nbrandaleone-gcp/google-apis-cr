@@ -268,7 +268,7 @@ filtered_repos.each_with_index do |repo, idx|
     if r_cfg = repo.remote_repository_config
       puts "    Remote Config: #{r_cfg.description || "configured"}"
     end
-    if v_cfg = repo.virtual_repository_config
+    if repo.virtual_repository_config
       puts "    Virtual Config: configured"
     end
     if labels = repo.labels

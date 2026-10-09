@@ -34,23 +34,28 @@ describe GoogleApis::Manager do
     output.includes?("examples, 0 failures").should be_true
   end
 
-  it "removes an API and its associated files" do
+  it "removes an API and its associated files including discovery JSON" do
     test_api_dir = "src/google_apis/testapi"
     test_bin_src = "src/bin/list_testapi.cr"
     test_bin = "bin/list_testapi"
+    test_disc = "discovery/testapi_v1.json"
     FileUtils.mkdir_p(File.join(test_api_dir, "v1"))
     File.write(File.join(test_api_dir, "v1", "client.cr"), "# dummy client")
     FileUtils.mkdir_p("src/bin")
     File.write(test_bin_src, "# dummy script")
     FileUtils.mkdir_p("bin")
     File.write(test_bin, "# dummy binary")
+    FileUtils.mkdir_p("discovery")
+    File.write(test_disc, "{\"name\":\"testapi\",\"version\":\"v1\"}")
 
     success, msg = GoogleApis::Manager.remove_api("testapi")
     success.should be_true
     Dir.exists?(test_api_dir).should be_false
     File.exists?(test_bin_src).should be_false
     File.exists?(test_bin).should be_false
+    File.exists?(test_disc).should be_false
     msg.includes?("Successfully removed testapi API").should be_true
+    msg.includes?("discovery/testapi_v1.json").should be_true
   end
 
   it "removes documentation directory safely" do
@@ -62,6 +67,17 @@ describe GoogleApis::Manager do
     success.should be_true
     Dir.exists?(test_docs).should be_false
     msg.includes?("removed").should be_true
+  end
+
+  it "removes an API when queried by target ID (e.g. name:version)" do
+    test_api_dir = "src/google_apis/testidapi"
+    FileUtils.mkdir_p(File.join(test_api_dir, "v1"))
+    File.write(File.join(test_api_dir, "v1", "client.cr"), "# dummy client")
+
+    success, msg = GoogleApis::Manager.remove_api("testidapi:v1")
+    success.should be_true
+    Dir.exists?(test_api_dir).should be_false
+    msg.includes?("Successfully removed testidapi API").should be_true
   end
 end
 
