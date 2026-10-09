@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google API Client Generation Sequence Flow</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --border-color: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-pink: #ec4899;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #3b82f6;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .diagram-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      overflow-x: auto;
+    }
+
+    .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    footer a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        ARCHITECTURE EXECUTION FLOW
+      </div>
+      <h1>Google API Client Generation Pipeline</h1>
+      <p class="subtitle">Step-by-step sequence from user query through Discovery parsing and ECR synthesis to binary compilation</p>
+    </header>
+
+    <div class="diagram-card">
+      <pre class="mermaid">
+sequenceDiagram
+  autonumber
+
+  actor Dev as Developer (User)
+  participant CLI as CLI / TUI Runner<br/>(tui.cr / generate_api.cr)
+  participant Mgr as GoogleApis::Manager<br/>(manager.cr)
+  participant Cat as DiscoveryCatalog<br/>(discovery.cr)
+  participant GDisc as Google Discovery API<br/>(discovery.googleapis.com)
+  participant Gen as GoogleApis::Generator<br/>(generator.cr)
+  participant ECR as ECR Template Views<br/>(views.cr & *.ecr)
+  participant FS as File System<br/>(src/, spec/, bin/)
+  participant Cry as Crystal Tooling<br/>(format & build)
+  participant Reg as ApiListRegistry<br/>(api_list_registry.cr)
+
+  %% 1. INVOCATION & DISCOVERY
+  Dev->>CLI: Invokes command ("tui -g storage" or "generate_api -i ...")
+  CLI->>Mgr: generate_api(target_query: "storage", project_root: ".", allow_network: true)
+  
+  Mgr->>Cat: load(discovery_dir: "discovery", src_dir: "src/google_apis", allow_network: true)
+  Cat->>GDisc: HTTP GET /discovery/v1/apis (or read discovery/directory.json)
+  GDisc-->>Cat: Directory JSON payload (items: [{id, name, version, discoveryRestUrl}...])
+  Cat-->>Mgr: catalog: DiscoveryCatalog instance
+
+  Mgr->>Cat: find_target("storage")
+  Cat-->>Mgr: target: DiscoveryTarget (id: "storage:v1", url: "https://...")
+
+  Mgr->>Cat: fetch_discovery_json(target, discovery_dir: "discovery")
+  alt Local cached JSON exists
+    Cat->>FS: Read "discovery/storage_v1.json"
+    FS-->>Cat: Cached JSON content
+  else Remote fetch required
+    Cat->>GDisc: HTTP GET target.discovery_url
+    GDisc-->>Cat: HTTP 200 OK (Discovery Document JSON)
+    Cat->>FS: Cache payload to "discovery/storage_v1.json"
+  end
+  Cat-->>Mgr: discovery_json: String
+
+  %% 2. PARSING & AST SYNTHESIS
+  Mgr->>Gen: parse(discovery_json)
+  Note over Gen: Maps JSON types to Crystal types,<br/>sanitizes keyword collisions,<br/>extracts schemas, resources, and methods
+  Gen-->>Mgr: service: ServiceModel
+
+  %% 3. CODE GENERATION VIA ECR
+  Mgr->>Gen: generate(service, target_dir: "src/google_apis/storage/v1")
+  
+  Gen->>ECR: TypesView.new(service).to_s
+  ECR-->>Gen: Rendered Crystal source code for schemas
+  Gen->>FS: Write "src/google_apis/storage/v1/types.cr"
+
+  loop For each Resource in service.resources
+    Gen->>ECR: ResourceServiceView.new(service, resource).to_s
+    ECR-->>Gen: Rendered Crystal source code for resource service
+    Gen->>FS: Write "src/google_apis/storage/v1/{resource}_service.cr"
+  end
+
+  Gen->>ECR: ClientView.new(service).to_s
+  ECR-->>Gen: Rendered Crystal source code for top-level Client
+  Gen->>FS: Write "src/google_apis/storage/v1/client.cr"
+
+  Gen->>ECR: ServiceModuleView.new(service).to_s
+  ECR-->>Gen: Rendered Crystal source code for version entrypoint
+  Gen->>FS: Write "src/google_apis/storage/v1/v1.cr"
+
+  Gen->>FS: Write "src/google_apis/storage/v1/README.md" (usage docs)
+
+  Gen->>Cry: Process.run("crystal", ["tool", "format", target_dir])
+  Cry-->>Gen: Formatted source files
+  Gen-->>Mgr: Client files successfully generated
+
+  %% 4. SPEC SCAFFOLDING
+  Mgr->>Gen: generate_spec(service, spec_dir: "spec/google_apis")
+  Gen->>FS: Write "spec/google_apis/storage_v1_spec.cr"
+  Gen-->>Mgr: spec_path: "spec/google_apis/storage_v1_spec.cr"
+
+  %% 5. SAMPLE CLI CREATION & COMPILATION
+  Mgr->>Gen: generate_sample_cli(service, project_root: ".")
+  Note over Gen: Scores resources via heuristics<br/>to pick primary list method
+  Gen->>FS: Write "src/bin/list_storage.cr"
+  Gen->>Cry: Process.run("crystal", ["tool", "format", "src/bin/list_storage.cr"])
+  Cry-->>Gen: Formatted CLI source
+  
+  Gen->>FS: Register target "list_storage" in "shard.yml"
+  Gen->>FS: Append require statement to "src/google_apis_cr.cr"
+  
+  Gen->>Cry: Process.run("crystal", ["build", "src/bin/list_storage.cr", "-o", "bin/list_storage"])
+  Cry->>FS: Emit compiled native binary "bin/list_storage"
+  Cry-->>Gen: Exit status (success: true)
+  Gen-->>Mgr: {sample_src: "src/bin/list_storage.cr", sample_bin: "bin/list_storage"}
+
+  %% 6. REGISTRY SYNCHRONIZATION
+  Mgr->>Reg: sync_and_save(catalog, yaml_path: "api-list.yaml")
+  Reg->>FS: Write updated "api-list.yaml" (tracks latest vs generated versions)
+  Reg-->>Mgr: registry: ApiListRegistry
+
+  %% 7. COMPLETION REPORT
+  Mgr-->>CLI: Return Tuple(Bool, String, ServiceModel?)
+  CLI-->>Dev: Displays generation summary (schema count, resource count, binary path, spec path)
+      </pre>
+    </div>
+
+    <footer>
+      google_apis_cr Architecture Artifact &bull; Generated for Google Cloud Discovery Crystal Library
+    </footer>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#0b0f19',
+        mainBkg: '#111827',
+        primaryColor: '#1e293b',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#3b82f6',
+        lineColor: '#60a5fa',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#0f172a',
+        signalColor: '#38bdf8',
+        signalTextColor: '#e2e8f0',
+        labelBoxBkgColor: '#1e293b',
+        labelBoxBorderColor: '#3b82f6',
+        labelTextColor: '#f8fafc',
+        loopTextColor: '#93c5fd',
+        noteBorderColor: '#8b5cf6',
+        noteBkgColor: '#1e1b4b',
+        noteTextColor: '#e9d5ff',
+        activationBorderColor: '#ec4899',
+        activationBkgColor: '#500724',
+        sequenceNumberColor: '#0b0f19'
+      },
+      sequence: {
+        diagramMarginX: 30,
+        diagramMarginY: 30,
+        actorMargin: 50,
+        width: 150,
+        height: 65,
+        boxMargin: 10,
+        boxTextMargin: 5,
+        noteMargin: 10,
+        messageMargin: 35,
+        mirrorActors: true,
+        bottomMarginAdj: 10,
+        useMaxWidth: true,
+        autonumber: true
+      }
+    });
+  </script>
+</body>
+</html>

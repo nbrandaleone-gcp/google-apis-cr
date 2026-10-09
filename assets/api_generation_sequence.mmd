@@ -1,0 +1,97 @@
+sequenceDiagram
+  autonumber
+
+  actor Dev as Developer (User)
+  participant CLI as CLI / TUI Runner<br/>(tui.cr / generate_api.cr)
+  participant Mgr as GoogleApis::Manager<br/>(manager.cr)
+  participant Cat as DiscoveryCatalog<br/>(discovery.cr)
+  participant GDisc as Google Discovery API<br/>(discovery.googleapis.com)
+  participant Gen as GoogleApis::Generator<br/>(generator.cr)
+  participant ECR as ECR Template Views<br/>(views.cr & *.ecr)
+  participant FS as File System<br/>(src/, spec/, bin/)
+  participant Cry as Crystal Tooling<br/>(format & build)
+  participant Reg as ApiListRegistry<br/>(api_list_registry.cr)
+
+  %% 1. INVOCATION & DISCOVERY
+  Dev->>CLI: Invokes command ("tui -g storage" or "generate_api -i ...")
+  CLI->>Mgr: generate_api(target_query: "storage", project_root: ".", allow_network: true)
+  
+  Mgr->>Cat: load(discovery_dir: "discovery", src_dir: "src/google_apis", allow_network: true)
+  Cat->>GDisc: HTTP GET /discovery/v1/apis (or read discovery/directory.json)
+  GDisc-->>Cat: Directory JSON payload (items: [{id, name, version, discoveryRestUrl}...])
+  Cat-->>Mgr: catalog: DiscoveryCatalog instance
+
+  Mgr->>Cat: find_target("storage")
+  Cat-->>Mgr: target: DiscoveryTarget (id: "storage:v1", url: "https://...")
+
+  Mgr->>Cat: fetch_discovery_json(target, discovery_dir: "discovery")
+  alt Local cached JSON exists
+    Cat->>FS: Read "discovery/storage_v1.json"
+    FS-->>Cat: Cached JSON content
+  else Remote fetch required
+    Cat->>GDisc: HTTP GET target.discovery_url
+    GDisc-->>Cat: HTTP 200 OK (Discovery Document JSON)
+    Cat->>FS: Cache payload to "discovery/storage_v1.json"
+  end
+  Cat-->>Mgr: discovery_json: String
+
+  %% 2. PARSING & AST SYNTHESIS
+  Mgr->>Gen: parse(discovery_json)
+  Note over Gen: Maps JSON types to Crystal types,<br/>sanitizes keyword collisions,<br/>extracts schemas, resources, and methods
+  Gen-->>Mgr: service: ServiceModel
+
+  %% 3. CODE GENERATION VIA ECR
+  Mgr->>Gen: generate(service, target_dir: "src/google_apis/storage/v1")
+  
+  Gen->>ECR: TypesView.new(service).to_s
+  ECR-->>Gen: Rendered Crystal source code for schemas
+  Gen->>FS: Write "src/google_apis/storage/v1/types.cr"
+
+  loop For each Resource in service.resources
+    Gen->>ECR: ResourceServiceView.new(service, resource).to_s
+    ECR-->>Gen: Rendered Crystal source code for resource service
+    Gen->>FS: Write "src/google_apis/storage/v1/{resource}_service.cr"
+  end
+
+  Gen->>ECR: ClientView.new(service).to_s
+  ECR-->>Gen: Rendered Crystal source code for top-level Client
+  Gen->>FS: Write "src/google_apis/storage/v1/client.cr"
+
+  Gen->>ECR: ServiceModuleView.new(service).to_s
+  ECR-->>Gen: Rendered Crystal source code for version entrypoint
+  Gen->>FS: Write "src/google_apis/storage/v1/v1.cr"
+
+  Gen->>FS: Write "src/google_apis/storage/v1/README.md" (usage docs)
+
+  Gen->>Cry: Process.run("crystal", ["tool", "format", target_dir])
+  Cry-->>Gen: Formatted source files
+  Gen-->>Mgr: Client files successfully generated
+
+  %% 4. SPEC SCAFFOLDING
+  Mgr->>Gen: generate_spec(service, spec_dir: "spec/google_apis")
+  Gen->>FS: Write "spec/google_apis/storage_v1_spec.cr"
+  Gen-->>Mgr: spec_path: "spec/google_apis/storage_v1_spec.cr"
+
+  %% 5. SAMPLE CLI CREATION & COMPILATION
+  Mgr->>Gen: generate_sample_cli(service, project_root: ".")
+  Note over Gen: Scores resources via heuristics<br/>to pick primary list method
+  Gen->>FS: Write "src/bin/list_storage.cr"
+  Gen->>Cry: Process.run("crystal", ["tool", "format", "src/bin/list_storage.cr"])
+  Cry-->>Gen: Formatted CLI source
+  
+  Gen->>FS: Register target "list_storage" in "shard.yml"
+  Gen->>FS: Append require statement to "src/google_apis_cr.cr"
+  
+  Gen->>Cry: Process.run("crystal", ["build", "src/bin/list_storage.cr", "-o", "bin/list_storage"])
+  Cry->>FS: Emit compiled native binary "bin/list_storage"
+  Cry-->>Gen: Exit status (success: true)
+  Gen-->>Mgr: {sample_src: "src/bin/list_storage.cr", sample_bin: "bin/list_storage"}
+
+  %% 6. REGISTRY SYNCHRONIZATION
+  Mgr->>Reg: sync_and_save(catalog, yaml_path: "api-list.yaml")
+  Reg->>FS: Write updated "api-list.yaml" (tracks latest vs generated versions)
+  Reg-->>Mgr: registry: ApiListRegistry
+
+  %% 7. COMPLETION REPORT
+  Mgr-->>CLI: Return Tuple(Bool, String, ServiceModel?)
+  CLI-->>Dev: Displays generation summary (schema count, resource count, binary path, spec path)

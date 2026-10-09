@@ -1,0 +1,429 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 1620" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="seqBgGlow" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#141c2e" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#0b0f19" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#05070c" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Participant Cards Gradient -->
+    <linearGradient id="seqCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Section Header Gradient -->
+    <linearGradient id="stageGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#1e293b" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+    </linearGradient>
+
+    <!-- Glow & Shadow Filters -->
+    <filter id="seqShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+
+    <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+
+    <!-- Dot Pattern -->
+    <pattern id="seqGrid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.35"/>
+    </pattern>
+
+    <!-- Markers for Arrows -->
+    <marker id="arrowSolid" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowReturn" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#34d399"/>
+    </marker>
+    <marker id="arrowPink" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#f472b6"/>
+    </marker>
+  </defs>
+
+  <style>
+    .title-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 24px; font-weight: 800; fill: #f8fafc; letter-spacing: -0.5px; }
+    .subtitle-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #94a3b8; }
+    .actor-name { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #f1f5f9; text-anchor: middle; }
+    .actor-sub { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; fill: #60a5fa; text-anchor: middle; }
+    .step-num { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10px; font-weight: 800; fill: #0f172a; text-anchor: middle; dominant-baseline: central; }
+    .msg-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11.5px; font-weight: 600; fill: #e2e8f0; }
+    .data-text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; fill: #93c5fd; }
+    .stage-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; fill: #e0e7ff; }
+  </style>
+
+  <!-- Background Layer -->
+  <rect width="1300" height="1620" fill="url(#seqBgGlow)"/>
+  <rect width="1300" height="1620" fill="url(#seqGrid)"/>
+
+  <!-- Top Header -->
+  <g transform="translate(650, 42)" text-anchor="middle">
+    <rect x="-130" y="-14" width="260" height="24" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-width="1" stroke-opacity="0.6"/>
+    <circle cx="-108" cy="-2" r="4" fill="#3b82f6"/>
+    <text x="8" y="2" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10.5" font-weight="700" fill="#93c5fd" letter-spacing="1">ARCHITECTURE SEQUENCE FLOW</text>
+    
+    <text y="36" class="title-text">Google API Client Generation: Top-to-Bottom Execution Flow</text>
+    <text y="58" class="subtitle-text">Sequence tracing CLI requests through Discovery Ingestion, ECR Template Synthesis, and Native Crystal Tooling</text>
+  </g>
+
+  <!-- Lifeline Columns (X Coordinates):
+       1. Dev (User): 100
+       2. CLI/TUI: 250
+       3. Manager: 420
+       4. Catalog: 590
+       5. Discovery API: 760
+       6. Generator: 930
+       7. ECR Views: 1080
+       8. Tooling & FS: 1210
+  -->
+
+  <!-- Lifeline Vertical Dashed Lines -->
+  <g stroke="#334155" stroke-width="1.5" stroke-dasharray="6 6">
+    <line x1="100" y1="175" x2="100" y2="1540"/>
+    <line x1="250" y1="175" x2="250" y2="1540"/>
+    <line x1="420" y1="175" x2="420" y2="1540"/>
+    <line x1="590" y1="175" x2="590" y2="1540"/>
+    <line x1="760" y1="175" x2="760" y2="1540"/>
+    <line x1="930" y1="175" x2="930" y2="1540"/>
+    <line x1="1080" y1="175" x2="1080" y2="1540"/>
+    <line x1="1210" y1="175" x2="1210" y2="1540"/>
+  </g>
+
+  <!-- Participant Headers (Top) -->
+  <!-- 1. Dev -->
+  <g transform="translate(100, 140)" filter="url(#seqShadow)">
+    <rect x="-65" y="-30" width="130" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#3b82f6" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">Developer</text>
+    <text y="10" class="actor-sub">(User)</text>
+  </g>
+  <!-- 2. CLI/TUI -->
+  <g transform="translate(250, 140)" filter="url(#seqShadow)">
+    <rect x="-65" y="-30" width="130" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#38bdf8" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">CLI / TUI</text>
+    <text y="10" class="actor-sub">tui.cr / bin</text>
+  </g>
+  <!-- 3. Manager -->
+  <g transform="translate(420, 140)" filter="url(#seqShadow)">
+    <rect x="-70" y="-30" width="140" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#818cf8" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">Manager</text>
+    <text y="10" class="actor-sub">manager.cr</text>
+  </g>
+  <!-- 4. Catalog -->
+  <g transform="translate(590, 140)" filter="url(#seqShadow)">
+    <rect x="-70" y="-30" width="140" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#a78bfa" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">DiscoveryCatalog</text>
+    <text y="10" class="actor-sub">discovery.cr</text>
+  </g>
+  <!-- 5. Discovery API -->
+  <g transform="translate(760, 140)" filter="url(#seqShadow)">
+    <rect x="-75" y="-30" width="150" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#f472b6" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">Google API</text>
+    <text y="10" class="actor-sub">discovery.googleapis</text>
+  </g>
+  <!-- 6. Generator -->
+  <g transform="translate(930, 140)" filter="url(#seqShadow)">
+    <rect x="-70" y="-30" width="140" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#34d399" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">Generator</text>
+    <text y="10" class="actor-sub">generator.cr</text>
+  </g>
+  <!-- 7. ECR Views -->
+  <g transform="translate(1080, 140)" filter="url(#seqShadow)">
+    <rect x="-65" y="-30" width="130" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#fbbf24" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">ECR Views</text>
+    <text y="10" class="actor-sub">views.cr &amp; *.ecr</text>
+  </g>
+  <!-- 8. Tooling & FS -->
+  <g transform="translate(1210, 140)" filter="url(#seqShadow)">
+    <rect x="-65" y="-30" width="130" height="52" rx="10" fill="url(#seqCardGrad)" stroke="#38bdf8" stroke-width="1.2"/>
+    <text y="-8" class="actor-name">Tooling &amp; FS</text>
+    <text y="10" class="actor-sub">crystal &amp; files</text>
+  </g>
+
+
+  <!-- ================= SECTION 1: INVOCATION & DISCOVERY RESOLUTION ================= -->
+  <g transform="translate(40, 200)">
+    <rect width="1220" height="24" rx="6" fill="url(#stageGrad)" stroke="#4338ca" stroke-width="1"/>
+    <text x="14" y="16" class="stage-title">STAGE 1: INVOCATION &amp; DISCOVERY DOCUMENT RESOLUTION</text>
+  </g>
+
+  <!-- Step 1: Dev -> CLI -->
+  <g transform="translate(0, 240)">
+    <line x1="100" y1="0" x2="242" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="106" cy="0" r="8" fill="#38bdf8"/>
+    <text x="106" y="0" class="step-num">1</text>
+    <text x="120" y="-8" class="msg-text">Execute generation command</text>
+    <text x="120" y="14" class="data-text">Data: target_query = "storage" (or "tui -g storage")</text>
+  </g>
+
+  <!-- Step 2: CLI -> Manager -->
+  <g transform="translate(0, 290)">
+    <line x1="250" y1="0" x2="412" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="256" cy="0" r="8" fill="#38bdf8"/>
+    <text x="256" y="0" class="step-num">2</text>
+    <text x="270" y="-8" class="msg-text">generate_api(target_query, root, allow_net)</text>
+    <text x="270" y="14" class="data-text">Data: query="storage", project_root=".", allow_network=true</text>
+  </g>
+
+  <!-- Step 3: Manager -> DiscoveryCatalog -->
+  <g transform="translate(0, 340)">
+    <line x1="420" y1="0" x2="582" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="426" cy="0" r="8" fill="#38bdf8"/>
+    <text x="426" y="0" class="step-num">3</text>
+    <text x="440" y="-8" class="msg-text">load(discovery_dir, src_dir, allow_network)</text>
+    <text x="440" y="14" class="data-text">Data: discovery_dir="discovery", src_dir="src/google_apis"</text>
+  </g>
+
+  <!-- Step 4: DiscoveryCatalog -> Google API -->
+  <g transform="translate(0, 390)">
+    <line x1="590" y1="0" x2="752" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="596" cy="0" r="8" fill="#38bdf8"/>
+    <text x="596" y="0" class="step-num">4</text>
+    <text x="610" y="-8" class="msg-text">HTTP GET /discovery/v1/apis (or read cache)</text>
+    <text x="610" y="14" class="data-text">Data: URI="https://discovery.googleapis.com/discovery/v1/apis"</text>
+  </g>
+
+  <!-- Step 5: Google API -> DiscoveryCatalog (Return) -->
+  <g transform="translate(0, 440)">
+    <line x1="760" y1="0" x2="598" y2="0" stroke="#a78bfa" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrowReturn)"/>
+    <circle cx="754" cy="0" r="8" fill="#a78bfa"/>
+    <text x="754" y="0" class="step-num">5</text>
+    <text x="610" y="-8" class="msg-text">Return directory catalog items</text>
+    <text x="610" y="14" class="data-text">Data: Directory JSON (items: [{id, name, version, discoveryRestUrl}...])</text>
+  </g>
+
+  <!-- Step 6: DiscoveryCatalog -> Manager (Target Found) -->
+  <g transform="translate(0, 490)">
+    <line x1="420" y1="0" x2="582" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="426" cy="0" r="8" fill="#38bdf8"/>
+    <text x="426" y="0" class="step-num">6</text>
+    <text x="440" y="-8" class="msg-text">find_target("storage")</text>
+    <text x="440" y="14" class="data-text">Data: DiscoveryTarget (id: "storage:v1", discovery_url: "...")</text>
+  </g>
+
+  <!-- Step 7: DiscoveryCatalog fetch doc from Google API / File -->
+  <g transform="translate(0, 540)">
+    <line x1="590" y1="0" x2="752" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="596" cy="0" r="8" fill="#38bdf8"/>
+    <text x="596" y="0" class="step-num">7</text>
+    <text x="610" y="-8" class="msg-text">fetch_discovery_json(target)</text>
+    <text x="610" y="14" class="data-text">Data: target.discovery_url or cached discovery/storage_v1.json</text>
+  </g>
+
+  <!-- Step 8: Discovery API -> Manager -->
+  <g transform="translate(0, 590)">
+    <line x1="760" y1="0" x2="428" y2="0" stroke="#a78bfa" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrowReturn)"/>
+    <circle cx="754" cy="0" r="8" fill="#a78bfa"/>
+    <text x="754" y="0" class="step-num">8</text>
+    <text x="440" y="-8" class="msg-text">Return complete API Discovery Document</text>
+    <text x="440" y="14" class="data-text">Data: Raw Discovery JSON Contract (schemas: 39, resources: 14)</text>
+  </g>
+
+
+  <!-- ================= SECTION 2: AST PARSING & TYPE MAPPING ================= -->
+  <g transform="translate(40, 640)">
+    <rect width="1220" height="24" rx="6" fill="url(#stageGrad)" stroke="#4338ca" stroke-width="1"/>
+    <text x="14" y="16" class="stage-title">STAGE 2: SCHEMA &amp; RESOURCE AST PARSING</text>
+  </g>
+
+  <!-- Step 9: Manager -> Generator.parse -->
+  <g transform="translate(0, 680)">
+    <line x1="420" y1="0" x2="922" y2="0" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrowGreen)"/>
+    <circle cx="426" cy="0" r="8" fill="#34d399"/>
+    <text x="426" y="0" class="step-num">9</text>
+    <text x="440" y="-8" class="msg-text">Generator.parse(discovery_json)</text>
+    <text x="440" y="14" class="data-text">Data: json_content: String</text>
+  </g>
+
+  <!-- Step 10: Generator Self-Loop (Type Mapping & Sanitization) -->
+  <g transform="translate(930, 725)">
+    <path d="M 0 0 L 40 0 L 40 32 L 8 32" stroke="#34d399" stroke-width="1.8" fill="none" marker-end="url(#arrowGreen)"/>
+    <circle cx="6" cy="0" r="8" fill="#34d399"/>
+    <text x="6" y="0" class="step-num">10</text>
+    <text x="48" y="14" class="msg-text">Build in-memory AST models</text>
+    <text x="48" y="30" class="data-text">Data: crystal_type_for(), sanitize_identifier(), ParameterModel</text>
+  </g>
+
+  <!-- Step 11: Generator -> Manager (ServiceModel) -->
+  <g transform="translate(0, 785)">
+    <line x1="930" y1="0" x2="428" y2="0" stroke="#a78bfa" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrowReturn)"/>
+    <circle cx="924" cy="0" r="8" fill="#a78bfa"/>
+    <text x="924" y="0" class="step-num">11</text>
+    <text x="440" y="-8" class="msg-text">Return synthesized ServiceModel</text>
+    <text x="440" y="14" class="data-text">Data: ServiceModel (name: "storage", version: "v1", schemas: 39, resources: 14)</text>
+  </g>
+
+
+  <!-- ================= SECTION 3: ECR TEMPLATE SYNTHESIS ================= -->
+  <g transform="translate(40, 830)">
+    <rect width="1220" height="24" rx="6" fill="url(#stageGrad)" stroke="#4338ca" stroke-width="1"/>
+    <text x="14" y="16" class="stage-title">STAGE 3: ECR CODE GENERATION (TEMPLATES &amp; SCHEMAS)</text>
+  </g>
+
+  <!-- Step 12: Manager -> Generator.generate -->
+  <g transform="translate(0, 870)">
+    <line x1="420" y1="0" x2="922" y2="0" stroke="#fbbf24" stroke-width="1.8" marker-end="url(#arrowAmber)"/>
+    <circle cx="426" cy="0" r="8" fill="#fbbf24"/>
+    <text x="426" y="0" class="step-num">12</text>
+    <text x="440" y="-8" class="msg-text">Generator.generate(service, output_dir)</text>
+    <text x="440" y="14" class="data-text">Data: service: ServiceModel, output_dir: "src/google_apis/storage/v1"</text>
+  </g>
+
+  <!-- Step 13: Generator -> ECR Views (TypesView) -->
+  <g transform="translate(0, 920)">
+    <line x1="930" y1="0" x2="1072" y2="0" stroke="#fbbf24" stroke-width="1.8" marker-end="url(#arrowAmber)"/>
+    <circle cx="936" cy="0" r="8" fill="#fbbf24"/>
+    <text x="936" y="0" class="step-num">13</text>
+    <text x="946" y="-8" class="msg-text">TypesView.new(service).to_s</text>
+    <text x="946" y="14" class="data-text">Data: Render types.cr with JSON::Serializable structs</text>
+  </g>
+
+  <!-- Step 14: Generator -> ECR Views (ResourceServiceView) -->
+  <g transform="translate(0, 970)">
+    <line x1="930" y1="0" x2="1072" y2="0" stroke="#fbbf24" stroke-width="1.8" marker-end="url(#arrowAmber)"/>
+    <circle cx="936" cy="0" r="8" fill="#fbbf24"/>
+    <text x="936" y="0" class="step-num">14</text>
+    <text x="946" y="-8" class="msg-text">ResourceServiceView.new(service, resource).to_s</text>
+    <text x="946" y="14" class="data-text">Data: Render buckets_service.cr, objects_service.cr, etc.</text>
+  </g>
+
+  <!-- Step 15: Generator -> ECR Views (ClientView & ModuleView) -->
+  <g transform="translate(0, 1020)">
+    <line x1="930" y1="0" x2="1072" y2="0" stroke="#fbbf24" stroke-width="1.8" marker-end="url(#arrowAmber)"/>
+    <circle cx="936" cy="0" r="8" fill="#fbbf24"/>
+    <text x="936" y="0" class="step-num">15</text>
+    <text x="946" y="-8" class="msg-text">ClientView &amp; ServiceModuleView.to_s</text>
+    <text x="946" y="14" class="data-text">Data: Render client.cr, v1.cr, and usage README.md</text>
+  </g>
+
+  <!-- Step 16: Generator -> Tooling & FS (Write & Format) -->
+  <g transform="translate(0, 1070)">
+    <line x1="930" y1="0" x2="1202" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="936" cy="0" r="8" fill="#38bdf8"/>
+    <text x="936" y="0" class="step-num">16</text>
+    <text x="946" y="-8" class="msg-text">Write files &amp; run crystal tool format</text>
+    <text x="946" y="14" class="data-text">Data: Write 17 files into src/google_apis/storage/v1/ and auto-format</text>
+  </g>
+
+
+  <!-- ================= SECTION 4: SPEC SCAFFOLDING & SAMPLE CLI BUILD ================= -->
+  <g transform="translate(40, 1115)">
+    <rect width="1220" height="24" rx="6" fill="url(#stageGrad)" stroke="#4338ca" stroke-width="1"/>
+    <text x="14" y="16" class="stage-title">STAGE 4: SPEC SCAFFOLDING, CLI GENERATION &amp; COMPILATION</text>
+  </g>
+
+  <!-- Step 17: Manager -> Generator.generate_spec -->
+  <g transform="translate(0, 1155)">
+    <line x1="420" y1="0" x2="922" y2="0" stroke="#f472b6" stroke-width="1.8" marker-end="url(#arrowPink)"/>
+    <circle cx="426" cy="0" r="8" fill="#f472b6"/>
+    <text x="426" y="0" class="step-num">17</text>
+    <text x="440" y="-8" class="msg-text">generate_spec(service, "spec/google_apis")</text>
+    <text x="440" y="14" class="data-text">Data: Scaffold unit test spec with MockCredentials</text>
+  </g>
+
+  <!-- Step 18: Generator -> FS (Write Spec) -->
+  <g transform="translate(0, 1205)">
+    <line x1="930" y1="0" x2="1202" y2="0" stroke="#f472b6" stroke-width="1.8" marker-end="url(#arrowPink)"/>
+    <circle cx="936" cy="0" r="8" fill="#f472b6"/>
+    <text x="936" y="0" class="step-num">18</text>
+    <text x="946" y="-8" class="msg-text">Write spec file</text>
+    <text x="946" y="14" class="data-text">Data: spec/google_apis/storage_v1_spec.cr</text>
+  </g>
+
+  <!-- Step 19: Manager -> Generator.generate_sample_cli -->
+  <g transform="translate(0, 1255)">
+    <line x1="420" y1="0" x2="922" y2="0" stroke="#f472b6" stroke-width="1.8" marker-end="url(#arrowPink)"/>
+    <circle cx="426" cy="0" r="8" fill="#f472b6"/>
+    <text x="426" y="0" class="step-num">19</text>
+    <text x="440" y="-8" class="msg-text">generate_sample_cli(service, project_root)</text>
+    <text x="440" y="14" class="data-text">Data: pick_primary_list_resource (buckets.list), generate src/bin/list_storage.cr</text>
+  </g>
+
+  <!-- Step 20: Generator -> Tooling & FS (Update Shard & Build) -->
+  <g transform="translate(0, 1305)">
+    <line x1="930" y1="0" x2="1202" y2="0" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrowSolid)"/>
+    <circle cx="936" cy="0" r="8" fill="#38bdf8"/>
+    <text x="936" y="0" class="step-num">20</text>
+    <text x="946" y="-8" class="msg-text">Register target in shard.yml &amp; compile binary</text>
+    <text x="946" y="14" class="data-text">Data: crystal build src/bin/list_storage.cr -o bin/list_storage</text>
+  </g>
+
+
+  <!-- ================= SECTION 5: REGISTRY SYNC & REPORTING ================= -->
+  <g transform="translate(40, 1350)">
+    <rect width="1220" height="24" rx="6" fill="url(#stageGrad)" stroke="#4338ca" stroke-width="1"/>
+    <text x="14" y="16" class="stage-title">STAGE 5: VERSION REGISTRY SYNC &amp; SUMMARY REPORTING</text>
+  </g>
+
+  <!-- Step 21: Manager -> Registry Sync -->
+  <g transform="translate(0, 1390)">
+    <line x1="420" y1="0" x2="1202" y2="0" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrowGreen)"/>
+    <circle cx="426" cy="0" r="8" fill="#34d399"/>
+    <text x="426" y="0" class="step-num">21</text>
+    <text x="440" y="-8" class="msg-text">ApiListRegistry.sync_and_save(catalog, "api-list.yaml")</text>
+    <text x="440" y="14" class="data-text">Data: Synchronize and persist version status [UP TO DATE] to api-list.yaml</text>
+  </g>
+
+  <!-- Step 22: Manager -> CLI/TUI Result -->
+  <g transform="translate(0, 1440)">
+    <line x1="420" y1="0" x2="258" y2="0" stroke="#a78bfa" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrowReturn)"/>
+    <circle cx="414" cy="0" r="8" fill="#a78bfa"/>
+    <text x="414" y="0" class="step-num">22</text>
+    <text x="270" y="-8" class="msg-text">Return execution result tuple</text>
+    <text x="270" y="14" class="data-text">Data: {success: true, msg: "Successfully generated...", service: ServiceModel}</text>
+  </g>
+
+  <!-- Step 23: CLI -> Developer Output -->
+  <g transform="translate(0, 1490)">
+    <line x1="250" y1="0" x2="108" y2="0" stroke="#a78bfa" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrowReturn)"/>
+    <circle cx="244" cy="0" r="8" fill="#a78bfa"/>
+    <text x="244" y="0" class="step-num">23</text>
+    <text x="120" y="-8" class="msg-text">Display generation report</text>
+    <text x="120" y="14" class="data-text">Data: Schemas: 39, Resources: 14, Binary: bin/list_storage, Spec: storage_v1_spec.cr</text>
+  </g>
+
+
+  <!-- Participant Footers (Bottom) -->
+  <g transform="translate(100, 1555)">
+    <rect x="-60" y="-16" width="120" height="32" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">Developer</text>
+  </g>
+  <g transform="translate(250, 1555)">
+    <rect x="-60" y="-16" width="120" height="32" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">CLI / TUI</text>
+  </g>
+  <g transform="translate(420, 1555)">
+    <rect x="-60" y="-16" width="120" height="32" rx="8" fill="#1e293b" stroke="#818cf8" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">Manager</text>
+  </g>
+  <g transform="translate(590, 1555)">
+    <rect x="-65" y="-16" width="130" height="32" rx="8" fill="#1e293b" stroke="#a78bfa" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">DiscoveryCatalog</text>
+  </g>
+  <g transform="translate(760, 1555)">
+    <rect x="-65" y="-16" width="130" height="32" rx="8" fill="#1e293b" stroke="#f472b6" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">Google API</text>
+  </g>
+  <g transform="translate(930, 1555)">
+    <rect x="-60" y="-16" width="120" height="32" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">Generator</text>
+  </g>
+  <g transform="translate(1080, 1555)">
+    <rect x="-60" y="-16" width="120" height="32" rx="8" fill="#1e293b" stroke="#fbbf24" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">ECR Views</text>
+  </g>
+  <g transform="translate(1210, 1555)">
+    <rect x="-65" y="-16" width="130" height="32" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+    <text y="5" class="actor-name" font-size="11">Tooling &amp; FS</text>
+  </g>
+</svg>
