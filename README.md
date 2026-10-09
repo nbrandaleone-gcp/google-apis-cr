@@ -12,17 +12,19 @@ to be correct, it is clearly not idiomatic crystal that humans would write.
 ## Features
 
 - **Application Default Credentials (ADC)**: Automatic loading via `$GOOGLE_APPLICATION_CREDENTIALS` or well-known gcloud CLI path (`~/.config/gcloud/application_default_credentials.json`). Supports automatic token refresh and caching.
-- **Google Cloud Storage (v1)**: Strongly-typed client for buckets, objects, ACLs, and other storage resources.
-- **Cloud Run Admin API (v2)**: Strongly-typed client for Cloud Run services, revisions, instances, and jobs.
-- **Artifact Registry API (v1)**: Strongly-typed client for repositories, packages, tags, versions, and docker images.
 - **Discovery Service Code Generator**: Built-in generator using ECR templates to parse any Google Discovery document and produce typed Crystal clients and schemas.
+- **Sample generated APIs:**
+  1. **Google Cloud Storage (v1)**: Strongly-typed client for buckets, objects, ACLs, and other storage resources.
+  2. **Cloud Run Admin API (v2)**: Strongly-typed client for Cloud Run services, revisions, instances, and jobs.
+  3. **Artifact Registry API (v1)**: Strongly-typed client for repositories, packages, tags, versions, and docker images.
+
 - **CLI & TUI Utilities**:
-  - `bin/tui`: Interactive Terminal User Interface (TUI) powered by [Crysterm](https://github.com/crystallabs/crysterm) to browse Discovery targets, generate APIs, run tests, build/clean documentation, and track versions via `api-list.yaml`.
-  - `bin/list_registries`: Command-line tool to list Artifact Registry repositories (Docker and other formats) with region and metadata filtering.
-  - `bin/list_storage`: Command-line tool to list GCS buckets and objects.
-  - `bin/list_cloud_run`: Command-line tool to list Cloud Run services and instances.
-  - `bin/generate_api`: Code generation tool for Google Discovery documents.
+  - `bin/tui`: Interactive Terminal User Interface (TUI) powered by [Crysterm](https://github.com/crystallabs/crysterm) to browse Discovery targets, generate APIs, run tests, build/clean documentation, and track versions via `api-list.yaml`. This should be a simple Makefile. I got carried away...
   - `api-list.yaml`: Catalog tracking available Google APIs and latest version numbers from Google Discovery Service to detect outdated clients.
+  - `bin/generate_api`: Code generation tool for Google Discovery documents.
+  - `bin/list_storage`: Command-line tool to list GCS buckets and objects.
+  - `bin/list_registries`: Command-line tool to list Artifact Registry repositories (Docker and other formats) with region and metadata filtering.
+  - `bin/list_cloud_run`: Command-line tool to list Cloud Run services and instances.
 
 ## Installation
 
@@ -68,11 +70,12 @@ end)
 ### Build CLI Tools
 
 ```bash
+crystal build src/bin/tui.cr -o bin/tui
 crystal build src/bin/list_storage.cr -o bin/list_storage
 crystal build src/bin/list_cloud_run.cr -o bin/list_cloud_run
 crystal build src/bin/list_registries.cr -o bin/list_registries
 crystal build src/bin/generate_api.cr -o bin/generate_api
-crystal build src/bin/tui.cr -o bin/tui
+...
 ```
 
 ### Crysterm Terminal User Interface (TUI)
@@ -155,6 +158,9 @@ ameba
 
 # Auto-format
 crystal tool format
+
+# Generate docs from source code
+crystal docs
 ```
 
 ## License
