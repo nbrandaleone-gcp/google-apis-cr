@@ -33,7 +33,7 @@ module <%= @service.module_name %>
       req_path = req_path.gsub("{+<%= param.json_name %>}", <%= param.crystal_name %>.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
   <%- end -%>
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
   <%- method.query_parameters.select(&.required?).each do |param| -%>
       params["<%= param.json_name %>"] = <%= param.crystal_name %>
   <%- end -%>

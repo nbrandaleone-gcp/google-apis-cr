@@ -8,7 +8,7 @@ describe GoogleApis::Generator do
     GoogleApis::Generator.crystal_type_for(JSON.parse(%({"type": "boolean"}))).should eq("Bool")
     GoogleApis::Generator.crystal_type_for(JSON.parse(%({"$ref": "Bucket"}))).should eq("Bucket")
     GoogleApis::Generator.crystal_type_for(JSON.parse(%({"type": "array", "items": {"$ref": "Bucket"}}))).should eq("Array(Bucket)")
-    GoogleApis::Generator.crystal_type_for(JSON.parse(%({"type": "object", "additionalProperties": {"type": "string"}}))).should eq("Hash(String, String)")
+    GoogleApis::Generator.crystal_type_for(JSON.parse(%({"type": "object", "additionalProperties": {"type": "string"}}))).should eq("::Hash(String, String)")
   end
 
   it "sanitizes Crystal keywords in identifiers" do

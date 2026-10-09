@@ -405,7 +405,7 @@ module GoogleApis::Dns::V1
 
     # The normal, successful response of the operation. If the original method returns no data on success, such as `Delete`, the response is `google.protobuf.Empty`. If the original method is standard `Get`/`Create`/`Update`, the response should be the resource. For other methods, the response should have the type `XxxResponse`, where `Xxx` is the original method name. For example, if the original method name is `TakeSnapshot()`, the inferred response type is `TakeSnapshotResponse`.
     @[JSON::Field(key: "response")]
-    property response : Hash(String, JSON::Any)? = nil
+    property response : ::Hash(String, JSON::Any)? = nil
 
     # If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available.
     @[JSON::Field(key: "done")]
@@ -417,17 +417,17 @@ module GoogleApis::Dns::V1
 
     # Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata. Any method that returns a long-running operation should document the metadata type, if any.
     @[JSON::Field(key: "metadata")]
-    property metadata : Hash(String, JSON::Any)? = nil
+    property metadata : ::Hash(String, JSON::Any)? = nil
 
     # The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`.
     @[JSON::Field(key: "name")]
     property name : String? = nil
 
     def initialize(
-      @response : Hash(String, JSON::Any)? = nil,
+      @response : ::Hash(String, JSON::Any)? = nil,
       @done : Bool? = nil,
       @error : Status? = nil,
-      @metadata : Hash(String, JSON::Any)? = nil,
+      @metadata : ::Hash(String, JSON::Any)? = nil,
       @name : String? = nil,
     )
     end
@@ -501,7 +501,7 @@ module GoogleApis::Dns::V1
 
     # User labels.
     @[JSON::Field(key: "labels")]
-    property labels : Hash(String, String)? = nil
+    property labels : ::Hash(String, String)? = nil
 
     def initialize(
       @creation_time : String? = nil,
@@ -520,7 +520,7 @@ module GoogleApis::Dns::V1
       @kind : String? = nil,
       @cloud_logging_config : ManagedZoneCloudLoggingConfig? = nil,
       @name_server_set : String? = nil,
-      @labels : Hash(String, String)? = nil,
+      @labels : ::Hash(String, String)? = nil,
     )
     end
   end
@@ -1606,7 +1606,7 @@ module GoogleApis::Dns::V1
 
     # User labels.
     @[JSON::Field(key: "labels")]
-    property labels : Hash(String, String)? = nil
+    property labels : ::Hash(String, String)? = nil
 
     # The list of Google Kubernetes Engine clusters to which this response policy is applied.
     @[JSON::Field(key: "gkeClusters")]
@@ -1632,7 +1632,7 @@ module GoogleApis::Dns::V1
     property kind : String? = nil
 
     def initialize(
-      @labels : Hash(String, String)? = nil,
+      @labels : ::Hash(String, String)? = nil,
       @gke_clusters : Array(ResponsePolicyGKECluster)? = nil,
       @response_policy_name : String? = nil,
       @networks : Array(ResponsePolicyNetwork)? = nil,
@@ -1779,12 +1779,12 @@ module GoogleApis::Dns::V1
 
     # A list of messages that carry the error details. There is a common set of message types for APIs to use.
     @[JSON::Field(key: "details")]
-    property details : Array(Hash(String, JSON::Any))? = nil
+    property details : Array(::Hash(String, JSON::Any))? = nil
 
     def initialize(
       @code : Int64? = nil,
       @message : String? = nil,
-      @details : Array(Hash(String, JSON::Any))? = nil,
+      @details : Array(::Hash(String, JSON::Any))? = nil,
     )
     end
   end

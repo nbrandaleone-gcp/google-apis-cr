@@ -17,7 +17,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{project}", URI.encode_path_segment(project.to_s))
       req_path = req_path.gsub("{+project}", project.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["maxResults"] = max_results unless max_results.nil?
       params["pageToken"] = page_token unless page_token.nil?
 
@@ -43,7 +43,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{responsePolicy}", URI.encode_path_segment(response_policy.to_s))
       req_path = req_path.gsub("{+responsePolicy}", response_policy.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["clientOperationId"] = client_operation_id unless client_operation_id.nil?
 
       @client.execute(
@@ -68,7 +68,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{responsePolicy}", URI.encode_path_segment(response_policy.to_s))
       req_path = req_path.gsub("{+responsePolicy}", response_policy.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["clientOperationId"] = client_operation_id unless client_operation_id.nil?
 
       @client.execute(
@@ -92,7 +92,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{responsePolicy}", URI.encode_path_segment(response_policy.to_s))
       req_path = req_path.gsub("{+responsePolicy}", response_policy.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["clientOperationId"] = client_operation_id unless client_operation_id.nil?
 
       @client.execute_raw(
@@ -116,7 +116,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{responsePolicy}", URI.encode_path_segment(response_policy.to_s))
       req_path = req_path.gsub("{+responsePolicy}", response_policy.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["clientOperationId"] = client_operation_id unless client_operation_id.nil?
 
       @client.execute(
@@ -138,7 +138,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{project}", URI.encode_path_segment(project.to_s))
       req_path = req_path.gsub("{+project}", project.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
       params["clientOperationId"] = client_operation_id unless client_operation_id.nil?
 
       @client.execute(

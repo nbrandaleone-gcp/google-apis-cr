@@ -15,7 +15,7 @@ module GoogleApis::Dns::V1
       req_path = req_path.gsub("{project}", URI.encode_path_segment(project.to_s))
       req_path = req_path.gsub("{+project}", project.to_s.split('/').map { |segment| URI.encode_path_segment(segment) }.join('/'))
 
-      params = Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
+      params = ::Hash(String, String | Array(String) | Int32 | Int64 | Bool | Nil).new
 
       @client.execute(
         type: Project,

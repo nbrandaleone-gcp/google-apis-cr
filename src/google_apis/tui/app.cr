@@ -8,11 +8,22 @@ module GoogleApis
 
     # Crysterm-based Terminal User Interface for Google APIs client library.
     class App
+      enum FocusPane
+        Menu
+        ApiList
+      end
+
       getter window : CT::Window
       getter project_root : String
+      getter menu_box : CW::GroupBox
       getter menu_list : CW::List
+      getter api_box : CW::GroupBox
+      getter api_list : CW::List
+      getter output_box : CW::GroupBox
       getter log_view : CW::Log
       getter status_bar : CW::Box
+      property active_pane : FocusPane = FocusPane::Menu
+      getter targets : Array(DiscoveryTarget)
 
       MENU_ITEMS = [
         "[G] Generate API (Choose Target)",
@@ -33,9 +44,11 @@ module GoogleApis
           ENV["TERM"] = "xterm-256color"
         end
 
-        CT::Config.set "screen.border_junctions", true
+        CT::Config.set "window.border_junctions", true
 
         @window = CT::Window.new title: "Google APIs Generator & Manager"
+        @targets = [] of DiscoveryTarget
+        load_targets
 
         # Header bar
         header = CW::Box.new(
@@ -49,29 +62,58 @@ module GoogleApis
         )
         header.content = "{center}{bold}{#57c7ff-fg}Google APIs Crystal Client Generator & Manager{/#57c7ff-fg}{/bold}  (Powered by Crysterm){/center}"
 
-        # Menu Panel
-        menu_box = CW::GroupBox.new(
+        # Menu Panel (Left side)
+        @menu_box = CW::GroupBox.new(
           parent: @window,
           top: 3,
           left: 0,
           width: 44,
           bottom: 2,
-          title: " Menu Options "
+          title: " Menu Options [Active] "
         )
 
         @menu_list = CW::List.new(
-          parent: menu_box,
+          parent: @menu_box,
           top: 1,
           left: 1,
           right: 1,
           bottom: 1,
-          items: MENU_ITEMS
+          items: MENU_ITEMS,
+          mouse: true,
+          vi_keys: true,
+          styles: CT::Styles.new(
+            selected: CT::Style.new(bg: "blue", fg: "white", bold: true),
+          )
         )
 
-        # Output / Log Panel
-        output_box = CW::GroupBox.new(
+        # API Targets Panel (Right side, upper half above log output)
+        @api_box = CW::GroupBox.new(
           parent: @window,
           top: 3,
+          left: 44,
+          right: 0,
+          height: "48%",
+          title: " Available Google APIs (Press [G] to Highlight) "
+        )
+
+        @api_list = CW::List.new(
+          parent: @api_box,
+          top: 1,
+          left: 1,
+          right: 1,
+          bottom: 1,
+          items: @targets.map { |t| target_item_label(t) },
+          mouse: true,
+          vi_keys: true,
+          styles: CT::Styles.new(
+            selected: CT::Style.new(bg: "blue", fg: "white", bold: true),
+          )
+        )
+
+        # Output / Log Panel (Right side, lower half below API list)
+        @output_box = CW::GroupBox.new(
+          parent: @window,
+          top: "48%+3",
           left: 44,
           right: 0,
           bottom: 2,
@@ -79,7 +121,7 @@ module GoogleApis
         )
 
         @log_view = CW::Log.new(
-          parent: output_box,
+          parent: @output_box,
           top: 1,
           left: 1,
           right: 1,
@@ -96,17 +138,37 @@ module GoogleApis
           width: "100%",
           height: 2,
           parse_tags: true,
-          content: " [Enter] Run Selected  [G] Gen  [L] List  [D] Docs  [R] Clean Docs  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
+          content: " [↑/↓] Navigate  [Enter] Select  [G] Choose API  [L] List  [D] Docs  [R] Clean Docs  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
         )
 
         wire_events
         log_welcome
+        @menu_list.focus
+      end
+
+      private def load_targets
+        @targets = Manager.list_targets(allow_network: false)
+        if @targets.empty?
+          @targets = Manager.list_targets(allow_network: true)
+        end
+        @targets.sort_by! { |t| {t.generated? ? 0 : 1, t.id} }
+      end
+
+      private def target_item_label(target : DiscoveryTarget) : String
+        status = target.generated? ? "[INSTALLED]" : "[AVAILABLE]"
+        "#{status.ljust(12)} #{target.id.ljust(22)} #{target.title}"
+      end
+
+      def refresh_targets_list
+        load_targets
+        @api_list.items = @targets.map { |t| target_item_label(t) }
       end
 
       private def log_welcome
         @log_view.info "Welcome to Google APIs Crystal Generator TUI!"
         @log_view.info "Use Up/Down arrows to navigate menu, Enter to execute option."
-        @log_view.info "Or press shortcut keys: [G], [L], [D], [R], [T], [A], [C], [S], [H], [Q]"
+        @log_view.info "Press [G] to choose and install an API from the catalog list above."
+        @log_view.info "Shortcuts: [G] Choose API, [L] Targets, [D] Docs, [T] Test, [Q] Quit"
 
         # Quick check for out of date APIs
         check_outdated_status
@@ -131,20 +193,118 @@ module GoogleApis
           execute_menu_action(e.index)
         end
 
+        # Enter on API target item
+        @api_list.on(CT::Event::ItemActivated) do |e|
+          generate_selected_api(e.index)
+        end
+
+        # Cancel on API list (Escape)
+        @api_list.on(CT::Event::ItemCancelled) do |_e|
+          return_to_menu
+        end
+
+        # Focus synchronization
+        @menu_list.on(CT::Event::FocusIn) do |_e|
+          @active_pane = FocusPane::Menu
+          update_focus_ui
+          @window.update
+        end
+
+        @api_list.on(CT::Event::FocusIn) do |_e|
+          @active_pane = FocusPane::ApiList
+          update_focus_ui
+          @window.update
+        end
+
         # Global key presses
         @window.on(CT::Event::KeyPress) do |e|
-          handle_key_press(e.char)
+          handle_key_press(e)
         end
       end
 
-      private def handle_key_press(char : Char?)
+      private def handle_key_press(e : CT::Event::KeyPress)
+        return if @window.grab_keys?
+
+        case e.key
+        when ::Tput::Key::Up
+          if @active_pane.api_list?
+            unless e.accepted?
+              @api_list.up
+              @window.update
+            end
+          else
+            unless e.accepted?
+              @menu_list.up
+              @window.update
+            end
+          end
+          return
+        when ::Tput::Key::Down
+          if @active_pane.api_list?
+            unless e.accepted?
+              @api_list.down
+              @window.update
+            end
+          else
+            unless e.accepted?
+              @menu_list.down
+              @window.update
+            end
+          end
+          return
+        when ::Tput::Key::Enter
+          if @active_pane.api_list?
+            unless e.accepted?
+              generate_selected_api(@api_list.current_index)
+            end
+          else
+            unless e.accepted?
+              execute_menu_action(@menu_list.current_index)
+            end
+          end
+          return
+        when ::Tput::Key::Escape, ::Tput::Key::Left
+          if @active_pane.api_list?
+            return_to_menu
+            return
+          end
+        when ::Tput::Key::Right
+          if @active_pane.menu?
+            start_api_selection
+            return
+          end
+        when ::Tput::Key::Tab
+          if @active_pane.menu?
+            start_api_selection
+          else
+            return_to_menu
+          end
+          return
+        end
+
+        return if e.accepted?
+        char = e.char
         return unless char
         case char.downcase
         when 'q' then @window.quit
-        when 'g' then prompt_generate_api
+        when 'g' then start_api_selection
         when 'l' then show_all_targets
         when 'd' then generate_documentation
         when 'r' then remove_documentation
+        when 'k'
+          if @active_pane.api_list?
+            @api_list.up
+          else
+            @menu_list.up
+          end
+          @window.update
+        when 'j'
+          if @active_pane.api_list?
+            @api_list.down
+          else
+            @menu_list.down
+          end
+          @window.update
         else
           handle_secondary_key_press(char.downcase)
         end
@@ -160,6 +320,46 @@ module GoogleApis
         end
       end
 
+      # Starts selection mode in the API catalog list
+      def start_api_selection
+        @active_pane = FocusPane::ApiList
+        @api_list.focus
+        update_focus_ui
+        @log_view.info "API Selection Mode: Use Up/Down arrow keys to highlight an API to install, then press Enter."
+        @log_view.info "Tip: Press Escape or Left Arrow to return to the Main Menu."
+        @window.update
+      end
+
+      # Returns focus to the Main Menu
+      def return_to_menu
+        @active_pane = FocusPane::Menu
+        @menu_list.focus
+        update_focus_ui
+        @window.update
+      end
+
+      private def update_focus_ui
+        if @active_pane.api_list?
+          @menu_box.title = " Menu Options "
+          @api_box.title = " Available Google APIs [Active - Enter to Install, Esc to Cancel] "
+          @status_bar.content = " [↑/↓] Highlight API  [Enter] Install/Generate  [Esc/Tab/←] Back to Menu  [Q] Quit"
+        else
+          @menu_box.title = " Menu Options [Active] "
+          @api_box.title = " Available Google APIs (Press [G] to Highlight) "
+          @status_bar.content = " [↑/↓] Navigate  [Enter] Select  [G] Choose API  [L] List  [D] Docs  [R] Clean Docs  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
+        end
+      end
+
+      # Generates an API selected from the target list
+      def generate_selected_api(index : Int32)
+        target = @targets[index]?
+        unless target
+          @log_view.error "Invalid API target selected (index #{index})."
+          return
+        end
+        perform_generation(target.id)
+      end
+
       # Handles activation by index
       def execute_menu_action(index : Int32)
         if index < 5
@@ -171,7 +371,7 @@ module GoogleApis
 
       private def execute_primary_menu_action(index : Int32)
         case index
-        when 0 then prompt_generate_api
+        when 0 then start_api_selection
         when 1 then show_all_targets
         when 2 then generate_documentation
         when 3 then remove_documentation
@@ -189,18 +389,6 @@ module GoogleApis
         end
       end
 
-      # Action 1: Prompt user for API to generate
-      def prompt_generate_api
-        @log_view.info "Enter API name or ID to generate (e.g. storage, run, or path):"
-        CW::InputDialog.read(@window, "Generate API (name, ID or discovery JSON path):") do |input|
-          if input && !input.strip.empty?
-            perform_generation(input.strip)
-          else
-            @log_view.info "API generation cancelled."
-          end
-        end
-      end
-
       # Executes generation
       def perform_generation(target_query : String)
         @log_view.info "Generating client for '#{target_query}'..."
@@ -211,6 +399,7 @@ module GoogleApis
         if success
           @log_view.info msg
           @status_bar.content = " Status: Successfully generated #{target_query}!"
+          refresh_targets_list
         else
           @log_view.error msg
           @status_bar.content = " Status: Generation failed for #{target_query}."
@@ -229,6 +418,7 @@ module GoogleApis
 
         # Sync api-list.yaml
         Manager.sync_api_list_yaml(@project_root)
+        refresh_targets_list
 
         # Print targets
         @log_view.info "--- Discovery API Targets ---"
@@ -294,6 +484,7 @@ module GoogleApis
           else
             @log_view.info "Test execution cancelled."
           end
+          @menu_list.focus
         end
       end
 
@@ -344,6 +535,7 @@ module GoogleApis
         if success
           @log_view.info msg
           @status_bar.content = " Status: APIs successfully regenerated!"
+          refresh_targets_list
         else
           @log_view.warn msg
           @status_bar.content = " Status: API regeneration completed with warnings."

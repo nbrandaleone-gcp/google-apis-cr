@@ -50,8 +50,10 @@ module GoogleApis
           output_dir = File.join(project_root, "src/google_apis", service.name, service.version.downcase)
           Generator.generate(service, output_dir)
           spec_file = Generator.generate_spec(service, File.join(project_root, "spec/google_apis"))
+          sample_src, sample_bin = Generator.generate_sample_cli(service, project_root)
           sync_api_list_yaml(project_root)
-          return {true, "Successfully generated #{service.name} (#{service.version}) from #{target_query} into #{output_dir}\nSpec created/verified at: #{spec_file}", service}
+          msg = "Successfully generated #{service.name} (#{service.version}) from #{target_query} into #{output_dir}\nSpec: #{spec_file}\nSample CLI: #{sample_bin || sample_src}"
+          return {true, msg, service}
         end
         return {false, "Error: Could not find API target matching '#{target_query}'.", nil}
       end
@@ -69,6 +71,9 @@ module GoogleApis
       # Generate unit test spec scaffold if not present
       spec_file = Generator.generate_spec(service, File.join(project_root, "spec/google_apis"))
 
+      # Generate sample CLI program and executable in bin/
+      sample_src, sample_bin = Generator.generate_sample_cli(service, project_root)
+
       # Sync and save api-list.yaml
       sync_api_list_yaml(project_root)
 
@@ -78,7 +83,13 @@ module GoogleApis
         builder << "  - Resources: #{service.resources.size}\n"
         builder << "  - Location: #{output_dir}\n"
         builder << "  - Documentation: #{File.join(output_dir, "README.md")}\n"
-        builder << "  - Spec: #{spec_file}"
+        builder << "  - Spec: #{spec_file}\n"
+        builder << "  - Sample CLI Source: #{sample_src}\n"
+        if sample_bin
+          builder << "  - Sample CLI Executable: #{sample_bin}"
+        else
+          builder << "  - Sample CLI Executable: (build pending)"
+        end
       end
 
       {true, msg, service}

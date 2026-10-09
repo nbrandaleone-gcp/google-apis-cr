@@ -42,7 +42,7 @@ module GoogleApis
           "Array(JSON::Any)"
         end
       elsif add_prop = prop["additionalProperties"]?
-        "Hash(String, #{crystal_type_for(add_prop)})"
+        "::Hash(String, #{crystal_type_for(add_prop)})"
       else
         "JSON::Any"
       end
@@ -311,6 +311,341 @@ module GoogleApis
 
       File.write(spec_file, content)
       spec_file
+    end
+
+    # Generates a sample CLI in src/bin/list_#{service.name}.cr and builds bin/list_#{service.name}.
+    def self.generate_sample_cli(service : ServiceModel, project_root : String = ".") : Tuple(String, String?)
+      bin_dir = File.join(project_root, "bin")
+      src_bin_dir = File.join(project_root, "src/bin")
+      FileUtils.mkdir_p(bin_dir)
+      FileUtils.mkdir_p(src_bin_dir)
+
+      target_name = "list_#{service.name.underscore}"
+      sample_src_file = File.join(src_bin_dir, "#{target_name}.cr")
+      sample_bin_file = File.join(bin_dir, target_name)
+
+      # 1. Generate sample Crystal script if it does not already exist
+      unless File.exists?(sample_src_file)
+        picked = pick_primary_list_resource(service)
+        res = picked.try(&.[0])
+        meth = picked.try(&.[1])
+        code = generate_sample_script_content(service, res, meth)
+        File.write(sample_src_file, code)
+        Process.run("crystal", ["tool", "format", sample_src_file])
+      end
+
+      # 2. Register target in shard.yml
+      ensure_shard_target(project_root, target_name, "src/bin/#{target_name}.cr")
+
+      # 3. Register in src/google_apis_cr.cr
+      ensure_main_require(project_root, service)
+
+      # 4. Compile binary into bin/
+      build_output = IO::Memory.new
+      status = Process.run(
+        "crystal",
+        ["build", sample_src_file, "-o", sample_bin_file],
+        chdir: project_root,
+        output: build_output,
+        error: build_output
+      )
+
+      bin_path = status.success? ? sample_bin_file : nil
+      {sample_src_file, bin_path}
+    end
+
+    # Picks the primary listable resource and method for the API service.
+    def self.pick_primary_list_resource(service : ServiceModel) : Tuple(ResourceModel, MethodModel)?
+      candidates = [] of Tuple(ResourceModel, MethodModel, Int32)
+
+      service.resources.each do |res|
+        res.methods.each do |meth|
+          next unless meth.crystal_name == "list" || meth.crystal_name.starts_with?("list_")
+          score = score_resource_for_sample(service, res, meth)
+          candidates << {res, meth, score}
+        end
+      end
+
+      best = candidates.sort_by { |candidate| candidate[2] }.first?
+      best ? {best[0], best[1]} : nil
+    end
+
+    # Calculates a suitability score for picking a primary listing resource.
+    def self.score_resource_for_sample(
+      service : ServiceModel,
+      res : ResourceModel,
+      m : MethodModel,
+    ) : Int32
+      score = calculate_resource_penalties(res, m)
+      score + calculate_resource_bonuses(service, res, m)
+    end
+
+    private def self.calculate_resource_penalties(res : ResourceModel, m : MethodModel) : Int32
+      score = 0
+      if res.name.ends_with?("operations") || res.name.ends_with?("locations")
+        score += 60
+      end
+      if res.name.includes?("iam") || res.name.includes?("policy") || res.name.includes?("policies")
+        score += 40
+      end
+      if res.name.includes?("zone_operations") || res.name.includes?("dns_keys") || res.name.includes?("changes")
+        score += 30
+      end
+
+      req_params = m.required_parameters
+      req_params.each do |param|
+        p_name = param.crystal_name.downcase
+        unless ["project", "parent", "name", "project_id"].includes?(p_name)
+          score += 50
+        end
+      end
+      score += req_params.size * 10
+      score += res.name.split("_").size * 2
+      score
+    end
+
+    private def self.calculate_resource_bonuses(service : ServiceModel, res : ResourceModel, m : MethodModel) : Int32
+      score = 0
+      r_name = res.name.downcase
+      s_name = service.name.downcase
+      score -= 20 if r_name.includes?(s_name)
+
+      primary_suffixes = [
+        "services", "buckets", "repositories", "managed_zones",
+        "instances", "clusters", "topics", "subscriptions",
+      ]
+      if primary_suffixes.any? { |suffix| r_name.ends_with?(suffix) }
+        score -= 30
+      end
+
+      if s_name == "run" && r_name.ends_with?("services")
+        score -= 10
+      end
+
+      score -= 5 if m.response_ref
+      score
+    end
+
+    # Generates the source code for a sample list CLI.
+    def self.generate_sample_script_content(
+      service : ServiceModel,
+      res : ResourceModel?,
+      m : MethodModel?,
+    ) : String
+      title = service.title || "#{service.name.capitalize} API"
+      bin_name = "list_#{service.name.underscore}"
+
+      String.build do |builder|
+        builder << "require \"option_parser\"\n"
+        builder << "require \"json\"\n"
+        builder << "require \"../google_apis_cr\"\n"
+        builder << "require \"../google_apis/#{service.name}/#{service.version.downcase}/#{service.version.downcase}\"\n\n"
+        builder << "# Sample CLI tool to list Google #{title} primary resources.\n"
+        builder << "project_id : String? = nil\n"
+
+        needs_location = false
+        if m
+          needs_location = m.parameters.any? { |param| param.crystal_name == "location" } ||
+                           m.path.includes?("locations") ||
+                           m.parameters.any? { |param| param.crystal_name == "parent" && param.description.try(&.includes?("locations")) }
+        end
+
+        builder << "location_arg : String? = nil\n" if needs_location
+        builder << "max_results : Int64? = nil\n"
+        builder << "output_json = false\n\n"
+
+        builder << "OptionParser.parse do |opts|\n"
+        builder << "  opts.banner = \"Usage: #{bin_name} [options]\"\n\n"
+        builder << "  opts.on(\"-p PROJECT\", \"--project=PROJECT\", \"Google Cloud Project ID (default: from credentials/environment)\") do |arg|\n"
+        builder << "    project_id = arg\n"
+        builder << "  end\n\n"
+
+        if needs_location
+          builder << "  opts.on(\"-l LOCATION\", \"--location=LOCATION\", \"Location or region (default: '-' or us-central1)\") do |arg|\n"
+          builder << "    location_arg = arg\n"
+          builder << "  end\n\n"
+        end
+
+        builder << "  opts.on(\"-m NUM\", \"--max-results=NUM\", \"Max results to return\") do |arg|\n"
+        builder << "    max_results = arg.to_i64?\n"
+        builder << "  end\n\n"
+
+        builder << "  opts.on(\"-j\", \"--json\", \"Output response as formatted JSON\") do\n"
+        builder << "    output_json = true\n"
+        builder << "  end\n\n"
+
+        builder << "  opts.on(\"-h\", \"--help\", \"Show help documentation\") do\n"
+        builder << "    puts opts\n"
+        builder << "    exit 0\n"
+        builder << "  end\n"
+        builder << "end\n\n"
+
+        builder << "begin\n"
+        builder << "  credentials = GoogleApis::Auth.default_credentials\n"
+        builder << "  resolved_project = project_id ||\n"
+        builder << "                     ENV[\"GOOGLE_CLOUD_PROJECT\"]? ||\n"
+        builder << "                     ENV[\"GCP_PROJECT\"]? ||\n"
+        builder << "                     credentials.quota_project_id ||\n"
+        builder << "                     credentials.project_id\n\n"
+        builder << "  unless resolved_project\n"
+        builder << "    STDERR.puts \"Error: Project ID could not be determined. Please specify with -p/--project.\"\n"
+        builder << "    exit 1\n"
+        builder << "  end\n\n"
+
+        builder << "  client = #{service.module_name}::Client.new(credentials)\n"
+        builder << "  puts \"Authenticated via Application Default Credentials\"\n"
+        builder << "  puts \"Target Project: \#{resolved_project}\"\n"
+        builder << "  puts \"-\" * 60\n\n"
+
+        if res && m
+          build_sample_method_call(service, res, m, needs_location, builder)
+        else
+          builder << "  puts \"Client initialized successfully.\"\n"
+        end
+
+        builder << "rescue ex : GoogleApis::HttpError\n"
+        builder << "  STDERR.puts \"API Error: \#{ex.message} (HTTP \#{ex.status_code})\"\n"
+        builder << "  STDERR.puts ex.body unless ex.body.empty?\n"
+        builder << "  exit 1\n"
+        builder << "rescue ex\n"
+        builder << "  STDERR.puts \"Error: \#{ex.message}\"\n"
+        builder << "  exit 1\n"
+        builder << "end\n"
+      end
+    end
+
+    private def self.build_sample_method_call(
+      service : ServiceModel,
+      res : ResourceModel,
+      m : MethodModel,
+      needs_location : Bool,
+      builder : IO,
+    ) : Nil
+      args_str = build_sample_call_args(m, needs_location).join(", ")
+      builder << "  response = client.#{res.getter_name}.#{m.crystal_name}(#{args_str})\n\n"
+      builder << "  if output_json\n"
+      builder << "    puts response.to_json\n"
+      builder << "    exit 0\n"
+      builder << "  end\n\n"
+
+      build_sample_items_loop(service, res, m, builder)
+    end
+
+    private def self.build_sample_call_args(m : MethodModel, needs_location : Bool) : Array(String)
+      call_args = [] of String
+      m.parameters.each do |param|
+        if param.required?
+          case param.crystal_name
+          when "project", "project_id"
+            call_args << "#{param.crystal_name}: resolved_project"
+          when "parent", "name"
+            if needs_location
+              call_args << "#{param.crystal_name}: \"projects/\#{resolved_project}/locations/\#{location_arg || \"-\"}\""
+            else
+              call_args << "#{param.crystal_name}: \"projects/\#{resolved_project}\""
+            end
+          else
+            call_args << "#{param.crystal_name}: \"default\""
+          end
+        elsif param.crystal_name == "max_results"
+          call_args << "max_results: max_results"
+        elsif param.crystal_name == "page_size"
+          if param.crystal_type == "Int32"
+            call_args << "page_size: max_results.try(&.to_i32)"
+          else
+            call_args << "page_size: max_results"
+          end
+        end
+      end
+      call_args
+    end
+
+    private def self.build_sample_items_loop(
+      service : ServiceModel,
+      res : ResourceModel,
+      m : MethodModel,
+      builder : IO,
+    ) : Nil
+      schema_names = service.schemas.map(&.name).to_set
+      resp_schema = service.schemas.find { |s_item| s_item.name == m.response_ref }
+      list_prop = resp_schema.try do |rs_item|
+        rs_item.properties.find do |prop|
+          prop.crystal_type.starts_with?("Array(") && (schema_names.includes?(prop.crystal_type[6...-1]) || prop.crystal_name == "items")
+        end || rs_item.properties.find(&.crystal_type.starts_with?("Array("))
+      end
+
+      unless list_prop
+        builder << "  puts \"Response:\"\n"
+        builder << "  puts response.to_json\n"
+        return
+      end
+
+      elem_type = list_prop.crystal_type.starts_with?("Array(") ? list_prop.crystal_type[6...-1] : nil
+      elem_schema = elem_type ? service.schemas.find { |s_item| s_item.name == elem_type } : nil
+
+      id_prop = elem_schema.try(&.properties.find { |prop| ["name", "id", "display_name", "title"].includes?(prop.crystal_name) })
+      id_getter = id_prop ? id_prop.crystal_name : "name"
+
+      detail_props = elem_schema.try do |es_item|
+        candidates = ["description", "location", "status", "state", "format", "dns_name", "storage_class", "create_time", "visibility"]
+        es_item.properties.select { |prop| candidates.includes?(prop.crystal_name) && prop.crystal_name != id_getter }.first(4)
+      end || [] of PropertyModel
+
+      builder << "  if items = response.#{list_prop.crystal_name}\n"
+      builder << "    if items.empty?\n"
+      builder << "      puts \"No #{res.name.underscore.tr("_", " ")} found.\"\n"
+      builder << "    else\n"
+      builder << "      puts \"Listing #{res.name.underscore.tr("_", " ")} (\#{items.size} found):\"\n"
+      builder << "      items.each do |item|\n"
+      builder << "        details = [] of String\n"
+      detail_props.each do |prop|
+        builder << "        if val = item.#{prop.crystal_name}\n"
+        builder << "          details << \"#{prop.crystal_name}: \#{val}\"\n"
+        builder << "        end\n"
+      end
+      builder << "        summary = details.empty? ? \"\" : \" [\#{details.join(\", \")}]\"\n"
+      if id_prop
+        builder << "        label = item.#{id_getter} || \"(unknown)\"\n"
+      else
+        builder << "        label = item.to_s\n"
+      end
+      builder << "        puts \"  * \#{label}\#{summary}\"\n"
+      builder << "      end\n"
+      builder << "    end\n"
+      builder << "  else\n"
+      builder << "    puts \"No items returned.\"\n"
+      builder << "  end\n"
+    end
+
+    # Adds target to shard.yml if not already present.
+    def self.ensure_shard_target(project_root : String, target_name : String, main_path : String)
+      shard_path = File.join(project_root, "shard.yml")
+      return unless File.exists?(shard_path)
+      content = File.read(shard_path)
+      return if content.includes?("#{target_name}:")
+
+      new_content = if content.includes?("targets:")
+                      content.sub("targets:", "targets:\n  #{target_name}:\n    main: #{main_path}")
+                    else
+                      content + "\ntargets:\n  #{target_name}:\n    main: #{main_path}\n"
+                    end
+      File.write(shard_path, new_content)
+    end
+
+    # Ensures the service module is required in src/google_apis_cr.cr.
+    def self.ensure_main_require(project_root : String, service : ServiceModel)
+      main_file = File.join(project_root, "src/google_apis_cr.cr")
+      return unless File.exists?(main_file)
+      content = File.read(main_file)
+      require_stmt = %(require "./google_apis/#{service.name}/#{service.version.downcase}/#{service.version.downcase}")
+      return if content.includes?(require_stmt)
+
+      lines = content.lines
+      last_req_idx = lines.rindex(&.strip.starts_with?("require "))
+      if last_req_idx
+        lines.insert(last_req_idx + 1, require_stmt)
+        File.write(main_file, lines.join("\n") + "\n")
+      end
     end
   end
 end

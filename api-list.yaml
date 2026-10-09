@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-09 15:34:36 UTC
+last_updated: 2026-10-09 16:56:57 UTC
 apis:
   abusiveexperiencereport:
     title: Abusive Experience Report API
@@ -194,8 +194,9 @@ apis:
   artifactregistry:
     title: Artifact Registry API
     latest_version: v1
-    status: not_generated
-    discovery_url: https://artifactregistry.googleapis.com/$discovery/rest?version=v1
+    generated_version: v1
+    status: up_to_date
+    discovery_url: https://artifactregistry.googleapis.com/
   assuredworkloads:
     title: Assured Workloads API
     latest_version: v1

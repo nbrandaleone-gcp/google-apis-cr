@@ -13,6 +13,8 @@ dependencies:
     github: crystallabs/crysterm
 
 targets:
+  list_dns:
+    main: src/bin/list_dns.cr
   list_storage:
     main: src/bin/list_storage.cr
   list_cloud_run:
@@ -21,3 +23,5 @@ targets:
     main: src/bin/generate_api.cr
   tui:
     main: src/bin/tui.cr
+  list_registries:
+    main: src/bin/list_registries.cr
