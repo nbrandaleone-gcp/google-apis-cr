@@ -120,6 +120,166 @@ module GoogleApis
       end
     end
 
+    # Removes a generated API or documentation.
+    # Removes associated files in src/google_apis, src/bin, bin, spec, shard.yml, src/google_apis_cr.cr, and docs.
+    def self.remove_api(api_query : String, project_root : String = ".") : Tuple(Bool, String)
+      query = api_query.strip.downcase
+      return {false, "API name cannot be empty."} if query.empty?
+      return remove_docs(project_root) if query == "docs"
+      return remove_all_apis(project_root) if query == "all"
+
+      generated = find_generated_api_names(project_root)
+      target_api = generated.find { |name| name.downcase == query || name.downcase.includes?(query) }
+      unless target_api
+        return {false, "No generated API found matching '#{api_query}'. Generated APIs: #{generated.join(", ")}"}
+      end
+
+      if PROTECTED_DIRS.includes?(target_api)
+        return {false, "Cannot remove protected directory '#{target_api}'."}
+      end
+
+      removed_items = remove_single_api(target_api, project_root)
+      sync_api_list_yaml(project_root)
+
+      msg = String.build do |builder|
+        builder << "Successfully removed #{target_api} API and associated files:\n"
+        removed_items.each do |item|
+          builder << "  - #{item}\n"
+        end
+      end
+      {true, msg.strip}
+    end
+
+    private def self.remove_all_apis(project_root : String) : Tuple(Bool, String)
+      generated = find_generated_api_names(project_root)
+      if generated.empty?
+        remove_docs(project_root)
+        return {true, "No generated APIs to remove. Cleaned documentation."}
+      end
+
+      all_removed = [] of String
+      generated.each do |api_name|
+        all_removed.concat(remove_single_api(api_name, project_root))
+      end
+      remove_docs(project_root)
+      sync_api_list_yaml(project_root)
+
+      msg = "Successfully removed all generated APIs (#{generated.join(", ")}):\n" +
+            all_removed.map { |item| "  - #{item}" }.join("\n")
+      {true, msg}
+    end
+
+    private def self.remove_single_api(target_api : String, project_root : String) : Array(String)
+      removed_items = [] of String
+
+      # 1. src/google_apis/<api>
+      api_dir = File.join(project_root, "src/google_apis", target_api)
+      if Dir.exists?(api_dir)
+        FileUtils.rm_rf(api_dir)
+        removed_items << "src/google_apis/#{target_api}/"
+      end
+
+      # 2. src/bin scripts
+      src_bin_dir = File.join(project_root, "src/bin")
+      target_names = collect_api_target_names(target_api)
+      target_names.each do |target_name|
+        script_file = File.join(src_bin_dir, "#{target_name}.cr")
+        if File.exists?(script_file)
+          FileUtils.rm(script_file)
+          removed_items << "src/bin/#{target_name}.cr"
+        end
+      end
+
+      # 3. bin executables
+      bin_dir = File.join(project_root, "bin")
+      target_names.each do |target_name|
+        bin_file = File.join(bin_dir, target_name)
+        if File.exists?(bin_file)
+          FileUtils.rm(bin_file)
+          removed_items << "bin/#{target_name}"
+        end
+        dwarf_file = File.join(bin_dir, "#{target_name}.dwarf")
+        if File.exists?(dwarf_file)
+          FileUtils.rm(dwarf_file)
+        end
+      end
+
+      # 4. spec files
+      spec_dir = File.join(project_root, "spec/google_apis")
+      if Dir.exists?(spec_dir)
+        Dir.glob(File.join(spec_dir, "*#{target_api}*.cr")).each do |spec_file|
+          FileUtils.rm(spec_file)
+          removed_items << "spec/google_apis/#{File.basename(spec_file)}"
+        end
+      end
+
+      # 5. shard.yml targets
+      remove_shard_targets(project_root, target_names)
+
+      # 6. src/google_apis_cr.cr requires
+      remove_main_require(project_root, target_api)
+
+      # 7. docs
+      docs_api_dir = File.join(project_root, "docs/GoogleApis", target_api.camelcase)
+      if Dir.exists?(docs_api_dir)
+        FileUtils.rm_rf(docs_api_dir)
+        removed_items << "docs/GoogleApis/#{target_api.camelcase}/"
+      end
+
+      removed_items
+    end
+
+    private def self.collect_api_target_names(api_name : String) : Array(String)
+      names = ["list_#{api_name}", "list_#{api_name.underscore}"]
+      case api_name
+      when "run"
+        names << "list_cloud_run"
+      when "artifactregistry"
+        names << "list_registries"
+      when "storage"
+        names << "list_storage"
+      end
+      names.uniq
+    end
+
+    private def self.remove_shard_targets(project_root : String, target_names : Array(String))
+      shard_path = File.join(project_root, "shard.yml")
+      return unless File.exists?(shard_path)
+      lines = File.read_lines(shard_path)
+      new_lines = [] of String
+      skip_next_main = false
+
+      lines.each do |line|
+        if skip_next_main
+          skip_next_main = false
+          next if line.strip.starts_with?("main:")
+        end
+
+        matched = target_names.any? do |t_name|
+          stripped = line.strip
+          stripped == "#{t_name}:" || stripped.starts_with?("#{t_name}:")
+        end
+
+        if matched
+          skip_next_main = true
+          next
+        end
+
+        new_lines << line
+      end
+
+      File.write(shard_path, new_lines.join("\n") + "\n")
+    end
+
+    private def self.remove_main_require(project_root : String, api_name : String)
+      main_file = File.join(project_root, "src/google_apis_cr.cr")
+      return unless File.exists?(main_file)
+      lines = File.read_lines(main_file)
+      pattern = %(require "./google_apis/#{api_name}/)
+      new_lines = lines.reject(&.includes?(pattern))
+      File.write(main_file, new_lines.join("\n") + "\n")
+    end
+
     # Runs unit tests for a particular API (e.g. "storage", "run", etc.).
     def self.run_tests_for(api_query : String, project_root : String = ".") : Tuple(Bool, String)
       spec_dir = File.join(project_root, "spec/google_apis")
@@ -273,35 +433,33 @@ module GoogleApis
          'src/google_apis/<name>/<version>/', creates a usage README.md in that directory,
          and generates a unit test spec in 'spec/google_apis/'.
 
-      2. [L] Show all API Targets:
-         Lists all targets available from Google Discovery Service and local discovery files,
-         showing their title, latest version, and whether currently generated and up to date.
-
-      3. [D] Generate Documentation:
+      2. [D] Generate Documentation:
          Runs 'crystal docs' to build the complete Crystal HTML documentation site in 'docs/'.
 
-      4. [R] Remove Documentation:
-         Cleans up and removes the entire 'docs/' directory.
+      3. [R] Remove API and documentation:
+         Removes a generated API (or 'all', or 'docs'), deleting its client library in
+         'src/google_apis/', sample CLI in 'src/bin/', executable in 'bin/', spec in
+         'spec/google_apis/', shard target in 'shard.yml', and associated documentation.
 
-      5. [T] Run Unit Tests for API:
+      4. [T] Run Unit Tests for API:
          Runs specs for a particular API target (e.g. 'storage', 'run') via 'crystal spec'.
 
-      6. [A] Run All Unit Tests:
+      5. [A] Run All Unit Tests:
          Executes the full test suite with 'crystal spec'.
 
-      7. [C] Clear & Regenerate:
+      6. [C] Clear & Regenerate:
          Clears out existing generated API directories and regenerates them cleanly
          from discovery documents, including updated READMEs and specs.
 
-      8. [S] Sync api-list.yaml:
+      7. [S] Sync api-list.yaml:
          Synchronizes latest version numbers from Google Discovery Docs into 'api-list.yaml'
          so you can detect whenever a generated API is out of date.
 
-      9. [H] Help:
+      8. [H] Help:
          Displays this help text.
 
-      10. [Q] Quit:
-          Exits the application.
+      9. [Q] Quit:
+         Exits the application.
       HELP
     end
   end

@@ -20,9 +20,8 @@ describe GoogleApis::Manager do
     help = GoogleApis::Manager.help_text
     help.includes?("Google APIs Generator & Manager Help").should be_true
     help.includes?("[G] Generate API").should be_true
-    help.includes?("[L] Show all API Targets").should be_true
     help.includes?("[D] Generate Documentation").should be_true
-    help.includes?("[R] Remove Documentation").should be_true
+    help.includes?("[R] Remove API and documentation").should be_true
     help.includes?("[T] Run Unit Tests for API").should be_true
     help.includes?("[A] Run All Unit Tests").should be_true
     help.includes?("[C] Clear & Regenerate").should be_true
@@ -33,6 +32,25 @@ describe GoogleApis::Manager do
     success, output = GoogleApis::Manager.run_tests_for("storage")
     success.should be_true
     output.includes?("examples, 0 failures").should be_true
+  end
+
+  it "removes an API and its associated files" do
+    test_api_dir = "src/google_apis/testapi"
+    test_bin_src = "src/bin/list_testapi.cr"
+    test_bin = "bin/list_testapi"
+    FileUtils.mkdir_p(File.join(test_api_dir, "v1"))
+    File.write(File.join(test_api_dir, "v1", "client.cr"), "# dummy client")
+    FileUtils.mkdir_p("src/bin")
+    File.write(test_bin_src, "# dummy script")
+    FileUtils.mkdir_p("bin")
+    File.write(test_bin, "# dummy binary")
+
+    success, msg = GoogleApis::Manager.remove_api("testapi")
+    success.should be_true
+    Dir.exists?(test_api_dir).should be_false
+    File.exists?(test_bin_src).should be_false
+    File.exists?(test_bin).should be_false
+    msg.includes?("Successfully removed testapi API").should be_true
   end
 
   it "removes documentation directory safely" do

@@ -27,9 +27,8 @@ module GoogleApis
 
       MENU_ITEMS = [
         "[G] Generate API (Choose Target)",
-        "[L] Show All Discovery Targets",
         "[D] Generate Documentation (crystal docs)",
-        "[R] Remove Generated Documentation",
+        "[R] Remove API and documentation",
         "[T] Run Tests for Particular API",
         "[A] Run All Unit Tests",
         "[C] Clear & Regenerate APIs",
@@ -102,7 +101,7 @@ module GoogleApis
           left: 1,
           right: 1,
           bottom: 1,
-          items: @targets.map { |t| target_item_label(t) },
+          items: @targets.map { |target| target_item_label(target) },
           mouse: true,
           vi_keys: true,
           styles: CT::Styles.new(
@@ -138,7 +137,7 @@ module GoogleApis
           width: "100%",
           height: 2,
           parse_tags: true,
-          content: " [↑/↓] Navigate  [Enter] Select  [G] Choose API  [L] List  [D] Docs  [R] Clean Docs  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
+          content: " [↑/↓] Navigate  [Enter] Select  [G] Choose API  [D] Docs  [R] Remove API  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
         )
 
         wire_events
@@ -151,7 +150,7 @@ module GoogleApis
         if @targets.empty?
           @targets = Manager.list_targets(allow_network: true)
         end
-        @targets.sort_by! { |t| {t.generated? ? 0 : 1, t.id} }
+        @targets.sort_by! { |target| {target.generated? ? 0 : 1, target.id} }
       end
 
       private def target_item_label(target : DiscoveryTarget) : String
@@ -161,14 +160,14 @@ module GoogleApis
 
       def refresh_targets_list
         load_targets
-        @api_list.items = @targets.map { |t| target_item_label(t) }
+        @api_list.items = @targets.map { |target| target_item_label(target) }
       end
 
       private def log_welcome
         @log_view.info "Welcome to Google APIs Crystal Generator TUI!"
         @log_view.info "Use Up/Down arrows to navigate menu, Enter to execute option."
         @log_view.info "Press [G] to choose and install an API from the catalog list above."
-        @log_view.info "Shortcuts: [G] Choose API, [L] Targets, [D] Docs, [T] Test, [Q] Quit"
+        @log_view.info "Shortcuts: [G] Choose API, [D] Docs, [R] Remove API, [T] Test, [Q] Quit"
 
         # Quick check for out of date APIs
         check_outdated_status
@@ -224,89 +223,75 @@ module GoogleApis
 
       private def handle_key_press(e : CT::Event::KeyPress)
         return if @window.grab_keys?
+        return if handle_arrow_keys(e)
+        return if handle_action_keys(e)
+        return if e.accepted?
 
+        char = e.char
+        return unless char
+        handle_char_keys(char.downcase)
+      end
+
+      private def handle_arrow_keys(e : CT::Event::KeyPress) : Bool
         case e.key
         when ::Tput::Key::Up
-          if @active_pane.api_list?
-            unless e.accepted?
-              @api_list.up
-              @window.update
-            end
-          else
-            unless e.accepted?
-              @menu_list.up
-              @window.update
-            end
+          unless e.accepted?
+            @active_pane.api_list? ? @api_list.up : @menu_list.up
+            @window.update
           end
-          return
+          true
         when ::Tput::Key::Down
-          if @active_pane.api_list?
-            unless e.accepted?
-              @api_list.down
-              @window.update
-            end
-          else
-            unless e.accepted?
-              @menu_list.down
-              @window.update
-            end
+          unless e.accepted?
+            @active_pane.api_list? ? @api_list.down : @menu_list.down
+            @window.update
           end
-          return
+          true
+        else
+          false
+        end
+      end
+
+      private def handle_action_keys(e : CT::Event::KeyPress) : Bool
+        case e.key
         when ::Tput::Key::Enter
-          if @active_pane.api_list?
-            unless e.accepted?
+          unless e.accepted?
+            if @active_pane.api_list?
               generate_selected_api(@api_list.current_index)
-            end
-          else
-            unless e.accepted?
+            else
               execute_menu_action(@menu_list.current_index)
             end
           end
-          return
+          true
         when ::Tput::Key::Escape, ::Tput::Key::Left
-          if @active_pane.api_list?
-            return_to_menu
-            return
-          end
+          return false unless @active_pane.api_list?
+          return_to_menu
+          true
         when ::Tput::Key::Right
-          if @active_pane.menu?
-            start_api_selection
-            return
-          end
+          return false unless @active_pane.menu?
+          start_api_selection
+          true
         when ::Tput::Key::Tab
-          if @active_pane.menu?
-            start_api_selection
-          else
-            return_to_menu
-          end
-          return
+          @active_pane.menu? ? start_api_selection : return_to_menu
+          true
+        else
+          false
         end
+      end
 
-        return if e.accepted?
-        char = e.char
-        return unless char
-        case char.downcase
+      private def handle_char_keys(char : Char)
+        case char
         when 'q' then @window.quit
         when 'g' then start_api_selection
-        when 'l' then show_all_targets
         when 'd' then generate_documentation
-        when 'r' then remove_documentation
+        when 'r' then prompt_remove_api_and_docs
         when 'k'
-          if @active_pane.api_list?
-            @api_list.up
-          else
-            @menu_list.up
-          end
+          @active_pane.api_list? ? @api_list.up : @menu_list.up
           @window.update
         when 'j'
-          if @active_pane.api_list?
-            @api_list.down
-          else
-            @menu_list.down
-          end
+          @active_pane.api_list? ? @api_list.down : @menu_list.down
           @window.update
         else
-          handle_secondary_key_press(char.downcase)
+          handle_secondary_key_press(char)
         end
       end
 
@@ -346,7 +331,7 @@ module GoogleApis
         else
           @menu_box.title = " Menu Options [Active] "
           @api_box.title = " Available Google APIs (Press [G] to Highlight) "
-          @status_bar.content = " [↑/↓] Navigate  [Enter] Select  [G] Choose API  [L] List  [D] Docs  [R] Clean Docs  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
+          @status_bar.content = " [↑/↓] Navigate  [Enter] Select  [G] Choose API  [D] Docs  [R] Remove API  [T] Test  [A] All  [C] Regen  [S] Sync  [Q] Quit"
         end
       end
 
@@ -362,7 +347,7 @@ module GoogleApis
 
       # Handles activation by index
       def execute_menu_action(index : Int32)
-        if index < 5
+        if index < 4
           execute_primary_menu_action(index)
         else
           execute_secondary_menu_action(index)
@@ -372,20 +357,19 @@ module GoogleApis
       private def execute_primary_menu_action(index : Int32)
         case index
         when 0 then start_api_selection
-        when 1 then show_all_targets
-        when 2 then generate_documentation
-        when 3 then remove_documentation
-        when 4 then prompt_run_tests
+        when 1 then generate_documentation
+        when 2 then prompt_remove_api_and_docs
+        when 3 then prompt_run_tests
         end
       end
 
       private def execute_secondary_menu_action(index : Int32)
         case index
-        when 5 then run_all_unit_tests
-        when 6 then clear_and_regenerate
-        when 7 then sync_api_list_yaml
-        when 8 then print_help
-        when 9 then @window.quit
+        when 4 then run_all_unit_tests
+        when 5 then clear_and_regenerate
+        when 6 then sync_api_list_yaml
+        when 7 then print_help
+        when 8 then @window.quit
         end
       end
 
@@ -407,40 +391,6 @@ module GoogleApis
         @window.update
       end
 
-      # Action 2: Show all API targets from Discovery Docs
-      def show_all_targets
-        @log_view.info "Fetching and scanning Google Discovery Document targets..."
-        @status_bar.content = " Status: Loading discovery catalog..."
-        @window.update
-
-        targets = Manager.list_targets(allow_network: true)
-        @log_view.info "Total Discovery targets found: #{targets.size}"
-
-        # Sync api-list.yaml
-        Manager.sync_api_list_yaml(@project_root)
-        refresh_targets_list
-
-        # Print targets
-        @log_view.info "--- Discovery API Targets ---"
-        targets.first(25).each do |target|
-          tag_color = if target.out_of_date?
-                        "yellow"
-                      elsif target.generated?
-                        "green"
-                      else
-                        "blue"
-                      end
-          @log_view.info "{#{tag_color}-fg}#{target.status_label}{/#{tag_color}-fg} #{target.id} - #{target.title}"
-        end
-
-        if targets.size > 25
-          @log_view.info "... and #{targets.size - 25} more targets available (saved to api-list.yaml)."
-        end
-
-        @status_bar.content = " Status: Listed #{targets.size} Discovery targets. api-list.yaml updated."
-        @window.update
-      end
-
       # Action 3: Generate documentation using `crystal docs`
       def generate_documentation
         @log_view.info "Running `crystal docs` to generate documentation..."
@@ -458,16 +408,65 @@ module GoogleApis
         @window.update
       end
 
-      # Action 4: Remove generated documentation
-      def remove_documentation
-        @log_view.info "Removing generated documentation directory..."
+      # Action 4: Remove API and documentation
+      def prompt_remove_api_and_docs
+        generated = Manager.find_generated_api_names(@project_root)
+        if generated.empty?
+          clean_docs_only
+          return
+        end
+
+        highlighted = determine_highlighted_api
+        prompt_label = if highlighted
+                         "API to remove (default: #{highlighted}, or #{generated.join(", ")}, 'all', 'docs'):"
+                       else
+                         "API to remove (#{generated.join(", ")}, 'all', 'docs'):"
+                       end
+
+        CW::InputDialog.read(@window, prompt_label) do |input|
+          target = (input && !input.strip.empty?) ? input.strip : highlighted
+          if target
+            perform_remove_api(target)
+          else
+            @log_view.info "Removal cancelled."
+          end
+          @menu_list.focus
+          @window.update
+        end
+      end
+
+      private def determine_highlighted_api : String?
+        return unless @active_pane.api_list?
+        target = @targets[@api_list.current_index]?
+        (target && target.generated?) ? target.name : nil
+      end
+
+      private def clean_docs_only : Nil
+        @log_view.warn "No generated APIs found to remove. Checking documentation..."
         success, msg = Manager.remove_docs(@project_root)
         if success
           @log_view.info msg
           @status_bar.content = " Status: Documentation cleaned up."
         else
           @log_view.error msg
-          @status_bar.content = " Status: Failed to remove documentation."
+          @status_bar.content = " Status: Documentation cleanup failed."
+        end
+        @window.update
+      end
+
+      private def perform_remove_api(api_query : String)
+        @log_view.warn "Removing API and documentation matching '#{api_query}'..."
+        @status_bar.content = " Status: Removing #{api_query}..."
+        @window.update
+
+        success, msg = Manager.remove_api(api_query, @project_root)
+        if success
+          @log_view.info msg
+          @status_bar.content = " Status: Successfully removed #{api_query}!"
+          refresh_targets_list
+        else
+          @log_view.error msg
+          @status_bar.content = " Status: Removal failed for #{api_query}."
         end
         @window.update
       end
