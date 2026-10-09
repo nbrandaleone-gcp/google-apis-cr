@@ -2,9 +2,7 @@
 
 ![Google APIs Crystal Architecture Pipeline](assets/pipeline_architecture.png)
 
-A Crystal client library for Google APIs, featuring Application Default Credentials (ADC) authentication, Google Discovery Service typed code generation with Embedded Crystal (ECR) templates. 
-
-There is a generated typed Google Cloud Storage client, as an example.
+A Crystal program that generates client libraries for Google APIs, featuring Application Default Credentials (ADC) authentication, Google Discovery Service typed code generation with Embedded Crystal (ECR) templates. 
 
 All code is agent generated (Gemini 3.8 Flash). While unit tested
 to be correct, it is clearly not idiomatic crystal that humans would write.
@@ -172,7 +170,7 @@ MIT
 1) https://docs.cloud.google.com/docs/discovery/build-client-library
 2) https://developers.google.com/discovery/v1/building-a-client-library
 
-## AI tools
+## AI tooling
 
 All of the code in this repository was written by Gemini 3.8 Flash.
 I included the goal in the `AGENTS.md` file, along with some of the

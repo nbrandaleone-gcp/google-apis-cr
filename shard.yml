@@ -13,6 +13,8 @@ dependencies:
     github: crystallabs/crysterm
 
 targets:
+  list_tpu:
+    main: src/bin/list_tpu.cr
   list_dns:
     main: src/bin/list_dns.cr
   list_storage:

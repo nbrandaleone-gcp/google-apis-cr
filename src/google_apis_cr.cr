@@ -9,6 +9,7 @@ require "./google_apis/storage/v1/v1"
 require "./google_apis/run/v2/v2"
 require "./google_apis/artifactregistry/v1/v1"
 require "./google_apis/dns/v1/v1"
+require "./google_apis/tpu/v2alpha1/v2alpha1"
 
 # Client library for Google APIs.
 module GoogleApisCr
