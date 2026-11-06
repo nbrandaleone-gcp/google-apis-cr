@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google APIs Crystal Generator Architecture & Execution Flow</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --border-color: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a78bfa;
+      --accent-green: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-pink: #f472b6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .tab-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Diagram Card */
+    .diagram-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Pipeline Step Grid */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      transition: border-color 0.2s ease;
+    }
+
+    .step-card:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .step-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0 0 10px 0;
+    }
+
+    .method-tag {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px;
+      background: rgba(30, 41, 59, 0.7);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #7dd3fc;
+      border: 1px solid #334155;
+    }
+
+    /* Reference Table */
+    .table-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      background: #0f172a;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .links a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">Crystal Code Generation Engine</div>
+    <h1>src/google_apis/generator.cr</h1>
+    <p class="subtitle">Architectural Flow &amp; Execution Pipeline for Google Discovery Document Transformation</p>
+  </header>
+
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('arch')">📐 Pipeline Architecture Flow</button>
+    <button class="tab-btn" onclick="switchTab('seq')">⚡ Execution Sequence Diagram</button>
+    <button class="tab-btn" onclick="switchTab('ref')">📋 Methods &amp; Responsibilities Reference</button>
+  </div>
+
+  <!-- Tab 1: Architecture -->
+  <div id="tab-arch" class="tab-content active">
+    <div class="diagram-card">
+      <div class="mermaid">
+flowchart TD
+    subgraph Input["1. Input Source"]
+        JSON["Google Discovery Document<br/><code>discovery/&lt;api&gt;_&lt;ver&gt;.json</code>"]
+    end
+
+    subgraph Parsing["2. Parsing & AST Transformation (Generator.parse)"]
+        PARSE["Generator.parse(json_str)"]
+        TYPE_MAP["Type Mapper<br/><code>crystal_type_for / container_type_for</code><br/><i>$ref, string, integer, array, object</i>"]
+        SANITIZE["Identifier Sanitizer<br/><code>sanitize_identifier</code><br/><i>snake_case, keyword collision check</i>"]
+        RES_PARSE["Recursive Resource Collector<br/><code>collect_resources</code><br/><i>handles nested subresources</i>"]
+        PARAM_PARSE["Method & Param Parser<br/><code>parse_methods_for_resource</code><br/><i>required path params & optional query params</i>"]
+        MODEL["ServiceModel AST<br/><code>ServiceModel(schemas, resources)</code>"]
+
+        PARSE --> TYPE_MAP
+        PARSE --> SANITIZE
+        PARSE --> RES_PARSE
+        RES_PARSE --> PARAM_PARSE
+        PARSE --> MODEL
+    end
+
+    subgraph Codegen["3. Template Rendering (Generator.generate)"]
+        GEN["Generator.generate(service, target_dir)"]
+        T_VIEW["TypesView<br/><code>types.cr.ecr</code><br/>JSON::Serializable schemas"]
+        R_VIEW["ResourceServiceView<br/><code>resource_service.cr.ecr</code><br/>REST client methods"]
+        C_VIEW["ClientView<br/><code>client.cr.ecr</code><br/>Client router & accessors"]
+        M_VIEW["ServiceModuleView<br/><code>service_module.cr.ecr</code><br/>Version module definitions"]
+        README["Documentation Generator<br/><code>generate_readme</code><br/>Usage examples & method tables"]
+        FMT["Code Formatter<br/><code>crystal tool format</code>"]
+
+        MODEL --> GEN
+        GEN --> T_VIEW --> OUT_TYPES["src/google_apis/&lt;name&gt;/&lt;ver&gt;/types.cr"]
+        GEN --> R_VIEW --> OUT_RES["src/google_apis/&lt;name&gt;/&lt;ver&gt;/*_service.cr"]
+        GEN --> C_VIEW --> OUT_CLIENT["src/google_apis/&lt;name&gt;/&lt;ver&gt;/client.cr"]
+        GEN --> M_VIEW --> OUT_MOD["src/google_apis/&lt;name&gt;/&lt;ver&gt;/&lt;ver&gt;.cr"]
+        GEN --> README --> OUT_DOC["src/google_apis/&lt;name&gt;/&lt;ver&gt;/README.md"]
+        OUT_TYPES & OUT_RES & OUT_CLIENT & OUT_MOD --> FMT
+    end
+
+    subgraph Tooling["4. Spec & Sample CLI Tooling"]
+        SPEC_GEN["Generator.generate_spec"]
+        CLI_GEN["Generator.generate_sample_cli"]
+        SCORE["Resource Selector<br/><code>pick_primary_list_resource</code><br/><i>Heuristic penalty/bonus scoring</i>"]
+        SHARD["Project Registration<br/><code>ensure_shard_target</code>"]
+        MAIN_REQ["Library Wiring<br/><code>ensure_main_require</code>"]
+        BUILD["Compiler Subprocess<br/><code>crystal build</code>"]
+
+        MODEL --> SPEC_GEN --> OUT_SPEC["spec/google_apis/&lt;name&gt;_&lt;ver&gt;_spec.cr"]
+        MODEL --> CLI_GEN
+        CLI_GEN --> SCORE
+        CLI_GEN --> OUT_CLI_SRC["src/bin/list_&lt;name&gt;.cr"]
+        CLI_GEN --> SHARD --> SHARD_FILE["shard.yml"]
+        CLI_GEN --> MAIN_REQ --> MAIN_FILE["src/google_apis_cr.cr"]
+        OUT_CLI_SRC --> BUILD --> OUT_BIN["bin/list_&lt;name&gt;"]
+    end
+
+    JSON --> PARSE
+
+    classDef stage fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef output fill:#0f172a,stroke:#10b981,stroke-width:1.5px,color:#a7f3d0;
+    classDef proc fill:#1e1b4b,stroke:#8b5cf6,stroke-width:1.5px,color:#e0e7ff;
+    class Input,Parsing,Codegen,Tooling stage;
+    class OUT_TYPES,OUT_RES,OUT_CLIENT,OUT_MOD,OUT_DOC,OUT_SPEC,OUT_CLI_SRC,OUT_BIN output;
+    class PARSE,GEN,CLI_GEN,SPEC_GEN proc;
+      </div>
+    </div>
+
+    <!-- Quick stage recap -->
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num" style="background:rgba(56, 189, 248, 0.2); color:#38bdf8;">1</div>
+          <div class="step-title">Ingestion &amp; Parsing</div>
+        </div>
+        <p class="step-desc">Extracts root metadata, schemas, and endpoints from Google Discovery REST JSON.</p>
+        <span class="method-tag">Generator.parse(json_str)</span>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num" style="background:rgba(167, 139, 250, 0.2); color:#a78bfa;">2</div>
+          <div class="step-title">Type Sanitization</div>
+        </div>
+        <p class="step-desc">Maps JSON primitives to Crystal types and guards against 30 reserved keywords.</p>
+        <span class="method-tag">crystal_type_for / sanitize_identifier</span>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num" style="background:rgba(52, 211, 153, 0.2); color:#34d399;">3</div>
+          <div class="step-title">ECR Client Synthesis</div>
+        </div>
+        <p class="step-desc">Emits types.cr, *_service.cr, client.cr, and README.md, formatted via crystal tool format.</p>
+        <span class="method-tag">Generator.generate(service, dir)</span>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num" style="background:rgba(251, 191, 36, 0.2); color:#fbbf24;">4</div>
+          <div class="step-title">CLI &amp; Spec Tooling</div>
+        </div>
+        <p class="step-desc">Synthesizes runnable list CLI with heuristic scoring, registers in shard.yml, and compiles binary.</p>
+        <span class="method-tag">Generator.generate_sample_cli</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: Sequence -->
+  <div id="tab-seq" class="tab-content">
+    <div class="diagram-card">
+      <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Caller as Manager / CLI / TUI
+    participant Gen as Generator (generator.cr)
+    participant ECR as Views & Templates
+    participant FS as File System
+    participant Crystal as Crystal Toolchain
+
+    Caller->>Gen: parse(json_string)
+    activate Gen
+    Note over Gen: Parses metadata: name, version, base_url, schemas
+    loop Each Schema Property
+        Gen->>Gen: crystal_type_for(prop)
+        Gen->>Gen: sanitize_identifier(p_name)
+    end
+    loop Each Resource & Sub-resource
+        Gen->>Gen: collect_resources(sub_resources)
+        Gen->>Gen: parse_methods_for_resource(methods_json)
+        Gen->>Gen: parse_method_parameters(parameters_json)
+    end
+    Gen-->>Caller: ServiceModel (AST)
+    deactivate Gen
+
+    Caller->>Gen: generate(service_model, target_dir)
+    activate Gen
+    Gen->>FS: mkdir_p(target_dir)
+
+    Gen->>ECR: TypesView.new(service).to_s
+    ECR-->>Gen: types_content
+    Gen->>FS: File.write("target_dir/types.cr")
+
+    loop Each Resource
+        Gen->>ECR: ResourceServiceView.new(service, resource).to_s
+        ECR-->>Gen: resource_content
+        Gen->>FS: File.write("target_dir/<resource>_service.cr")
+    end
+
+    Gen->>ECR: ClientView.new(service).to_s
+    ECR-->>Gen: client_content
+    Gen->>FS: File.write("target_dir/client.cr")
+
+    Gen->>ECR: ServiceModuleView.new(service).to_s
+    ECR-->>Gen: module_content
+    Gen->>FS: File.write("target_dir/<version>.cr")
+
+    Gen->>Gen: generate_readme(service_model)
+    Gen->>FS: File.write("target_dir/README.md")
+
+    Gen->>Crystal: crystal tool format <target_dir>
+    Crystal-->>Gen: formatted files
+    Gen-->>Caller: target_dir generated
+    deactivate Gen
+
+    Caller->>Gen: generate_spec(service_model)
+    activate Gen
+    Gen->>FS: File.write("spec/google_apis/<name>_<version>_spec.cr")
+    Gen-->>Caller: spec_file_path
+    deactivate Gen
+
+    Caller->>Gen: generate_sample_cli(service_model)
+    activate Gen
+    Gen->>Gen: pick_primary_list_resource(service_model)
+    Gen->>Gen: generate_sample_script_content(service_model, res, method)
+    Gen->>FS: File.write("src/bin/list_<name>.cr")
+    Gen->>FS: ensure_shard_target("shard.yml")
+    Gen->>FS: ensure_main_require("src/google_apis_cr.cr")
+    Gen->>Crystal: crystal build src/bin/list_<name>.cr -o bin/list_<name>
+    Crystal-->>Gen: compiled binary
+    Gen-->>Caller: {sample_src_path, binary_path}
+    deactivate Gen
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Reference Table -->
+  <div id="tab-ref" class="tab-content">
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Method Name</th>
+            <th>Input Parameters</th>
+            <th>Output</th>
+            <th>Primary Responsibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>parse</code></td>
+            <td><code>json_str : String</code></td>
+            <td><code>ServiceModel</code></td>
+            <td>Parses raw Discovery JSON into the complete in-memory typed AST model.</td>
+          </tr>
+          <tr>
+            <td><code>crystal_type_for</code></td>
+            <td><code>prop : JSON::Any</code></td>
+            <td><code>String</code></td>
+            <td>Maps discovery types ($ref, string, integer, array, object) to Crystal type strings.</td>
+          </tr>
+          <tr>
+            <td><code>container_type_for</code></td>
+            <td><code>type : String, prop : JSON::Any</code></td>
+            <td><code>String</code></td>
+            <td>Resolves nested <code>Array(T)</code> element types and <code>Hash(String, T)</code> dictionaries.</td>
+          </tr>
+          <tr>
+            <td><code>sanitize_identifier</code></td>
+            <td><code>name : String</code></td>
+            <td><code>String</code></td>
+            <td>Converts names to snake_case and appends <code>_param</code> if colliding with Crystal keywords.</td>
+          </tr>
+          <tr>
+            <td><code>collect_resources</code></td>
+            <td><code>resources, schemas, prefix</code></td>
+            <td><code>Array(ResourceModel)</code></td>
+            <td>Recursively discovers nested endpoints and extracts method definitions.</td>
+          </tr>
+          <tr>
+            <td><code>parse_method_parameters</code></td>
+            <td><code>method_json : JSON::Any</code></td>
+            <td><code>Array(ParameterModel)</code></td>
+            <td>Sorts required path parameters before optional query parameters.</td>
+          </tr>
+          <tr>
+            <td><code>generate</code></td>
+            <td><code>service : ServiceModel, target_dir : String</code></td>
+            <td><code>Nil</code></td>
+            <td>Renders types.cr, *_service.cr, client.cr, vX.cr, README.md, and runs crystal tool format.</td>
+          </tr>
+          <tr>
+            <td><code>generate_spec</code></td>
+            <td><code>service : ServiceModel, spec_dir : String</code></td>
+            <td><code>String</code></td>
+            <td>Generates spec test file verifying client instantiation and base_url.</td>
+          </tr>
+          <tr>
+            <td><code>generate_sample_cli</code></td>
+            <td><code>service : ServiceModel, project_root : String</code></td>
+            <td><code>Tuple(String, String?)</code></td>
+            <td>Generates src/bin/list_*.cr, registers in shard.yml and google_apis_cr.cr, and runs crystal build.</td>
+          </tr>
+          <tr>
+            <td><code>pick_primary_list_resource</code></td>
+            <td><code>service : ServiceModel</code></td>
+            <td><code>Tuple(ResourceModel, MethodModel)?</code></td>
+            <td>Scores resource listing endpoints to pick the best candidate for the sample CLI tool.</td>
+          </tr>
+          <tr>
+            <td><code>ensure_shard_target</code></td>
+            <td><code>project_root, target_name, main_path</code></td>
+            <td><code>Nil</code></td>
+            <td>Idempotently injects compilation target into shard.yml under targets:.</td>
+          </tr>
+          <tr>
+            <td><code>ensure_main_require</code></td>
+            <td><code>project_root, service</code></td>
+            <td><code>Nil</code></td>
+            <td>Idempotently appends service require statement to src/google_apis_cr.cr.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div><strong>Generator Pipeline:</strong> Google Cloud Discovery Document &rarr; Strongly-Typed Crystal Client</div>
+    <div class="links">
+      <a href="generator_architecture.svg">🖼️ Standalone Architecture SVG</a>
+      <a href="generator_architecture.mmd">📄 Architecture MMD</a>
+      <a href="generator_sequence.mmd">📄 Sequence MMD</a>
+      <a href="visual_overview.html">🌐 Visual Overview</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      darkMode: true,
+      background: '#0b0f19',
+      primaryColor: '#1e293b',
+      primaryBorderColor: '#38bdf8',
+      primaryTextColor: '#f8fafc',
+      lineColor: '#38bdf8',
+      secondaryColor: '#1e1b4b',
+      tertiaryColor: '#0f172a'
+    }
+  });
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    event.currentTarget.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+  }
+</script>
+
+</body>
+</html>

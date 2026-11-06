@@ -1,5 +1,6 @@
 require "http/client"
 require "json"
+require "jwt"
 
 module GoogleApis
   module Auth
@@ -216,77 +217,203 @@ module GoogleApis
       end
     end
 
-    # Service account credentials representation.
+    # Service account credentials using RS256 JWT assertion exchange (RFC 7523).
     class ServiceAccountCredentials < Credentials
-      getter project_id : String?
-      getter client_email : String?
+      DEFAULT_TOKEN_URI = "https://oauth2.googleapis.com/token"
+      DEFAULT_SCOPE     = "https://www.googleapis.com/auth/cloud-platform"
+      JWT_GRANT_TYPE    = "urn:ietf:params:oauth:grant-type:jwt-bearer"
+
+      getter client_email : String
+      getter private_key : String
+      getter quota_project_id : String?
       getter private_key_id : String?
-      getter private_key : String?
       getter client_id : String?
       getter auth_uri : String?
       getter token_uri : String
+      getter auth_provider_x509_cert_url : String?
+      getter client_x509_cert_url : String?
       getter universe_domain : String?
+      getter scope : String
+
+      getter expires_at : Time?
+      getter token_type : String?
+
+      @project_id : String?
+      @access_token : String?
+      @mutex = Mutex.new
 
       def initialize(
+        @client_email : String,
+        @private_key : String,
         @project_id : String? = nil,
-        @client_email : String? = nil,
+        @quota_project_id : String? = nil,
         @private_key_id : String? = nil,
-        @private_key : String? = nil,
         @client_id : String? = nil,
         @auth_uri : String? = nil,
-        @token_uri : String = "https://oauth2.googleapis.com/token",
+        @token_uri : String = DEFAULT_TOKEN_URI,
+        @auth_provider_x509_cert_url : String? = nil,
+        @client_x509_cert_url : String? = nil,
         @universe_domain : String? = nil,
+        scope : String | Array(String) = DEFAULT_SCOPE,
+        @access_token : String? = nil,
+        @expires_at : Time? = nil,
+        @token_type : String? = "Bearer",
       )
+        @scope = scope.is_a?(Array) ? scope.join(" ") : scope
       end
 
-      def self.from_json_any(parser : JSON::Any) : ServiceAccountCredentials
+      # Creates ServiceAccountCredentials from a JSON string.
+      def self.from_json(
+        json_str : String,
+        scope : String | Array(String) = DEFAULT_SCOPE,
+        token_uri : String = DEFAULT_TOKEN_URI,
+      ) : ServiceAccountCredentials
+        parser = JSON.parse(json_str)
+        from_json_any(parser, scope: scope, token_uri: token_uri)
+      end
+
+      # Creates ServiceAccountCredentials from a parsed JSON::Any object.
+      def self.from_json_any(
+        parser : JSON::Any,
+        scope : String | Array(String) = DEFAULT_SCOPE,
+        token_uri : String = DEFAULT_TOKEN_URI,
+      ) : ServiceAccountCredentials
+        client_email = parser["client_email"]?.try(&.as_s?)
+        private_key = parser["private_key"]?.try(&.as_s?)
+
+        if client_email.nil? || client_email.empty? || private_key.nil? || private_key.empty?
+          raise InvalidCredentialsError.new(
+            "service_account credentials missing required fields (client_email, private_key)"
+          )
+        end
+
+        uri = parser["token_uri"]?.try(&.as_s?) || token_uri
+
         new(
+          client_email: client_email,
+          private_key: private_key,
           project_id: parser["project_id"]?.try(&.as_s?),
-          client_email: parser["client_email"]?.try(&.as_s?),
+          quota_project_id: parser["quota_project_id"]?.try(&.as_s?),
           private_key_id: parser["private_key_id"]?.try(&.as_s?),
-          private_key: parser["private_key"]?.try(&.as_s?),
           client_id: parser["client_id"]?.try(&.as_s?),
           auth_uri: parser["auth_uri"]?.try(&.as_s?),
-          token_uri: parser["token_uri"]?.try(&.as_s?) || "https://oauth2.googleapis.com/token",
-          universe_domain: parser["universe_domain"]?.try(&.as_s?)
+          token_uri: uri,
+          auth_provider_x509_cert_url: parser["auth_provider_x509_cert_url"]?.try(&.as_s?),
+          client_x509_cert_url: parser["client_x509_cert_url"]?.try(&.as_s?),
+          universe_domain: parser["universe_domain"]?.try(&.as_s?),
+          scope: scope
         )
       end
 
-      def quota_project_id : String?
-        nil
+      # Returns project_id if present, otherwise quota_project_id.
+      def project_id : String?
+        @project_id || @quota_project_id
       end
 
+      # Returns true if token is nil, expires_at is nil, or expires within `margin`.
+      def expired?(margin : Time::Span = 60.seconds) : Bool
+        expiry = @expires_at
+        return true if expiry.nil? || @access_token.nil?
+
+        Time.utc >= (expiry - margin)
+      end
+
+      # Returns the access token, automatically refreshing if expired or near expiry.
       def access_token : String
-        raise UnsupportedCredentialsTypeError.new(
-          "service_account credentials require RS256 JWT signing, " \
-          "which is not supported by the Crystal standard library without external dependencies"
-        )
+        @mutex.synchronize do
+          refresh_token_unlocked if expired?
+          @access_token || raise TokenRefreshError.new("Access token is unavailable")
+        end
       end
 
+      # Returns the Authorization HTTP header value, e.g. "Bearer <token>".
       def authorization_header : String
         "Bearer #{access_token}"
       end
 
-      def expired?(margin : Time::Span = 60.seconds) : Bool
-        true
-      end
-
+      # Forces a token refresh using a newly signed RS256 JWT assertion.
       def refresh_token! : String
-        access_token
+        @mutex.synchronize do
+          refresh_token_unlocked
+        end
       end
 
-      def expires_at : Time?
-        nil
+      # Builds and signs an RS256 JWT assertion for the OAuth2 token endpoint.
+      def generate_jwt(now : Time = Time.utc, lifetime : Time::Span = 1.hour) : String
+        iat = now.to_unix
+        exp = (now + lifetime).to_unix
+        payload = {
+          iss:   @client_email,
+          scope: @scope,
+          aud:   @token_uri,
+          exp:   exp,
+          iat:   iat,
+        }
+
+        begin
+          if key_id = @private_key_id
+            JWT.encode(payload, @private_key, JWT::Algorithm::RS256, kid: key_id)
+          else
+            JWT.encode(payload, @private_key, JWT::Algorithm::RS256)
+          end
+        rescue ex : Exception
+          raise TokenRefreshError.new("Failed to sign service account JWT: #{ex.message}")
+        end
       end
 
-      def token_type : String?
-        nil
+      private def refresh_token_unlocked : String
+        assertion = generate_jwt
+
+        params = HTTP::Params.encode({
+          "grant_type" => JWT_GRANT_TYPE,
+          "assertion"  => assertion,
+        })
+
+        headers = HTTP::Headers{
+          "Content-Type" => "application/x-www-form-urlencoded",
+        }
+
+        response = HTTP::Client.post(@token_uri, headers: headers, body: params)
+
+        unless response.success?
+          raise TokenRefreshError.new("Failed to refresh service account token: HTTP #{response.status_code} - #{response.body}")
+        end
+
+        begin
+          parsed = JSON.parse(response.body)
+        rescue ex : JSON::ParseException
+          raise TokenRefreshError.new("Failed to parse token response JSON: #{ex.message}")
+        end
+
+        token = parsed["access_token"]?.try(&.as_s?)
+        unless token
+          raise TokenRefreshError.new("Token response missing 'access_token': #{response.body}")
+        end
+
+        expires_in_val = parsed["expires_in"]?
+        expires_in_seconds = case expires_in_val
+                             when .nil?
+                               3600_i64
+                             else
+                               expires_in_val.as_i64? || expires_in_val.as_i? || expires_in_val.as_s?.try(&.to_i64?) || 3600_i64
+                             end
+
+        @expires_at = Time.utc + expires_in_seconds.seconds
+        @access_token = token
+        @token_type = parsed["token_type"]?.try(&.as_s?) || "Bearer"
+
+        token
       end
 
+      # Redacts private key in inspection output.
       def inspect(io : IO) : Nil
         io << "#<" << self.class.name
-        io << " project_id=" << @project_id.inspect
+        io << " project_id=" << project_id.inspect
         io << " client_email=" << @client_email.inspect
+        io << " private_key_id=" << @private_key_id.inspect
+        io << " scope=" << @scope.inspect
+        io << " expires_at=" << @expires_at.inspect
+        io << " token_type=" << @token_type.inspect
         io << ">"
       end
 
@@ -315,7 +442,10 @@ module GoogleApis
     # Loads Application Default Credentials.
     # Checks GOOGLE_APPLICATION_CREDENTIALS first, then the well-known path,
     # or uses the provided explicit path.
-    def self.default_credentials(path : String | Path | Nil = nil) : Credentials
+    def self.default_credentials(
+      path : String | Path | Nil = nil,
+      scope : String | Array(String) | Nil = nil,
+    ) : Credentials
       target_path = if path
                       Path[path].expand(home: true)
                     else
@@ -327,21 +457,27 @@ module GoogleApis
         raise CredentialsNotFoundError.new("Could not find Application Default Credentials file at #{searched}")
       end
 
-      from_file(target_path)
+      from_file(target_path, scope: scope)
     end
 
     # Loads credentials from a file path.
-    def self.from_file(path : String | Path) : Credentials
+    def self.from_file(
+      path : String | Path,
+      scope : String | Array(String) | Nil = nil,
+    ) : Credentials
       expanded = Path[path].expand(home: true)
       unless File.exists?(expanded)
         raise CredentialsNotFoundError.new("Credentials file not found: #{expanded}")
       end
       content = File.read(expanded)
-      from_json(content)
+      from_json(content, scope: scope)
     end
 
     # Parses credentials from a JSON string.
-    def self.from_json(json_str : String) : Credentials
+    def self.from_json(
+      json_str : String,
+      scope : String | Array(String) | Nil = nil,
+    ) : Credentials
       begin
         parsed = JSON.parse(json_str)
       rescue ex : JSON::ParseException
@@ -357,7 +493,11 @@ module GoogleApis
       when "authorized_user"
         AuthorizedUserCredentials.from_json_any(parsed)
       when "service_account"
-        ServiceAccountCredentials.from_json_any(parsed)
+        if scope
+          ServiceAccountCredentials.from_json_any(parsed, scope: scope)
+        else
+          ServiceAccountCredentials.from_json_any(parsed)
+        end
       else
         raise UnsupportedCredentialsTypeError.new("Unsupported credentials type: '#{cred_type}'")
       end

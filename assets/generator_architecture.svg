@@ -1,0 +1,326 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1020" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#141c2e" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#0b0f19" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#05070c" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Card Gradients -->
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <linearGradient id="innerCardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#090d16" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Header Gradient -->
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+
+    <!-- Filter Shadows -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+    <filter id="pillShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+
+    <!-- Grid Pattern -->
+    <pattern id="dotGrid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#334155" fill-opacity="0.3"/>
+    </pattern>
+
+    <!-- Arrow Markers -->
+    <marker id="arrowBlue" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#34d399"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <polygon points="0 1, 8 4.5, 0 8" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <style>
+    .title-main { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 26px; font-weight: 800; fill: url(#headerGrad); letter-spacing: -0.5px; }
+    .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; fill: #94a3b8; }
+    .stage-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; font-weight: 700; fill: #f8fafc; }
+    .box-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13px; font-weight: 700; fill: #e2e8f0; }
+    .box-desc { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 11px; fill: #94a3b8; line-height: 1.4; }
+    .code-text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; fill: #38bdf8; }
+    .badge-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .label-file { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; font-weight: 600; fill: #34d399; }
+  </style>
+
+  <!-- Background Base -->
+  <rect width="1440" height="1020" fill="url(#bgGlow)"/>
+  <rect width="1440" height="1020" fill="url(#dotGrid)"/>
+
+  <!-- ==================== HEADER ==================== -->
+  <g transform="translate(48, 36)">
+    <!-- Badge -->
+    <rect x="0" y="0" width="220" height="24" rx="12" fill="rgba(56, 189, 248, 0.12)" stroke="rgba(56, 189, 248, 0.3)" stroke-width="1"/>
+    <circle cx="12" cy="12" r="4" fill="#38bdf8"/>
+    <text x="24" y="16" class="badge-text" fill="#38bdf8">Crystal Code Generator</text>
+
+    <!-- Titles -->
+    <text x="0" y="58" class="title-main">src/google_apis/generator.cr Architecture &amp; Execution Pipeline</text>
+    <text x="0" y="80" class="subtitle">Complete functional decomposition from Discovery JSON parsing to typed client library, specs, and compiled CLI binaries.</text>
+  </g>
+
+  <!-- ==================== COLUMN 1: INPUT & PARSING ==================== -->
+  <g transform="translate(48, 140)" filter="url(#cardShadow)">
+    <!-- Stage Outer Container -->
+    <rect width="320" height="810" rx="16" fill="url(#cardGrad)" stroke="#1e293b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="320" height="42" rx="16" fill="rgba(30, 41, 59, 0.8)"/>
+    <circle cx="20" cy="21" r="5" fill="#38bdf8"/>
+    <text x="36" y="26" class="stage-title">1. Input &amp; AST Parsing</text>
+
+    <!-- Block 1.1: Discovery Document Input -->
+    <g transform="translate(18, 58)">
+      <rect width="284" height="110" rx="10" fill="url(#innerCardGrad)" stroke="#38bdf8" stroke-width="1.2"/>
+      <text x="14" y="24" class="box-title">Discovery Document (JSON)</text>
+      <text x="14" y="42" class="box-desc">Raw Google Discovery schema &amp; API metadata.</text>
+      <rect x="14" y="56" width="256" height="40" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+      <text x="24" y="74" class="code-text" fill="#94a3b8">📁 discovery/storage_v1.json</text>
+      <text x="24" y="88" class="code-text" fill="#64748b">name, version, schemas, resources</text>
+    </g>
+
+    <!-- Connector Arrow -->
+    <path d="M 160 176 L 160 200" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+    <!-- Block 1.2: Generator.parse -->
+    <g transform="translate(18, 206)">
+      <rect width="284" height="240" rx="10" fill="url(#innerCardGrad)" stroke="#1e293b" stroke-width="1"/>
+      <text x="14" y="24" class="box-title">Generator.parse(json_str)</text>
+      <text x="14" y="42" class="box-desc">Transforms JSON into normalized AST entities.</text>
+
+      <!-- Sub-function pills -->
+      <g transform="translate(14, 56)">
+        <rect width="256" height="36" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="16" class="code-text">crystal_type_for(prop)</text>
+        <text x="10" y="28" class="box-desc" fill="#64748b">Maps string, integer, array, $ref</text>
+      </g>
+      <g transform="translate(14, 100)">
+        <rect width="256" height="36" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="16" class="code-text">sanitize_identifier(name)</text>
+        <text x="10" y="28" class="box-desc" fill="#64748b">snake_case, 30 keyword guards</text>
+      </g>
+      <g transform="translate(14, 144)">
+        <rect width="256" height="36" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="16" class="code-text">collect_resources(res, schemas)</text>
+        <text x="10" y="28" class="box-desc" fill="#64748b">Recursive nested subresources</text>
+      </g>
+      <g transform="translate(14, 188)">
+        <rect width="256" height="36" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="16" class="code-text">parse_method_parameters(m)</text>
+        <text x="10" y="28" class="box-desc" fill="#64748b">Path (required) vs query (optional)</text>
+      </g>
+    </g>
+
+    <!-- Connector Arrow -->
+    <path d="M 160 452 L 160 478" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+    <!-- Block 1.3: ServiceModel AST Output -->
+    <g transform="translate(18, 484)">
+      <rect width="284" height="290" rx="10" fill="url(#innerCardGrad)" stroke="#a78bfa" stroke-width="1.2"/>
+      <text x="14" y="24" class="box-title" fill="#a78bfa">ServiceModel AST (In-Memory)</text>
+      <text x="14" y="42" class="box-desc">Complete validated representation of service.</text>
+
+      <g transform="translate(14, 56)">
+        <rect width="256" height="216" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="22" class="code-text" fill="#c084fc">ServiceModel</text>
+        <text x="24" y="40" class="code-text" fill="#94a3b8">├─ name: "storage"</text>
+        <text x="24" y="58" class="code-text" fill="#94a3b8">├─ version: "v1"</text>
+        <text x="24" y="76" class="code-text" fill="#94a3b8">├─ base_url: "https://storage..."</text>
+        <text x="24" y="94" class="code-text" fill="#94a3b8">├─ module: "GoogleApis::Storage::V1"</text>
+        <text x="24" y="116" class="code-text" fill="#38bdf8">├─ schemas: Array(SchemaModel)</text>
+        <text x="36" y="134" class="code-text" fill="#64748b">└─ [Bucket, Object, Policy...]</text>
+        <text x="24" y="156" class="code-text" fill="#34d399">└─ resources: Array(ResourceModel)</text>
+        <text x="36" y="174" class="code-text" fill="#64748b">└─ [BucketsService, ObjectsService]</text>
+        <text x="48" y="192" class="code-text" fill="#64748b">   └─ methods: [list, get, insert...]</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Big Lateral Transition Arrow from Column 1 to Column 2 -->
+  <path d="M 374 620 L 404 620" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#arrowPurple)"/>
+
+  <!-- ==================== COLUMN 2: CODE GENERATION ==================== -->
+  <g transform="translate(412, 140)" filter="url(#cardShadow)">
+    <rect width="470" height="810" rx="16" fill="url(#cardGrad)" stroke="#1e293b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="470" height="42" rx="16" fill="rgba(30, 41, 59, 0.8)"/>
+    <circle cx="20" cy="21" r="5" fill="#a78bfa"/>
+    <text x="36" y="26" class="stage-title">2. Client Library Code Generation (Generator.generate)</text>
+
+    <!-- Block 2.1: Template Views & ECR Engine -->
+    <g transform="translate(18, 58)">
+      <rect width="434" height="230" rx="10" fill="url(#innerCardGrad)" stroke="#1e293b" stroke-width="1"/>
+      <text x="14" y="24" class="box-title">ECR Embedded Crystal Templates (views.cr)</text>
+      <text x="14" y="42" class="box-desc">Interpolates ServiceModel AST directly into typed Crystal code.</text>
+
+      <g transform="translate(14, 56)">
+        <!-- View 1 -->
+        <rect x="0" y="0" width="198" height="68" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="18" class="code-text" fill="#38bdf8">TypesView</text>
+        <text x="10" y="32" class="box-desc">templates/types.cr.ecr</text>
+        <text x="10" y="48" class="box-desc" fill="#64748b">JSON::Serializable classes</text>
+
+        <!-- View 2 -->
+        <rect x="208" y="0" width="198" height="68" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="18" class="code-text" fill="#38bdf8">ResourceServiceView</text>
+        <text x="10" y="32" class="box-desc">templates/resource_service.cr.ecr</text>
+        <text x="10" y="48" class="box-desc" fill="#64748b">REST HTTP client wrappers</text>
+
+        <!-- View 3 -->
+        <rect x="0" y="78" width="198" height="68" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="18" class="code-text" fill="#38bdf8">ClientView</text>
+        <text x="10" y="32" class="box-desc">templates/client.cr.ecr</text>
+        <text x="10" y="48" class="box-desc" fill="#64748b">Client class &amp; service routers</text>
+
+        <!-- View 4 -->
+        <rect x="208" y="78" width="198" height="68" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="10" y="18" class="code-text" fill="#38bdf8">ServiceModuleView</text>
+        <text x="10" y="32" class="box-desc">templates/service_module.cr.ecr</text>
+        <text x="10" y="48" class="box-desc" fill="#64748b">Version module exports</text>
+      </g>
+    </g>
+
+    <!-- Connector Arrow -->
+    <path d="M 235 294 L 235 320" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowPurple)"/>
+
+    <!-- Block 2.2: Emitted Files & Formatting -->
+    <g transform="translate(18, 326)">
+      <rect width="434" height="448" rx="10" fill="url(#innerCardGrad)" stroke="#34d399" stroke-width="1.2"/>
+      <text x="14" y="24" class="box-title" fill="#34d399">Synthesized Client Artifacts (target_dir)</text>
+      <text x="14" y="42" class="box-desc">Emitted directly into src/google_apis/&lt;name&gt;/&lt;version&gt;/</text>
+
+      <!-- Output List -->
+      <g transform="translate(14, 56)">
+        <rect width="406" height="52" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="20" class="label-file">📄 types.cr</text>
+        <text x="12" y="38" class="box-desc">Typed data structs with JSON::Field mappings &amp; nilable fields.</text>
+
+        <rect y="60" width="406" height="52" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="80" class="label-file">📄 *_service.cr (e.g. buckets_service.cr)</text>
+        <text x="12" y="98" class="box-desc">Methods: list, get, insert with path substitution &amp; query params.</text>
+
+        <rect y="120" width="406" height="52" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="140" class="label-file">📄 client.cr</text>
+        <text x="12" y="158" class="box-desc">Main API Client initializing HTTP client, Auth tokens, &amp; services.</text>
+
+        <rect y="180" width="406" height="52" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="200" class="label-file">📄 &lt;version&gt;.cr (e.g. v1.cr)</text>
+        <text x="12" y="218" class="box-desc">Top-level namespace module requiring all component files.</text>
+
+        <rect y="240" width="406" height="64" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="260" class="label-file">📄 README.md (generate_readme)</text>
+        <text x="12" y="278" class="box-desc">Autogenerated usage example with ADC auth, method calls,</text>
+        <text x="12" y="292" class="box-desc">&amp; Markdown table of all available endpoints &amp; classes.</text>
+      </g>
+
+      <!-- Formatting Step -->
+      <g transform="translate(14, 374)">
+        <rect width="406" height="58" rx="8" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.2"/>
+        <circle cx="20" cy="29" r="6" fill="#8b5cf6"/>
+        <text x="36" y="24" class="code-text" fill="#e0e7ff">Process.run("crystal", ["tool", "format", target_dir])</text>
+        <text x="36" y="42" class="box-desc" fill="#cbd5e1">Enforces idiomatic Crystal indentation, whitespace, &amp; conventions.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Big Lateral Transition Arrow from Column 2 to Column 3 -->
+  <path d="M 888 620 L 924 620" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+
+  <!-- ==================== COLUMN 3: TESTING & CLI TOOLING ==================== -->
+  <g transform="translate(932, 140)" filter="url(#cardShadow)">
+    <rect width="460" height="810" rx="16" fill="url(#cardGrad)" stroke="#1e293b" stroke-width="1.5"/>
+    <rect x="0" y="0" width="460" height="42" rx="16" fill="rgba(30, 41, 59, 0.8)"/>
+    <circle cx="20" cy="21" r="5" fill="#34d399"/>
+    <text x="36" y="26" class="stage-title">3. Automated Testing &amp; Sample CLI Tooling</text>
+
+    <!-- Block 3.1: Spec Generation -->
+    <g transform="translate(18, 58)">
+      <rect width="424" height="150" rx="10" fill="url(#innerCardGrad)" stroke="#1e293b" stroke-width="1"/>
+      <text x="14" y="24" class="box-title">Generator.generate_spec</text>
+      <text x="14" y="42" class="box-desc">Creates mock-based test suite verifying client &amp; services.</text>
+
+      <g transform="translate(14, 56)">
+        <rect width="396" height="80" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="22" class="label-file">spec/google_apis/&lt;name&gt;_&lt;ver&gt;_spec.cr</text>
+        <text x="12" y="40" class="code-text" fill="#64748b">describe GoogleApis::&lt;Name&gt;::&lt;Ver&gt; do</text>
+        <text x="24" y="56" class="code-text" fill="#64748b">client.client.base_url.should eq(base_url)</text>
+        <text x="24" y="70" class="code-text" fill="#64748b">client.&lt;primary_service&gt;.should_not be_nil</text>
+      </g>
+    </g>
+
+    <!-- Connector Arrow -->
+    <path d="M 230 214 L 230 238" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrowAmber)"/>
+
+    <!-- Block 3.2: Sample CLI Generation -->
+    <g transform="translate(18, 244)">
+      <rect width="424" height="530" rx="10" fill="url(#innerCardGrad)" stroke="#fbbf24" stroke-width="1.2"/>
+      <text x="14" y="24" class="box-title" fill="#fbbf24">Generator.generate_sample_cli</text>
+      <text x="14" y="42" class="box-desc">Dynamic heuristic selection, code synthesis, &amp; compilation.</text>
+
+      <!-- Heuristic Selector -->
+      <g transform="translate(14, 56)">
+        <rect width="396" height="90" rx="6" fill="#0b0f19" stroke="#334155"/>
+        <text x="12" y="20" class="code-text">pick_primary_list_resource(service)</text>
+        <text x="12" y="38" class="box-desc">Heuristically scores all list endpoints for user suitability:</text>
+        <text x="12" y="54" class="box-desc" fill="#34d399">✓ Bonuses: primary resource suffixes (buckets, services, instances)</text>
+        <text x="12" y="70" class="box-desc" fill="#f43f5e">✗ Penalties: operations (+60), iam/policies (+40), obscure params (+50)</text>
+      </g>
+
+      <!-- Generated CLI Script -->
+      <g transform="translate(14, 154)">
+        <rect width="396" height="120" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="22" class="label-file">src/bin/list_&lt;name&gt;.cr (generate_sample_script_content)</text>
+        <text x="12" y="42" class="box-desc">• OptionParser (-p/--project, -l/--location, -m/--max-results, -j/--json)</text>
+        <text x="12" y="60" class="box-desc">• ADC Authentication (GoogleApis::Auth.default_credentials)</text>
+        <text x="12" y="78" class="box-desc">• Project resolution (flag &gt; env var &gt; quota project &gt; credentials)</text>
+        <text x="12" y="96" class="box-desc">• Formatted terminal item list display with attributes</text>
+      </g>
+
+      <!-- Project Registration -->
+      <g transform="translate(14, 282)">
+        <rect width="396" height="74" rx="6" fill="#0b0f19" stroke="#1e293b"/>
+        <text x="12" y="22" class="box-title" fill="#e2e8f0">Automatic Project Wiring</text>
+        <text x="12" y="42" class="code-text" fill="#38bdf8">ensure_shard_target &rarr; registers target in shard.yml</text>
+        <text x="12" y="60" class="code-text" fill="#38bdf8">ensure_main_require &rarr; adds require in src/google_apis_cr.cr</text>
+      </g>
+
+      <!-- Binary Compilation -->
+      <g transform="translate(14, 364)">
+        <rect width="396" height="150" rx="8" fill="#132a1e" stroke="#10b981" stroke-width="1.5"/>
+        <circle cx="20" cy="24" r="6" fill="#10b981"/>
+        <text x="36" y="28" class="box-title" fill="#6ee7b7">Compilation to Native Executable</text>
+        <text x="36" y="52" class="code-text" fill="#a7f3d0">Process.run("crystal", ["build", sample_src, "-o", bin_path])</text>
+
+        <rect x="14" y="66" width="368" height="68" rx="6" fill="#0b1710" stroke="#059669"/>
+        <text x="24" y="88" class="label-file" fill="#34d399">🚀 bin/list_&lt;name&gt; (Compiled Binary)</text>
+        <text x="24" y="106" class="box-desc" fill="#a7f3d0">Fast, standalone native executable ready to list cloud resources</text>
+        <text x="24" y="120" class="box-desc" fill="#6ee7b7">(e.g., bin/list_storage, bin/list_cloud_run, bin/list_tpu)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== FOOTER ==================== -->
+  <g transform="translate(48, 966)">
+    <rect width="1344" height="34" rx="8" fill="rgba(30, 41, 59, 0.4)" stroke="#1e293b" stroke-width="1"/>
+    <text x="16" y="22" class="box-desc" fill="#94a3b8">Google APIs Crystal Client Library • Architecture &amp; Execution Specification • Tested with 100% Ameba Compliance</text>
+    <text x="1328" y="22" class="box-desc" fill="#38bdf8" text-anchor="end">assets/generator_architecture.svg</text>
+  </g>
+</svg>

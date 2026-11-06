@@ -11,6 +11,8 @@ license: MIT
 dependencies:
   crysterm:
     github: crystallabs/crysterm
+  jwt:
+    github: crystal-community/jwt
 
 targets:
   list_dns:

@@ -180,30 +180,203 @@ describe GoogleApis::Auth do
   end
 
   describe GoogleApis::Auth::ServiceAccountCredentials do
-    it "parses service_account credentials and raises on access_token" do
-      json = <<-JSON
-      {
-        "type": "service_account",
-        "project_id": "sa-project-456",
-        "private_key_id": "key123",
-        "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIE...\\n-----END PRIVATE KEY-----\\n",
-        "client_email": "sa@sa-project-456.iam.gserviceaccount.com",
-        "client_id": "123456789"
-      }
-      JSON
+    rsa_key = OpenSSL::PKey::RSA.new(2048)
+    private_pem = rsa_key.to_pem
+    public_pem = rsa_key.public_key.to_pem
+
+    it "parses valid service_account credentials with all metadata fields" do
+      json = {
+        "type"                        => "service_account",
+        "project_id"                  => "sa-project-456",
+        "private_key_id"              => "key123",
+        "private_key"                 => private_pem,
+        "client_email"                => "sa@sa-project-456.iam.gserviceaccount.com",
+        "client_id"                   => "123456789",
+        "auth_uri"                    => "https://accounts.google.com/o/oauth2/auth",
+        "token_uri"                   => "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url"        => "https://www.googleapis.com/robot/v1/metadata/x509/sa",
+        "universe_domain"             => "googleapis.com",
+      }.to_json
 
       creds = GoogleApis::Auth.from_json(json).as(GoogleApis::Auth::ServiceAccountCredentials)
       creds.project_id.should eq("sa-project-456")
       creds.client_email.should eq("sa@sa-project-456.iam.gserviceaccount.com")
+      creds.private_key_id.should eq("key123")
+      creds.private_key.should eq(private_pem)
+      creds.client_id.should eq("123456789")
+      creds.auth_uri.should eq("https://accounts.google.com/o/oauth2/auth")
+      creds.token_uri.should eq("https://oauth2.googleapis.com/token")
+      creds.auth_provider_x509_cert_url.should eq("https://www.googleapis.com/oauth2/v1/certs")
+      creds.client_x509_cert_url.should eq("https://www.googleapis.com/robot/v1/metadata/x509/sa")
+      creds.universe_domain.should eq("googleapis.com")
+      creds.scope.should eq("https://www.googleapis.com/auth/cloud-platform")
       creds.quota_project_id.should be_nil
       creds.expired?.should be_true
+    end
 
-      expect_raises(GoogleApis::Auth::UnsupportedCredentialsTypeError, /service_account credentials require RS256 JWT signing/) do
-        creds.access_token
+    it "supports custom scopes as String or Array(String)" do
+      json = {
+        "type"         => "service_account",
+        "private_key"  => private_pem,
+        "client_email" => "sa@sa-project-456.iam.gserviceaccount.com",
+      }.to_json
+
+      creds = GoogleApis::Auth.from_json(
+        json,
+        scope: ["https://www.googleapis.com/auth/devstorage.read_only", "https://www.googleapis.com/auth/cloud-platform"]
+      ).as(GoogleApis::Auth::ServiceAccountCredentials)
+
+      creds.scope.should eq("https://www.googleapis.com/auth/devstorage.read_only https://www.googleapis.com/auth/cloud-platform")
+    end
+
+    it "raises InvalidCredentialsError when required fields are missing" do
+      missing_key_json = %({"type": "service_account", "client_email": "sa@example.com"})
+      expect_raises(GoogleApis::Auth::InvalidCredentialsError, /missing required fields/) do
+        GoogleApis::Auth.from_json(missing_key_json)
       end
 
-      expect_raises(GoogleApis::Auth::UnsupportedCredentialsTypeError) do
-        creds.authorization_header
+      missing_email_json = %({"type": "service_account", "private_key": "-----BEGIN PRIVATE KEY-----"})
+      expect_raises(GoogleApis::Auth::InvalidCredentialsError, /missing required fields/) do
+        GoogleApis::Auth.from_json(missing_email_json)
+      end
+    end
+
+    it "redacts private_key in inspect and to_s" do
+      creds = GoogleApis::Auth::ServiceAccountCredentials.new(
+        client_email: "sa@example.com",
+        private_key: private_pem,
+        project_id: "my-sa-project",
+        private_key_id: "kid-999"
+      )
+
+      creds.inspect.should_not contain("BEGIN")
+      creds.inspect.should_not contain(private_pem)
+      creds.to_s.should_not contain("BEGIN")
+      creds.inspect.should contain("sa@example.com")
+    end
+
+    it "generates a valid RS256 signed JWT assertion" do
+      creds = GoogleApis::Auth::ServiceAccountCredentials.new(
+        client_email: "sa@sa-project-456.iam.gserviceaccount.com",
+        private_key: private_pem,
+        private_key_id: "key123",
+        token_uri: "https://oauth2.googleapis.com/token",
+        scope: "https://www.googleapis.com/auth/devstorage.read_write"
+      )
+
+      fixed_time = Time.utc(2026, 11, 6, 12, 0, 0)
+      jwt_token = creds.generate_jwt(now: fixed_time, lifetime: 1.hour)
+
+      payload, header = JWT.decode(jwt_token, public_pem, JWT::Algorithm::RS256, validate: false)
+      header["alg"].as_s.should eq("RS256")
+      header["typ"].as_s.should eq("JWT")
+      header["kid"].as_s.should eq("key123")
+
+      payload["iss"].as_s.should eq("sa@sa-project-456.iam.gserviceaccount.com")
+      payload["scope"].as_s.should eq("https://www.googleapis.com/auth/devstorage.read_write")
+      payload["aud"].as_s.should eq("https://oauth2.googleapis.com/token")
+      payload["iat"].as_i64.should eq(fixed_time.to_unix)
+      payload["exp"].as_i64.should eq((fixed_time + 1.hour).to_unix)
+    end
+
+    it "exchanges signed JWT assertion for access token via mock HTTP server and caches it" do
+      request_count = 0
+      captured_content_type = ""
+      captured_grant_type = ""
+      captured_assertion = ""
+
+      server = HTTP::Server.new do |context|
+        request_count += 1
+        captured_content_type = context.request.headers["Content-Type"]? || ""
+        raw_body = context.request.body.try(&.gets_to_end) || ""
+        params = URI::Params.parse(raw_body)
+        captured_grant_type = params["grant_type"]? || ""
+        captured_assertion = params["assertion"]? || ""
+
+        context.response.content_type = "application/json"
+        context.response.print %({"access_token": "ya29.sa_mock_token_456", "expires_in": 3600, "token_type": "Bearer"})
+      end
+
+      address = server.bind_unused_port
+      spawn { server.listen }
+
+      begin
+        token_uri = "http://#{address.address}:#{address.port}/token"
+        creds = GoogleApis::Auth::ServiceAccountCredentials.new(
+          client_email: "sa@sa-project-456.iam.gserviceaccount.com",
+          private_key: private_pem,
+          project_id: "sa-project-456",
+          private_key_id: "key123",
+          token_uri: token_uri,
+          scope: "https://www.googleapis.com/auth/cloud-platform"
+        )
+
+        creds.expired?.should be_true
+
+        token = creds.access_token
+        token.should eq("ya29.sa_mock_token_456")
+        creds.authorization_header.should eq("Bearer ya29.sa_mock_token_456")
+        creds.token_type.should eq("Bearer")
+        creds.expires_at.should_not be_nil
+        creds.expired?.should be_false
+        request_count.should eq(1)
+
+        captured_content_type.should eq("application/x-www-form-urlencoded")
+        captured_grant_type.should eq("urn:ietf:params:oauth:grant-type:jwt-bearer")
+        captured_assertion.empty?.should be_false
+
+        # Verify the assertion sent to the server is a valid RS256 JWT signed by our RSA key
+        payload, header = JWT.decode(captured_assertion, public_pem, JWT::Algorithm::RS256)
+        header["alg"].as_s.should eq("RS256")
+        header["kid"].as_s.should eq("key123")
+        payload["iss"].as_s.should eq("sa@sa-project-456.iam.gserviceaccount.com")
+        payload["scope"].as_s.should eq("https://www.googleapis.com/auth/cloud-platform")
+        payload["aud"].as_s.should eq(token_uri)
+
+        # Second call should use cached token without hitting server
+        token2 = creds.access_token
+        token2.should eq("ya29.sa_mock_token_456")
+        request_count.should eq(1)
+      ensure
+        server.close
+      end
+    end
+
+    it "raises TokenRefreshError when private key is invalid PEM" do
+      creds = GoogleApis::Auth::ServiceAccountCredentials.new(
+        client_email: "sa@sa-project-456.iam.gserviceaccount.com",
+        private_key: "not-a-valid-pem-key"
+      )
+
+      expect_raises(GoogleApis::Auth::TokenRefreshError, /Failed to sign service account JWT/) do
+        creds.access_token
+      end
+    end
+
+    it "raises TokenRefreshError when server returns an HTTP error" do
+      server = HTTP::Server.new do |context|
+        context.response.status = HTTP::Status::BAD_REQUEST
+        context.response.content_type = "application/json"
+        context.response.print %({"error": "invalid_grant", "error_description": "Invalid JWT Signature."})
+      end
+
+      address = server.bind_unused_port
+      spawn { server.listen }
+
+      begin
+        token_uri = "http://#{address.address}:#{address.port}/token"
+        creds = GoogleApis::Auth::ServiceAccountCredentials.new(
+          client_email: "sa@sa-project-456.iam.gserviceaccount.com",
+          private_key: private_pem,
+          token_uri: token_uri
+        )
+
+        expect_raises(GoogleApis::Auth::TokenRefreshError, /Failed to refresh service account token: HTTP 400/) do
+          creds.access_token
+        end
+      ensure
+        server.close
       end
     end
   end

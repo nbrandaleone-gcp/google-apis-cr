@@ -1,0 +1,72 @@
+%% Generator Execution Flow Sequence Diagram
+%% Source: src/google_apis/generator.cr
+sequenceDiagram
+    autonumber
+    actor Caller as Manager / CLI / TUI
+    participant Gen as Generator (generator.cr)
+    participant ECR as Views & Templates
+    participant FS as File System
+    participant Crystal as Crystal Toolchain
+
+    Caller->>Gen: parse(json_string)
+    activate Gen
+    Note over Gen: Parses metadata: name, version, base_url, schemas
+    loop Each Schema Property
+        Gen->>Gen: crystal_type_for(prop)
+        Gen->>Gen: sanitize_identifier(p_name)
+    end
+    loop Each Resource & Sub-resource
+        Gen->>Gen: collect_resources(sub_resources)
+        Gen->>Gen: parse_methods_for_resource(methods_json)
+        Gen->>Gen: parse_method_parameters(parameters_json)
+    end
+    Gen-->>Caller: ServiceModel (AST)
+    deactivate Gen
+
+    Caller->>Gen: generate(service_model, target_dir)
+    activate Gen
+    Gen->>FS: mkdir_p(target_dir)
+
+    Gen->>ECR: TypesView.new(service).to_s
+    ECR-->>Gen: types_content
+    Gen->>FS: File.write("target_dir/types.cr")
+
+    loop Each Resource
+        Gen->>ECR: ResourceServiceView.new(service, resource).to_s
+        ECR-->>Gen: resource_content
+        Gen->>FS: File.write("target_dir/<resource>_service.cr")
+    end
+
+    Gen->>ECR: ClientView.new(service).to_s
+    ECR-->>Gen: client_content
+    Gen->>FS: File.write("target_dir/client.cr")
+
+    Gen->>ECR: ServiceModuleView.new(service).to_s
+    ECR-->>Gen: module_content
+    Gen->>FS: File.write("target_dir/<version>.cr")
+
+    Gen->>Gen: generate_readme(service_model)
+    Gen->>FS: File.write("target_dir/README.md")
+
+    Gen->>Crystal: crystal tool format <target_dir>
+    Crystal-->>Gen: formatted files
+    Gen-->>Caller: target_dir generated
+    deactivate Gen
+
+    Caller->>Gen: generate_spec(service_model)
+    activate Gen
+    Gen->>FS: File.write("spec/google_apis/<name>_<version>_spec.cr")
+    Gen-->>Caller: spec_file_path
+    deactivate Gen
+
+    Caller->>Gen: generate_sample_cli(service_model)
+    activate Gen
+    Gen->>Gen: pick_primary_list_resource(service_model)
+    Gen->>Gen: generate_sample_script_content(service_model, res, method)
+    Gen->>FS: File.write("src/bin/list_<name>.cr")
+    Gen->>FS: ensure_shard_target("shard.yml")
+    Gen->>FS: ensure_main_require("src/google_apis_cr.cr")
+    Gen->>Crystal: crystal build src/bin/list_<name>.cr -o bin/list_<name>
+    Crystal-->>Gen: compiled binary
+    Gen-->>Caller: {sample_src_path, binary_path}
+    deactivate Gen

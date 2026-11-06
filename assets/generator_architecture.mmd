@@ -1,0 +1,65 @@
+%% Google APIs Generator Architecture & Execution Flow
+%% Source: src/google_apis/generator.cr
+flowchart TD
+    subgraph Input["1. Input Source"]
+        JSON["Google Discovery Document<br/><code>discovery/&lt;api&gt;_&lt;ver&gt;.json</code>"]
+    end
+
+    subgraph Parsing["2. Parsing & AST Transformation (Generator.parse)"]
+        PARSE["Generator.parse(json_str)"]
+        TYPE_MAP["Type Mapper<br/><code>crystal_type_for / container_type_for</code><br/><i>$ref, string, integer, array, object</i>"]
+        SANITIZE["Identifier Sanitizer<br/><code>sanitize_identifier</code><br/><i>snake_case, keyword collision check</i>"]
+        RES_PARSE["Recursive Resource Collector<br/><code>collect_resources</code><br/><i>handles nested subresources</i>"]
+        PARAM_PARSE["Method & Param Parser<br/><code>parse_methods_for_resource</code><br/><i>required path params & optional query params</i>"]
+        MODEL["ServiceModel AST<br/><code>ServiceModel(schemas, resources)</code>"]
+
+        PARSE --> TYPE_MAP
+        PARSE --> SANITIZE
+        PARSE --> RES_PARSE
+        RES_PARSE --> PARAM_PARSE
+        PARSE --> MODEL
+    end
+
+    subgraph Codegen["3. Template Rendering (Generator.generate)"]
+        GEN["Generator.generate(service, target_dir)"]
+        T_VIEW["TypesView<br/><code>types.cr.ecr</code><br/>JSON::Serializable schemas"]
+        R_VIEW["ResourceServiceView<br/><code>resource_service.cr.ecr</code><br/>REST client methods"]
+        C_VIEW["ClientView<br/><code>client.cr.ecr</code><br/>Client router & accessors"]
+        M_VIEW["ServiceModuleView<br/><code>service_module.cr.ecr</code><br/>Version module definitions"]
+        README["Documentation Generator<br/><code>generate_readme</code><br/>Usage examples & method tables"]
+        FMT["Code Formatter<br/><code>crystal tool format</code>"]
+
+        MODEL --> GEN
+        GEN --> T_VIEW --> OUT_TYPES["src/google_apis/&lt;name&gt;/&lt;ver&gt;/types.cr"]
+        GEN --> R_VIEW --> OUT_RES["src/google_apis/&lt;name&gt;/&lt;ver&gt;/*_service.cr"]
+        GEN --> C_VIEW --> OUT_CLIENT["src/google_apis/&lt;name&gt;/&lt;ver&gt;/client.cr"]
+        GEN --> M_VIEW --> OUT_MOD["src/google_apis/&lt;name&gt;/&lt;ver&gt;/&lt;ver&gt;.cr"]
+        GEN --> README --> OUT_DOC["src/google_apis/&lt;name&gt;/&lt;ver&gt;/README.md"]
+        OUT_TYPES & OUT_RES & OUT_CLIENT & OUT_MOD --> FMT
+    end
+
+    subgraph Tooling["4. Spec & Sample CLI Tooling"]
+        SPEC_GEN["Generator.generate_spec"]
+        CLI_GEN["Generator.generate_sample_cli"]
+        SCORE["Resource Selector<br/><code>pick_primary_list_resource</code><br/><i>Heuristic penalty/bonus scoring</i>"]
+        SHARD["Project Registration<br/><code>ensure_shard_target</code>"]
+        MAIN_REQ["Library Wiring<br/><code>ensure_main_require</code>"]
+        BUILD["Compiler Subprocess<br/><code>crystal build</code>"]
+
+        MODEL --> SPEC_GEN --> OUT_SPEC["spec/google_apis/&lt;name&gt;_&lt;ver&gt;_spec.cr"]
+        MODEL --> CLI_GEN
+        CLI_GEN --> SCORE
+        CLI_GEN --> OUT_CLI_SRC["src/bin/list_&lt;name&gt;.cr"]
+        CLI_GEN --> SHARD --> SHARD_FILE["shard.yml"]
+        CLI_GEN --> MAIN_REQ --> MAIN_FILE["src/google_apis_cr.cr"]
+        OUT_CLI_SRC --> BUILD --> OUT_BIN["bin/list_&lt;name&gt;"]
+    end
+
+    JSON --> PARSE
+
+    classDef stage fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef output fill:#0f172a,stroke:#10b981,stroke-width:1.5px,color:#a7f3d0;
+    classDef proc fill:#1e1b4b,stroke:#8b5cf6,stroke-width:1.5px,color:#e0e7ff;
+    class Input,Parsing,Codegen,Tooling stage;
+    class OUT_TYPES,OUT_RES,OUT_CLIENT,OUT_MOD,OUT_DOC,OUT_SPEC,OUT_CLI_SRC,OUT_BIN output;
+    class PARSE,GEN,CLI_GEN,SPEC_GEN proc;
